@@ -20,6 +20,7 @@ public class AnunciosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_anuncios);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,17 +78,16 @@ public class AnunciosActivity extends AppCompatActivity {
 
                 if (anuncios_isdown == 1) {
                     if (id == R.id.sub_pesq_anuncio) {
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
 
-                        Intent intencao = new Intent(AnunciosActivity.this, AnunciosActivity.class);
+                    if (id == R.id.sub_ins_anuncio) {
+                        Intent intencao = new Intent(AnunciosActivity.this, CadastroAnuncioActivity.class);
                         startActivity(intencao);
                         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                         drawer.closeDrawer(GravityCompat.START);
                         finish();
-                    }
-
-                    if (id == R.id.sub_ins_anuncio) {
-                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawer(GravityCompat.START);
                     }
                     if (id == R.id.nav_buscarapida) {
                         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

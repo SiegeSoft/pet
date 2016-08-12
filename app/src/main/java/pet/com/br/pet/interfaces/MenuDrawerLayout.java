@@ -50,11 +50,11 @@ public class MenuDrawerLayout extends AppCompatActivity  {
             public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.nav_preferences) {
+              //  if (id == R.id.nav_preferences) {
 
-                } else if (id == R.id.nav_about) {
+           //     } else if (id == R.id.nav_about) {
 
-                }
+             //   }
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);

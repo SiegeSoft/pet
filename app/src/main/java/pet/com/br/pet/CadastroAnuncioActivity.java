@@ -15,9 +15,11 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
 
     int negociacoes_isdown = 0, anuncios_isdown = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_cadastro_anuncio);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -75,7 +77,6 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
 
                 if (anuncios_isdown == 1) {
                     if (id == R.id.sub_pesq_anuncio) {
-
                         Intent intencao = new Intent(CadastroAnuncioActivity.this, AnunciosActivity.class);
                         startActivity(intencao);
                         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
