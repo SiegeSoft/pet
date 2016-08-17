@@ -9,12 +9,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".AnunciosActivity"
+            android:name=".Anuncios.AnunciosActivity"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".CadastroAnuncioActivity"
+        <activity android:name=".Anuncios.CadastroAnuncioActivity"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

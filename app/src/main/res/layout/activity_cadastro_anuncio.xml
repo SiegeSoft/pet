@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            tools:context=".CadastroAnuncioActivity">
+            tools:context=".Anuncios.CadastroAnuncioActivity">
 
             <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
                 android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
@@ -65,6 +65,17 @@
                         android:layout_marginLeft="10dp"
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="25dp"
+                        android:text="Codigo:"
+                        android:textSize="30sp"
+                        android:id="@+id/text_codigo"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_below="@+id/text_codigo"
                         android:text="Categoria:"
                         android:textSize="30sp"
                         android:id="@+id/text_categoria"
@@ -73,7 +84,7 @@
                     <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
+                        android:layout_below="@+id/text_codigo"
                         android:layout_toRightOf="@id/text_categoria"
                         android:layout_gravity="right"
                         android:layout_marginLeft="10dp"

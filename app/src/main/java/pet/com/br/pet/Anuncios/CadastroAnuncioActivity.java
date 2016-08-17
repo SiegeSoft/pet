@@ -1,5 +1,6 @@
 package pet.com.br.pet.Anuncios;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,10 +11,52 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import pet.com.br.pet.R;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+//endregion
 
 public class CadastroAnuncioActivity extends AppCompatActivity {
+    private static final String LOGIN_URL = "http://thebossgamestudio.xyz/pet/inserirAnuncio.php";
+    public static final String KEY_CODIGO="CODIGO";
+    public static final String KEY_RACA="RACA";
+    public static final String KEY_IDADE="IDADE";
+    public static final String KEY_VALOR="VALOR";
+    public static final String KEY_DESCRICAO="DESCRICAO";
+
+    private TextView txtcodigo;
+    private EditText editTextraca;
+    private EditText editTextidade;
+    private EditText editTextvalor;
+    private EditText editTextdescricao;
+
+    private String strcodigo;
+    private String strraca;
+    private String stridade;
+    private String strvalor;
+    private String strdescricao;
+
+    private String codigogen;
+
+    ProgressDialog loading;
 
     int negociacoes_isdown = 0, anuncios_isdown = 0;
 
@@ -21,11 +64,25 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_cadastro_anuncio);
+
+        final DateFormat dateFormat = new SimpleDateFormat("HHmmddMMssyyyy");
+        final Date data = new Date();
+        double gen = Math.random() * 140;
+        double getgen = Math.round(gen);
+        codigogen = (dateFormat.format(data) + getgen).replace(".","");
+
+        txtcodigo = (TextView) findViewById(R.id.text_codigo);
+
+        txtcodigo.setText("Codigo: "+codigogen);
+
+        editTextraca = (EditText) findViewById(R.id.editText_raca);
+        editTextidade = (EditText) findViewById(R.id.editText_idade);
+        editTextvalor = (EditText) findViewById(R.id.editText_valor);
+        editTextdescricao = (EditText) findViewById(R.id.editText_descricao);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -144,6 +201,76 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
     }
 
 
+    private void iniciaAnuncio() {
+        strcodigo = codigogen.trim();
+        strraca = editTextraca.getText().toString().trim();
+        stridade = editTextidade.getText().toString().trim();
+        strvalor = editTextvalor.getText().toString().trim();
+        strdescricao = editTextdescricao.getText().toString().trim();
+
+        loading = ProgressDialog.show(this, "Aguarde...", "Carregando...", false, false);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try{
+                            if(response.trim().equals("success")){
+                                loading.dismiss();
+                                openProfile();
+                            }else{
+                                AlertDialog.Builder builder = new AlertDialog.Builder(CadastroAnuncioActivity.this);
+                                builder.setMessage("ERRO AO CADASTRAR O ANUNCIO")
+                                        .setNegativeButton("Tentar novamente", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
+                            }
+                        }catch(Exception e){
+                            loading.dismiss();
+                            e.printStackTrace();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(CadastroAnuncioActivity.this);
+                            builder.setMessage("Erro na sincronização com servidor: "+e)
+                                    .setNegativeButton("Tentar novamente", null)
+                                    .create()
+                                    .show();
+                            loading.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        loading.dismiss();
+                        error.printStackTrace();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(CadastroAnuncioActivity.this);
+                        builder.setMessage("Erro na sincronização com servidor: "+error)
+                                .setNegativeButton("Tentar novamente", null)
+                                .create()
+                                .show();
+                        // Toast.makeText(Login.this, error.toString(), Toast.LENGTH_LONG).show();
+
+                        //
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<String,String>();
+                map.put(KEY_CODIGO,strcodigo);
+                map.put(KEY_RACA,strraca);
+                map.put(KEY_IDADE,stridade);
+                map.put(KEY_VALOR,strvalor);
+                map.put(KEY_DESCRICAO,strdescricao);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -168,5 +295,22 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    private void openProfile(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CadastroAnuncioActivity.this);
+        builder.setMessage("Anuncio Cadastrado com sucesso")
+                .setNegativeButton("Prosseguir", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent refresh = new Intent(CadastroAnuncioActivity.this, CadastroAnuncioActivity.class);
+                        startActivity(refresh);
+                        finish();
+                    }
+                })
+                .create()
+                .show();
 
+    }
+    public void inicia_anuncio(View v) {
+        iniciaAnuncio();
+    }
 }

@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -21,7 +20,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-import pet.com.br.pet.CadastroAnuncioActivity;
+import pet.com.br.pet.Anuncios.CadastroAnuncioActivity;
 import pet.com.br.pet.R;
 
 /**
@@ -77,7 +76,6 @@ public class Login  extends AppCompatActivity {
                             }
                         }catch(Exception e){
                             loading.dismiss();
-                            //Toast.makeText(Login.this,response,Toast.LENGTH_LONG).show();
                             e.printStackTrace();
                             AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
                             builder.setMessage("Erro na sincronização com servidor: "+e)
