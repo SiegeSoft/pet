@@ -1,17 +1,21 @@
-package pet.com.br.pet;
+package pet.com.br.pet.Anuncios;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class CadastroAnuncioActivity extends AppCompatActivity {
+import pet.com.br.pet.CadastroAnuncioActivity;
+import pet.com.br.pet.R;
+
+
+public class AnunciosActivity extends AppCompatActivity {
 
     int negociacoes_isdown = 0, anuncios_isdown = 0;
 
@@ -20,7 +24,7 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_cadastro_anuncio);
+        setContentView(R.layout.activity_anuncios);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -77,16 +81,16 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
 
                 if (anuncios_isdown == 1) {
                     if (id == R.id.sub_pesq_anuncio) {
-                        Intent intencao = new Intent(CadastroAnuncioActivity.this, AnunciosActivity.class);
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+
+                    if (id == R.id.sub_ins_anuncio) {
+                        Intent intencao = new Intent(AnunciosActivity.this, CadastroAnuncioActivity.class);
                         startActivity(intencao);
                         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                         drawer.closeDrawer(GravityCompat.START);
                         finish();
-                    }
-
-                    if (id == R.id.sub_ins_anuncio) {
-                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawer(GravityCompat.START);
                     }
                     if (id == R.id.nav_buscarapida) {
                         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
