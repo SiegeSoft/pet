@@ -1,7 +1,14 @@
 package pet.com.br.pet.Anuncios;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -9,13 +16,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import pet.com.br.pet.R;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -26,8 +37,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.w3c.dom.Text;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,12 +78,31 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
 
     int negociacoes_isdown = 0, anuncios_isdown = 0;
 
+    //seleciona imagem
+
+    private static final int SELECT_PICTURE = 1;
+    private static final int SELECT_PICTURE2 = 1;
+
+    Uri selectedImage;
+    Uri selectedImage2;
+
+    static String encoded_string;
+    private String image_name;
+    private Bitmap bitmap;
+    private File file;
+    private Uri file_uri;
+
+
+
+
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_anuncio);
 
+        //codigo automatico
         final DateFormat dateFormat = new SimpleDateFormat("HHmmddMMssyyyy");
         final Date data = new Date();
         double gen = Math.random() * 140;
@@ -80,6 +117,15 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
         editTextidade = (EditText) findViewById(R.id.editText_idade);
         editTextvalor = (EditText) findViewById(R.id.editText_valor);
         editTextdescricao = (EditText) findViewById(R.id.editText_descricao);
+        //endregion
+
+        //seleciona imagem
+        //Button btn = (Button) findViewById(R.id.buttonImage);
+        //btn.setOnClickListener(mOnClickListener);
+
+        //endregion
+
+        //menu
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -261,6 +307,8 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
                 map.put(KEY_IDADE,stridade);
                 map.put(KEY_VALOR,strvalor);
                 map.put(KEY_DESCRICAO,strdescricao);
+                map.put("IMAGEM",image_name);
+                map.put("IMAGEMPATCH",encoded_string);
                 return map;
             }
         };
@@ -270,6 +318,93 @@ public class CadastroAnuncioActivity extends AppCompatActivity {
     }
 
 
+
+   /* //seleciona imagem
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            int pc1 =0;
+
+            switch (pc1){
+                case 0:
+                    if(pc1==0){
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Selecione a imagem"), SELECT_PICTURE);
+                    pc1 = 1;}
+                    break;
+
+                case 1:
+                    if(pc1==1) {
+                        Intent intent2 = new Intent();
+                        intent2.setType("image/*");
+                        intent2.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(intent2, "Selecione a imagem"), SELECT_PICTURE2);
+                    }
+                        break;
+            }
+
+
+        }
+    };*/
+
+    public void inicia_img1(View v) {
+        // TODO Auto-generated method stub
+        pickImage();
+    }
+
+    public void pickImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, SELECT_PICTURE);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK) {
+            try {
+                image_name = "teste123.jpg";
+                Uri selectedImage = data.getData();
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                ImageView my_img_view = (ImageView) findViewById (R.id.imageAnuncio);
+                my_img_view.setImageBitmap(bitmap);
+                encodeTobase64(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            //InputStream inputStream = context.getContentResolver().openInputStream(Uri);
+
+
+
+            //Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
+        }
+    }
+    public static String encodeTobase64(Bitmap image)
+    {
+        Bitmap immagex=image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+
+        String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
+        encoded_string = imageEncoded;
+        Log.e("LOOK", imageEncoded);
+        return imageEncoded;
+}
+    public static Bitmap decodeBase64(String input)
+    {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+
+    //endregion
 
     @Override
     public void onBackPressed() {

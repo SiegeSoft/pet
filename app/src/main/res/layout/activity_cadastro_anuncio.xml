@@ -193,24 +193,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
-                    <Button
-                        android:id="@+id/buttonImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:textSize="25dp"
-                        android:height="80dp"
-                        android:text="Selecione a Imagem"
-                        />
+
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     >
                     <ImageView
-                        android:id="@+id/imageCapa"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/imageAnuncio"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:background="@android:color/black"
+                        android:onClick="inicia_img1"
                         android:layout_marginTop="20dp"
                         />
                 </RelativeLayout>
