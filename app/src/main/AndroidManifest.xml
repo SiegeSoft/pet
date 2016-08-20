@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pet.com.br.pet">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,17 +18,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Anuncios.AnunciosActivity"
+            android:name=".anuncios.AnunciosActivity"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".Anuncios.CadastroAnuncioActivity"
+        <activity android:name=".anuncios.CadastroAnuncioActivity"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <activity android:name=".Autenticacao.Login"
+        <activity android:name=".autenticacao.Login"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

@@ -1,4 +1,4 @@
-package pet.com.br.pet.Autenticacao;
+package pet.com.br.pet.autenticacao;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
@@ -20,26 +19,24 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-import pet.com.br.pet.Anuncios.CadastroAnuncioActivity;
+import pet.com.br.pet.anuncios.CadastroAnuncioActivity;
 import pet.com.br.pet.R;
+import pet.com.br.pet.utils.UsuarioUtils;
 
 /**
  * Created by iaco_ on 15/08/2016.
  */
 public class Login  extends AppCompatActivity {
 
-    public static final String LOGIN_URL = "http://thebossgamestudio.xyz/pet/login.php";
-
-    public static final String KEY_USERNAME="USERNAME";
-    public static final String KEY_PASSWORD="PASSWORD";
+    private static final String LOGIN_URL = "http://thebossgamestudio.xyz/pet/login.php";
+    private static final String KEY_USERNAME="USERNAME";
+    private static final String KEY_PASSWORD="PASSWORD";
     private EditText editTextUsername;
     private EditText editTextPassword;
-    private Button buttonLogin;
 
     private String username;
     private String password;
-
-    ProgressDialog loading;
+    private ProgressDialog loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +48,7 @@ public class Login  extends AppCompatActivity {
 
     }
 
-    private void userLogin() {
+    private void solicitaLogin() {
         username = editTextUsername.getText().toString().trim();
         password = editTextPassword.getText().toString().trim();
         loading = ProgressDialog.show(this, "Aguarde...", "Carregando...", false, false);
@@ -64,7 +61,7 @@ public class Login  extends AppCompatActivity {
                         try{
                             if(response.trim().equals("success")){
                                 loading.dismiss();
-                                openProfile();
+                                abrirConta();
                                 }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
                                 builder.setMessage("ERRO AO REALIZAR O LOGIN SENHA OU USUARIO INVALIDO")
@@ -78,7 +75,7 @@ public class Login  extends AppCompatActivity {
                             loading.dismiss();
                             e.printStackTrace();
                             AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
-                            builder.setMessage("Erro na sincronização com servidor: "+e)
+                            builder.setMessage("Erro na sincronização com servidor")
                                     .setNegativeButton("Tentar novamente", null)
                                     .create()
                                     .show();
@@ -97,9 +94,6 @@ public class Login  extends AppCompatActivity {
                                     .setNegativeButton("Tentar novamente", null)
                                     .create()
                                     .show();
-                            // Toast.makeText(Login.this, error.toString(), Toast.LENGTH_LONG).show();
-
-                        //
                     }
                 }){
             @Override
@@ -111,19 +105,18 @@ public class Login  extends AppCompatActivity {
 
             }
         };
-
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
 
-    private void openProfile(){
+    private void abrirConta(){
         Intent intent = new Intent(this, CadastroAnuncioActivity.class);
-        intent.putExtra(KEY_USERNAME, username);
+        UsuarioUtils.setUserName(username);
         startActivity(intent);
     }
 
-    public void inicia_login(View v) {
-        userLogin();
+    public void login(View v) {
+        solicitaLogin();
     }
 }
 
