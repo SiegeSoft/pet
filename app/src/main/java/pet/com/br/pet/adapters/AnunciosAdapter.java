@@ -56,8 +56,6 @@ public class AnunciosAdapter extends ArrayAdapter<String> {
         txtTipoVenda.setText("Venda/Doação: "+tipoVenda.get(position));
         txtHora.setText(hora.get(position));
 
-              
-
         return rowView;
 
     }

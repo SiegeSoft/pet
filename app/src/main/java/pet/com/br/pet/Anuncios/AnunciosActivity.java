@@ -28,9 +28,9 @@ public class AnunciosActivity extends BaseMenu {
     ListView listView;
     private ArrayList<String> raca = new ArrayList<String>();
     private ArrayList<String> dono =  new ArrayList<String>();
-    private final ArrayList<String> idade  =  new ArrayList<String>();
-    private final ArrayList<String> tipoVenda =  new ArrayList<String>();
-    private final ArrayList<String> hora = new ArrayList<String>();
+    private ArrayList<String> idade  =  new ArrayList<String>();
+    private ArrayList<String> tipoVenda =  new ArrayList<String>();
+    private ArrayList<String> hora = new ArrayList<String>();
     private ArrayList<Integer> imgid = new ArrayList<Integer>();
 
     @Override
