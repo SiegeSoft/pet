@@ -281,6 +281,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void openProfile(){
         AlertDialog.Builder builder = new AlertDialog.Builder(CadastroAnuncioActivity.this);
         builder.setMessage("Anuncio Cadastrado com sucesso")

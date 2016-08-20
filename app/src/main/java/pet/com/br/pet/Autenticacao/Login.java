@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import pet.com.br.pet.anuncios.AnunciosActivity;
 import pet.com.br.pet.anuncios.CadastroAnuncioActivity;
 import pet.com.br.pet.R;
 import pet.com.br.pet.utils.UsuarioUtils;
@@ -110,9 +111,11 @@ public class Login  extends AppCompatActivity {
     }
 
     private void abrirConta(){
-        Intent intent = new Intent(this, CadastroAnuncioActivity.class);
         UsuarioUtils.setUserName(username);
+        Intent intent = new Intent(this, AnunciosActivity.class);
         startActivity(intent);
+        finish();
+
     }
 
     public void login(View v) {
