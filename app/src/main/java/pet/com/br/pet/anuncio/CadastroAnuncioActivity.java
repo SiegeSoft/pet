@@ -1,14 +1,11 @@
-package pet.com.br.pet.anuncios;
+package pet.com.br.pet.anuncio;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;

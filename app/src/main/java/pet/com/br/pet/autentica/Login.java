@@ -1,4 +1,4 @@
-package pet.com.br.pet.autenticacao;
+package pet.com.br.pet.autentica;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -19,8 +19,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-import pet.com.br.pet.anuncios.AnunciosActivity;
-import pet.com.br.pet.anuncios.CadastroAnuncioActivity;
+import pet.com.br.pet.anuncio.AnunciosActivity;
 import pet.com.br.pet.R;
 import pet.com.br.pet.utils.UsuarioUtils;
 

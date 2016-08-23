@@ -18,17 +18,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".anuncios.AnunciosActivity"
+            android:name=".anuncio.AnunciosActivity"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".anuncios.CadastroAnuncioActivity"
+        <activity android:name=".anuncio.CadastroAnuncioActivity"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <activity android:name=".autenticacao.Login"
+        <activity android:name=".autentica.Login"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

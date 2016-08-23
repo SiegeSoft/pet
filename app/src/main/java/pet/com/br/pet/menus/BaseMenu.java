@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import pet.com.br.pet.R;
-import pet.com.br.pet.anuncios.CadastroAnuncioActivity;
+import pet.com.br.pet.anuncio.CadastroAnuncioActivity;
 
 /**
  * Created by rafae on 19/08/2016.
