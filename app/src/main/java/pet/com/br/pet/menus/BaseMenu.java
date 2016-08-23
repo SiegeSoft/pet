@@ -62,7 +62,6 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
         }
 
         setUpNavView();
-
     }
 
     protected boolean useToolbar() {

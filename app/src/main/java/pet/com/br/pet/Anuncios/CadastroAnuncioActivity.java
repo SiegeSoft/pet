@@ -181,39 +181,6 @@ public class CadastroAnuncioActivity extends BaseMenu {
     }
 
 
-
-   /* //seleciona imagem
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            int pc1 =0;
-
-            switch (pc1){
-                case 0:
-                    if(pc1==0){
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Selecione a imagem"), SELECT_PICTURE);
-                    pc1 = 1;}
-                    break;
-
-                case 1:
-                    if(pc1==1) {
-                        Intent intent2 = new Intent();
-                        intent2.setType("image/*");
-                        intent2.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent2, "Selecione a imagem"), SELECT_PICTURE2);
-                    }
-                        break;
-            }
-
-
-        }
-    };*/
-
     public void inicia_img1(View v) {
         // TODO Auto-generated method stub
         pickImage();
@@ -241,12 +208,6 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 e.printStackTrace();
             }
 
-
-            //InputStream inputStream = context.getContentResolver().openInputStream(Uri);
-
-
-
-            //Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
         }
     }
     public static String encodeTobase64(Bitmap image)
@@ -260,12 +221,8 @@ public class CadastroAnuncioActivity extends BaseMenu {
         encoded_string = imageEncoded;
         Log.e("LOOK", imageEncoded);
         return imageEncoded;
-}
-    public static Bitmap decodeBase64(String input)
-    {
-        byte[] decodedByte = Base64.decode(input, 0);
-        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
