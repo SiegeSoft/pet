@@ -15,7 +15,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import pet.com.br.pet.R;
+import pet.com.br.pet.anuncio.AnunciosActivity;
 import pet.com.br.pet.anuncio.CadastroAnuncioActivity;
+import pet.com.br.pet.gps.BuscaRapidaActivity;
 
 /**
  * Created by rafae on 19/08/2016.
@@ -106,16 +108,21 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
                 break;
 
             case R.id.sub_pesq_anuncio:
+                iniciaOutraActivity(AnunciosActivity.class);
                 fullLayout.closeDrawer(GravityCompat.START);
+                finish();
                 break;
 
             case R.id.sub_ins_anuncio:
                 iniciaOutraActivity(CadastroAnuncioActivity.class);
                 fullLayout.closeDrawer(GravityCompat.START);
+                finish();
                 break;
 
             case R.id.sub_buscarapida:
+                iniciaOutraActivity(BuscaRapidaActivity.class);
                 fullLayout.closeDrawer(GravityCompat.START);
+                finish();
                 break;
 
             case R.id.sub_ver_negociacoes:

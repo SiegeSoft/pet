@@ -82,7 +82,7 @@ public class AnunciosActivity extends BaseMenu {
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
+            super.onScrolled(recyclerView, dx, -dy);
             if (isLastItemDisplaying(recyclerView)) {
                 getData();
             }
