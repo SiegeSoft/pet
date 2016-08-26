@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
-        tools:context=".anuncios.AnunciosActivity">
+        tools:context=".anuncio.AnunciosActivity">
 
         <RelativeLayout
             android:layout_width="match_parent"

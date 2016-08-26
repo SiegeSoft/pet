@@ -1,15 +1,18 @@
-package pet.com.br.pet.anuncios;
+package pet.com.br.pet.anuncio;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -50,6 +53,9 @@ public class CadastroAnuncioActivity extends BaseMenu {
     private static final String KEY_IDADE="IDADE";
     private static final String KEY_VALOR="VALOR";
     private static final String KEY_DESCRICAO="DESCRICAO";
+    private static final String KEY_LAT="LAT";
+    private static final String KEY_LON="LON";
+
 
     private TextView txtcodigo;
     private EditText editTextraca;
@@ -62,6 +68,10 @@ public class CadastroAnuncioActivity extends BaseMenu {
     private String stridade;
     private String strvalor;
     private String strdescricao;
+
+
+    private String getLatitude;
+    private String getLongitude;
 
     private String _codigo;
 
@@ -96,6 +106,25 @@ public class CadastroAnuncioActivity extends BaseMenu {
         editTextvalor = (EditText) findViewById(R.id.editText_valor);
         editTextdescricao = (EditText) findViewById(R.id.editText_descricao);
 
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        double longitude = location.getLongitude();
+        double latitude = location.getLatitude();
+        getLatitude = "" + latitude;
+        getLongitude = "" + longitude;
+
+
     }
 
     private String criarCodigo(){
@@ -116,7 +145,6 @@ public class CadastroAnuncioActivity extends BaseMenu {
         stridade = editTextidade.getText().toString().trim();
         strvalor = editTextvalor.getText().toString().trim();
         strdescricao = editTextdescricao.getText().toString().trim();
-
         loading = ProgressDialog.show(this, "Aguarde...", "Carregando...", false, false);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL,
@@ -170,6 +198,8 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 map.put(KEY_IDADE,stridade);
                 map.put(KEY_VALOR,strvalor);
                 map.put(KEY_DESCRICAO,strdescricao);
+                map.put(KEY_LAT,getLatitude);
+                map.put(KEY_LON,getLongitude);
                 map.put("IMAGEM",image_name);
                 map.put("IMAGEMPATCH",encoded_string);
                 return map;
