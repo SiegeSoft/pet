@@ -6,6 +6,7 @@ package pet.com.br.pet.utils;
 public class AnunciosUtils {
 
     public static final String DATA_URL = "http://thebossgamestudio.xyz/pet/getAnuncios.php?page=";
+    public static final String DATA_NEW_URL = "http://thebossgamestudio.xyz/pet/getNewAnuncio.php?page=";
     public static final String TAG_CODIGO = "CODIGO";
     public static final String TAG_DESCRICAO = "DESCRICAO";
     public static final String TAG_CATEGORIA = "CATEGORIA";

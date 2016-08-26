@@ -53,7 +53,7 @@ public class AnunciosActivity extends BaseMenu {
     private RecyclerView.Adapter adapter;
 
     private RequestQueue requestQueue;
-    private int requestCount = 1;
+    private int requestCount = 1, requestCountInit = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +97,9 @@ public class AnunciosActivity extends BaseMenu {
             if (isLastItemDisplaying(recyclerView)) {
                 getData();
             }
+            if(isFirstItemDisplaying(recyclerView)){
+                getNewData();
+            }
 
         }
     };
@@ -108,18 +111,14 @@ public class AnunciosActivity extends BaseMenu {
         return true;
     }
 
-    private JsonArrayRequest getDataFromServer(int requestCount) {
+    private JsonArrayRequest getDataFromServer(String url) {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-
         progressBar.setVisibility(View.VISIBLE);
         setProgressBarIndeterminateVisibility(true);
-
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(AnunciosUtils.DATA_URL + String.valueOf(requestCount),
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-
                         parseData(response);
                         progressBar.setVisibility(View.GONE);
                     }
@@ -135,11 +134,41 @@ public class AnunciosActivity extends BaseMenu {
     }
 
 
+    private JsonArrayRequest getNewDataFromServer(String url) {
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+        progressBar.setVisibility(View.VISIBLE);
+        setProgressBarIndeterminateVisibility(true);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        parseNewData(response);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(AnunciosActivity.this, "Não existem novos anuncios", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return jsonArrayRequest;
+    }
+
+
     private void getData() {
         //Adding the method to the queue by calling the method getDataFromServer
-        requestQueue.add(getDataFromServer(requestCount));
+        requestQueue.add(getDataFromServer(AnunciosUtils.DATA_URL+String.valueOf(requestCount)));
         //Incrementing the request counter
         requestCount++;
+    }
+
+    private void getNewData() {
+        //Adding the method to the queue by calling the method getDataFromServer
+        requestQueue.add(getNewDataFromServer(AnunciosUtils.DATA_NEW_URL+String.valueOf(requestCountInit)));
+        //Incrementing the request counter
+        requestCountInit++;
     }
 
 
@@ -148,14 +177,13 @@ public class AnunciosActivity extends BaseMenu {
             Anuncios anuncios = new Anuncios();
             JSONObject json = null;
             try {
-
                 json = array.getJSONObject(i);
                 anuncios.setRaca(json.getString(AnunciosUtils.TAG_RACA));
                 anuncios.setDono(json.getString(AnunciosUtils.TAG_DONO));
                 anuncios.setIdade(json.getString(AnunciosUtils.TAG_IDADE));
                 anuncios.setTipoVenda(json.getString(AnunciosUtils.TAG_VALOR));
                 anuncios.setHora(json.getString(AnunciosUtils.TAG_HORARIO));
-                Log.v("ImagePatch:",json.getString(AnunciosUtils.TAG_IMAGEMPATCH));
+
                 if (json.getString(AnunciosUtils.TAG_IMAGEMPATCH).equals("")) {
                     anuncios.setImgid(null);
                 } else {
@@ -168,7 +196,6 @@ public class AnunciosActivity extends BaseMenu {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            //Adding the superhero object to the list
             this.anuncios.add(anuncios);
         }
 
@@ -176,8 +203,47 @@ public class AnunciosActivity extends BaseMenu {
         adapter.notifyDataSetChanged();
     }
 
-    private Bitmap decodeBase64(String input) {
 
+
+    private void parseNewData(JSONArray array) {
+        for (int i = 0; i < array.length(); i++) {
+            Anuncios anuncios = new Anuncios();
+            JSONObject json = null;
+
+            try {
+
+                json = array.getJSONObject(i);
+                anuncios.setRaca(json.getString(AnunciosUtils.TAG_RACA));
+                anuncios.setDono(json.getString(AnunciosUtils.TAG_DONO));
+                anuncios.setIdade(json.getString(AnunciosUtils.TAG_IDADE));
+                anuncios.setTipoVenda(json.getString(AnunciosUtils.TAG_VALOR));
+                anuncios.setHora(json.getString(AnunciosUtils.TAG_HORARIO));
+
+                if (json.getString(AnunciosUtils.TAG_IMAGEMPATCH).equals("")) {
+                    anuncios.setImgid(null);
+                } else {
+                    anuncios.setImgid(decodeBase64(json.getString(AnunciosUtils.TAG_IMAGEMPATCH)));
+                }
+                anuncios.setCodigo(json.getString(AnunciosUtils.TAG_CODIGO));
+                anuncios.setDescricao(json.getString(AnunciosUtils.TAG_DESCRICAO));
+                anuncios.setCategoria(json.getString(AnunciosUtils.TAG_CATEGORIA));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.v("normal:","Anuncio codigo" + this.anuncios.get(0).getCodigo() );
+            Log.v("normal:","Anuncio codigo" + anuncios.getCodigo());
+            if(!anuncios.getCodigo().equals(this.anuncios.get(0).getCodigo())) {
+                Log.v("dentro do if:","Anuncio codigo" + this.anuncios.get(0).getCodigo() );
+                this.anuncios.add(0,anuncios);
+            }
+        }
+
+        //Notifying the adapter that data has been added or changed
+        adapter.notifyDataSetChanged();
+    }
+
+    private Bitmap decodeBase64(String input) {
         if (input.equals("")) {
             return null;
         } else {
@@ -188,9 +254,22 @@ public class AnunciosActivity extends BaseMenu {
     }
 
     private boolean isLastItemDisplaying(RecyclerView recyclerView) {
+        Log.v("normal:","NAO" + recyclerView.getAdapter().getItemCount() );
         if (recyclerView.getAdapter().getItemCount() != 0) {
             int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+            Log.v("normal:","NAO" + recyclerView.getAdapter().getItemCount() );
             if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1)
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isFirstItemDisplaying(RecyclerView recyclerView) {
+        Log.v("firstVisible:","SIM" + recyclerView.getAdapter().getItemCount() );
+        if (recyclerView.getAdapter().getItemCount() != 0) {
+            int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+            Log.v("firstVisible:","SIM" + String.valueOf(firstVisibleItemPosition));
+            if (firstVisibleItemPosition != RecyclerView.NO_POSITION && firstVisibleItemPosition == 0)
                 return true;
         }
         return false;
