@@ -75,7 +75,6 @@ public class AnunciosAdapter extends RecyclerView.Adapter<AnunciosAdapter.ViewHo
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             txtRaca = (TextView) itemView.findViewById(R.id.raca);
             imgAnimal = (ImageView) itemView.findViewById(R.id.imgAnimal);
             txtDono = (TextView) itemView.findViewById(R.id.dono);

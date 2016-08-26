@@ -78,6 +78,11 @@ public class AnunciosActivity extends BaseMenu {
         public void onScrollStateChanged(RecyclerView recyclerView,
                                          int newState) {
             super.onScrollStateChanged(recyclerView, newState);
+            switch (newState){
+                case RecyclerView.SCROLL_STATE_IDLE:
+                    getNewData();
+                    break;
+            }
         }
 
         @Override
@@ -220,10 +225,7 @@ public class AnunciosActivity extends BaseMenu {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Log.v("normal:","Anuncio codigo" + this.anuncios.get(0).getCodigo() );
-            Log.v("normal:","Anuncio codigo" + anuncios.getCodigo());
             if(!anuncios.getCodigo().equals(this.anuncios.get(0).getCodigo())) {
-                Log.v("dentro do if:","Anuncio codigo" + this.anuncios.get(0).getCodigo() );
                 this.anuncios.add(0,anuncios);
             }
         }
@@ -243,10 +245,10 @@ public class AnunciosActivity extends BaseMenu {
     }
 
     private boolean isLastItemDisplaying(RecyclerView recyclerView) {
-        Log.v("normal:","NAO" + recyclerView.getAdapter().getItemCount() );
+
         if (recyclerView.getAdapter().getItemCount() != 0) {
             int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-            Log.v("normal:","NAO" + recyclerView.getAdapter().getItemCount() );
+
             if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1)
                 return true;
         }
@@ -254,10 +256,10 @@ public class AnunciosActivity extends BaseMenu {
     }
 
     private boolean isFirstItemDisplaying(RecyclerView recyclerView) {
-        Log.v("firstVisible:","SIM" + recyclerView.getAdapter().getItemCount() );
+
         if (recyclerView.getAdapter().getItemCount() != 0) {
             int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-            Log.v("firstVisible:","SIM" + String.valueOf(firstVisibleItemPosition));
+
             if (firstVisibleItemPosition != RecyclerView.NO_POSITION && firstVisibleItemPosition == 0)
                 return true;
         }
