@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
+import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -17,25 +18,22 @@ import android.view.View;
 
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.BuscaRapida;
-import pet.com.br.pet.utils.AnunciosUtils;
 import pet.com.br.pet.utils.BuscaRapidaUtils;
 
 /**
@@ -43,8 +41,8 @@ import pet.com.br.pet.utils.BuscaRapidaUtils;
  */
 public class BuscaRapidaActivity extends BaseMenu {
 
-    private String getLatitude, getLongitude;
 
+    private String getLatitude, getLongitude;
 
     private TextView codigo;
     private TextView myLatitude;
@@ -55,10 +53,16 @@ public class BuscaRapidaActivity extends BaseMenu {
     ImageView img;
 
 
+    //imageadapter
+
+    Context mContext;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscarapida);
+
 
         codigo = (TextView) findViewById(R.id.codigo);
 
@@ -94,6 +98,8 @@ public class BuscaRapidaActivity extends BaseMenu {
         requestQueue.add(getDataFromServer(getLatitude, getLongitude));
 
     }
+
+
 
 
     @Override
@@ -162,7 +168,16 @@ public class BuscaRapidaActivity extends BaseMenu {
         } else {
             byte[] decodedString = Base64.decode(input, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            img.setImageBitmap(decodedByte);
+
+            /*Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;*/
+            RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeImg);
+            int width  = layout.getMeasuredWidth();
+            int height = layout.getMeasuredHeight();
+            img.setImageBitmap(Bitmap.createScaledBitmap(decodedByte, width, height, true));
             return decodedByte;
 
         }
