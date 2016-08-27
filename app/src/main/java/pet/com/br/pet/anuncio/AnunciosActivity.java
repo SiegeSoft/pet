@@ -144,7 +144,7 @@ public class AnunciosActivity extends BaseMenu {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(AnunciosActivity.this, "Não existem novos anuncios", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AnunciosActivity.this, "Não existem novos anuncios" +error, Toast.LENGTH_LONG).show();
                     }
                 });
         return jsonArrayRequest;
@@ -200,13 +200,13 @@ public class AnunciosActivity extends BaseMenu {
 
 
     private void parseNewData(JSONArray array) {
-        for (int i = 0; i < array.length(); i++) {
+
             Anuncios anuncios = new Anuncios();
             JSONObject json = null;
 
             try {
 
-                json = array.getJSONObject(i);
+                json = array.getJSONObject(0);
                 anuncios.setRaca(json.getString(AnunciosUtils.TAG_RACA));
                 anuncios.setDono(json.getString(AnunciosUtils.TAG_DONO));
                 anuncios.setIdade(json.getString(AnunciosUtils.TAG_IDADE));
@@ -228,7 +228,7 @@ public class AnunciosActivity extends BaseMenu {
             if(!anuncios.getCodigo().equals(this.anuncios.get(0).getCodigo())) {
                 this.anuncios.add(0,anuncios);
             }
-        }
+
 
         //Notifying the adapter that data has been added or changed
         adapter.notifyDataSetChanged();
