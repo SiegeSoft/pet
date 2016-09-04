@@ -1,10 +1,14 @@
 package pet.com.br.pet.chat;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -22,33 +26,61 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pet.com.br.pet.R;
-import pet.com.br.pet.adapters.ChatAdapter;
+import pet.com.br.pet.adapters.ChatViewAdapter;
+import pet.com.br.pet.database.ChatController;
+import pet.com.br.pet.database.ChatData;
 import pet.com.br.pet.menus.BaseMenu;
-import pet.com.br.pet.models.Chat;
-import pet.com.br.pet.utils.ChatUtils;
+import pet.com.br.pet.models.ChatView;
+import pet.com.br.pet.utils.ChatViewUtils;
 
 /**
- * Created by iaco_ on 26/08/2016.
+ * Created by iaco_ on 28/08/2016.
  */
-public class ChatActivity extends BaseMenu {
-    private List<Chat> chat;
+public class ChatViewActivity extends BaseMenu {
+    private List<ChatView> chatview;
+    //private List<ChatView> chatviewHistory;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
-
     private RequestQueue requestQueue;
-    private int requestCount = 1, requestCountInit = 2;
+    private int _requestCount = 1;
+
+    private ChatController chatController;
+    private List<ChatView> chatViewList;
+    //database
+    //private SQLiteDatabase db;
+    //private ChatData banco;
+
+
+    // private Activity context;
+
+    String user;
+    String codigo;
+    String descricao;
+    EditText msg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.chatview);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewchat);
+        //instancia o chat controller class
+        chatController = new ChatController(this);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewchatView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        chat = new ArrayList<>();
+        chatview = new ArrayList<>();
+
+        Intent intent = getIntent();
+        user = intent.getStringExtra("Userchat");
+        codigo = intent.getStringExtra("Usercodigo");
+        descricao = intent.getStringExtra("Userdesc");
+
+        msg = (EditText) findViewById(R.id.edit_escrevemensagem);
+
+        //msg.setText(""+user + " "+ codigo + " " +descricao );
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -57,11 +89,11 @@ public class ChatActivity extends BaseMenu {
         recyclerView.addOnScrollListener(rVOnScrollListener);
 
         //initializing our adapter
-        adapter = new ChatAdapter(chat, this);
+        //adapter = new ChatViewAdapter(chatview, this);
 
         //Adding adapter to recyclerview
-        recyclerView.setAdapter(adapter);
-
+//        recyclerView.setAdapter(adapter);
+        setaAdaptador();
     }
 
     private RecyclerView.OnScrollListener rVOnScrollListener = new RecyclerView.OnScrollListener() {
@@ -72,7 +104,7 @@ public class ChatActivity extends BaseMenu {
             super.onScrollStateChanged(recyclerView, newState);
             switch (newState){
                 case RecyclerView.SCROLL_STATE_IDLE:
-                    getNewData();
+                    getData();
                     break;
             }
         }
@@ -84,12 +116,11 @@ public class ChatActivity extends BaseMenu {
             if (isLastItemDisplaying(recyclerView)) {
                 getData();
             }
-            if(isFirstItemDisplaying(recyclerView)){
-                getNewData();
-            }
+
 
         }
     };
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -98,44 +129,28 @@ public class ChatActivity extends BaseMenu {
     }
 
     private JsonArrayRequest getDataFromServer(String url) {
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarchat);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarchatView);
         progressBar.setVisibility(View.VISIBLE);
         setProgressBarIndeterminateVisibility(true);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        parseData(response);
-                        progressBar.setVisibility(View.GONE);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(ChatActivity.this, "Não existem outras mensagens", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        return jsonArrayRequest;
-    }
+                        try {
+                            parseData(response);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                        catch (Exception e){
+                            Toast.makeText(ChatViewActivity.this, "Não existem outras mensagens "+ e, Toast.LENGTH_SHORT).show();
 
-    private JsonArrayRequest getNewDataFromServer(String url) {
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarchat);
-        progressBar.setVisibility(View.VISIBLE);
-        setProgressBarIndeterminateVisibility(true);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        parseNewData(response);
-                        progressBar.setVisibility(View.GONE);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(ChatActivity.this, "Não existem outras mensagens" +error, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ChatViewActivity.this, "Não existem outras mensagens", Toast.LENGTH_SHORT).show();
                     }
                 });
         return jsonArrayRequest;
@@ -144,61 +159,64 @@ public class ChatActivity extends BaseMenu {
 
     private void getData() {
         //Adding the method to the queue by calling the method getDataFromServer
-        requestQueue.add(getDataFromServer(ChatUtils.DATA_URL+String.valueOf(requestCount)+"&myusername=iaco"));
+        requestQueue.add(getDataFromServer(ChatViewUtils.DATA_URL+"page="+_requestCount+"&CODIGO="+codigo+"&USUARIOCLIENTE="+user));
         //Incrementing the request counter
-        requestCount++;
+        _requestCount++;
     }
 
-    private void getNewData() {
-        //Adding the method to the queue by calling the method getDataFromServer
-        requestQueue.add(getNewDataFromServer(ChatUtils.DATA_NEW_URL+String.valueOf(requestCountInit)+"&myusername=iaco"));
-        //Incrementing the request counter
-        requestCountInit++;
-    }
 
     private void parseData(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
-            Chat chat = new Chat();
+            ChatView chatvieww = new ChatView();
             JSONObject json = null;
             try {
+
                 json = array.getJSONObject(i);
-                chat.setCodigo(json.getString(ChatUtils.TAG_CODIGO));
-                chat.setUsername(json.getString(ChatUtils.TAG_USERCHAT));
-                chat.setDescricao(json.getString(ChatUtils.TAG_DESCRICAO));
+                chatvieww.setId(json.getString(ChatViewUtils.TAG_ID));
+                chatvieww.setCodigo(json.getString(ChatViewUtils.TAG_CODIGO));
+                chatvieww.setUsername(json.getString(ChatViewUtils.TAG_USERCHAT));
+                chatvieww.setMensagem(json.getString(ChatViewUtils.TAG_MENSAGEM));
+
+               // ChatController chatController = new ChatController(getBaseContext());
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            this.chat.add(chat);
 
+
+
+            // Linear search, see if the id exists
+            boolean flag = false;
+            for(ChatView chat : chatview){
+                if(null != chat.getId() && null != chatvieww.getId()){
+                    if(chat.getId().equals(chatvieww.getId())){
+                        // Item exists
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+
+            // if flag is true item exists, don't add.
+            if(!flag){
+                chatController.insereDado(chatvieww.getId(),chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem());
+                chatview.add(chatvieww);
+                adapter = new ChatViewAdapter(chatController.carregaTodosDados(), this);
+                //Adding adapter to recyclerview
+                recyclerView.setAdapter(adapter);
+            }
         }
-
-        //Notifying the adapter that data has been added or changed
+        // Notifying the adapter that data has been added or changed
         adapter.notifyDataSetChanged();
     }
 
+    public void setaAdaptador(){
 
-    private void parseNewData(JSONArray array) {
+        adapter = new ChatViewAdapter(chatController.carregaTodosDados(), this);
+        //Adding adapter to recyclerview
+        recyclerView.setAdapter(adapter);
 
-            Chat chat = new Chat();
-            JSONObject json = null;
-
-            try {
-
-                json = array.getJSONObject(0);
-                chat.setCodigo(json.getString(ChatUtils.TAG_CODIGO));
-                chat.setUsername(json.getString(ChatUtils.TAG_USERCHAT));
-                chat.setDescricao(json.getString(ChatUtils.TAG_DESCRICAO));
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (!chat.getCodigo().equals(this.chat.get(0).getCodigo())) {
-                this.chat.add(0, chat);
-            }
-
-        //Notifying the adapter that data has been added or changed
-        adapter.notifyDataSetChanged();
     }
 
 
@@ -214,7 +232,6 @@ public class ChatActivity extends BaseMenu {
     }
 
     private boolean isFirstItemDisplaying(RecyclerView recyclerView) {
-
         if (recyclerView.getAdapter().getItemCount() != 0) {
             int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
 
@@ -223,6 +240,5 @@ public class ChatActivity extends BaseMenu {
         }
         return false;
     }
-
 
 }
