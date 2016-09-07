@@ -65,12 +65,9 @@ public class ChatViewActivity extends BaseMenu {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
         setContentView(R.layout.activity_chatview);
 
-=======
-        setContentView(R.layout.chatview);
->>>>>>> 7e0244d914cecdb98ae8ef828c1883fac3936216
+
         //instancia o chat controller class
         chatController = new ChatController(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewchatView);
