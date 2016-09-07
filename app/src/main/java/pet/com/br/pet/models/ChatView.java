@@ -6,8 +6,9 @@ package pet.com.br.pet.models;
 public class ChatView {
 
     private String id;
-    private String username;
+    private String celular;
     private String codigo;
+    private String username;
     private String mensagem;
 
     public String getId() {
@@ -18,12 +19,12 @@ public class ChatView {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getCelular() {
+        return celular;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setCelular(String celular) {
+        this.celular = celular;
     }
 
     public String getCodigo() {
@@ -32,6 +33,14 @@ public class ChatView {
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getMensagem() {

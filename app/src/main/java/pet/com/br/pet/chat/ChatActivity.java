@@ -23,13 +23,16 @@ import java.util.List;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.adapters.ChatAdapter;
+import pet.com.br.pet.adapters.ChatViewAdapter;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Chat;
+import pet.com.br.pet.models.ChatView;
 import pet.com.br.pet.utils.ChatUtils;
 
 /**
  * Created by iaco_ on 26/08/2016.
  */
+
 public class ChatActivity extends BaseMenu {
     private List<Chat> chat;
     private RecyclerView recyclerView;
@@ -43,24 +46,15 @@ public class ChatActivity extends BaseMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewchat);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         chat = new ArrayList<>();
-
         requestQueue = Volley.newRequestQueue(this);
-
         getData();
-
         recyclerView.addOnScrollListener(rVOnScrollListener);
-
-        //initializing our adapter
-        adapter = new ChatAdapter(chat, this);
-
-        //Adding adapter to recyclerview
-        recyclerView.setAdapter(adapter);
+        setaAdaptador();
 
     }
 
@@ -72,7 +66,7 @@ public class ChatActivity extends BaseMenu {
             super.onScrollStateChanged(recyclerView, newState);
             switch (newState){
                 case RecyclerView.SCROLL_STATE_IDLE:
-                    getNewData();
+                    getData();
                     break;
             }
         }
@@ -85,7 +79,7 @@ public class ChatActivity extends BaseMenu {
                 getData();
             }
             if(isFirstItemDisplaying(recyclerView)){
-                getNewData();
+
             }
 
         }
@@ -105,10 +99,16 @@ public class ChatActivity extends BaseMenu {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        parseData(response);
-                        progressBar.setVisibility(View.GONE);
+                        try {
+                            parseData(response);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                        catch (Exception e){
+                            Toast.makeText(ChatActivity.this, "Não existem outras mensagens"+ e, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 },
+
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -119,88 +119,56 @@ public class ChatActivity extends BaseMenu {
         return jsonArrayRequest;
     }
 
-    private JsonArrayRequest getNewDataFromServer(String url) {
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarchat);
-        progressBar.setVisibility(View.VISIBLE);
-        setProgressBarIndeterminateVisibility(true);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        parseNewData(response);
-                        progressBar.setVisibility(View.GONE);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(ChatActivity.this, "Não existem outras mensagens" +error, Toast.LENGTH_LONG).show();
-                    }
-                });
-        return jsonArrayRequest;
-    }
-
-
     private void getData() {
         //Adding the method to the queue by calling the method getDataFromServer
-        requestQueue.add(getDataFromServer(ChatUtils.DATA_URL+String.valueOf(requestCount)+"&myusername=iaco"));
+        requestQueue.add(getDataFromServer(ChatUtils.DATA_URL+"&myusername=iaco"));
         //Incrementing the request counter
         requestCount++;
     }
 
-    private void getNewData() {
-        //Adding the method to the queue by calling the method getDataFromServer
-        requestQueue.add(getNewDataFromServer(ChatUtils.DATA_NEW_URL+String.valueOf(requestCountInit)+"&myusername=iaco"));
-        //Incrementing the request counter
-        requestCountInit++;
-    }
 
     private void parseData(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
-            Chat chat = new Chat();
+            Chat chat1 = new Chat();
             JSONObject json = null;
+
             try {
                 json = array.getJSONObject(i);
-                chat.setCodigo(json.getString(ChatUtils.TAG_CODIGO));
-                chat.setUsername(json.getString(ChatUtils.TAG_USERCHAT));
-                chat.setDescricao(json.getString(ChatUtils.TAG_DESCRICAO));
-
+                chat1.setId(json.getString(ChatUtils.TAG_ID));
+                chat1.setCelular(json.getString(ChatUtils.TAG_CELULAR));
+                chat1.setCodigo(json.getString(ChatUtils.TAG_CODIGO));
+                chat1.setUsername(json.getString(ChatUtils.TAG_USERCHAT));
+                chat1.setDescricao(json.getString(ChatUtils.TAG_DESCRICAO));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            this.chat.add(chat);
+            //this.chat.add(chat);
 
+            boolean flag = false;
+            for(Chat chaT : chat){
+                if(null != chaT.getCelular() && null != chat1.getCelular()){
+                    if(chaT.getCelular().equals(chat1.getCelular())){
+                        // Item exists
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            // if flag is true item exists, don't add.
+            if(!flag){
+                chat.add(chat1);
+            }
         }
-
         //Notifying the adapter that data has been added or changed
         adapter.notifyDataSetChanged();
     }
 
-
-    private void parseNewData(JSONArray array) {
-
-            Chat chat = new Chat();
-            JSONObject json = null;
-
-            try {
-
-                json = array.getJSONObject(0);
-                chat.setCodigo(json.getString(ChatUtils.TAG_CODIGO));
-                chat.setUsername(json.getString(ChatUtils.TAG_USERCHAT));
-                chat.setDescricao(json.getString(ChatUtils.TAG_DESCRICAO));
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (!chat.getCodigo().equals(this.chat.get(0).getCodigo())) {
-                this.chat.add(0, chat);
-            }
-
-        //Notifying the adapter that data has been added or changed
-        adapter.notifyDataSetChanged();
+    public void setaAdaptador(){
+        //initializing our adapter
+        adapter = new ChatAdapter(chat, this);
+        //Adding adapter to recyclerview
+        recyclerView.setAdapter(adapter);
     }
-
 
     private boolean isLastItemDisplaying(RecyclerView recyclerView) {
 
@@ -223,6 +191,5 @@ public class ChatActivity extends BaseMenu {
         }
         return false;
     }
-
 
 }
