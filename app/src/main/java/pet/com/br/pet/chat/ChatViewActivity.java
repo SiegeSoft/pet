@@ -2,6 +2,7 @@ package pet.com.br.pet.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -29,41 +30,49 @@ import pet.com.br.pet.database.ChatController;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.ChatView;
 import pet.com.br.pet.utils.ChatViewUtils;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 /**
  * Created by iaco_ on 28/08/2016.
  */
 public class ChatViewActivity extends BaseMenu {
     private List<ChatView> chatview;
-    //private List<ChatView> chatviewHistory;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     private RequestQueue requestQueue;
     private int _requestCount = 1;
-
     private ChatController chatController;
     private List<ChatView> chatViewList;
-    //database
-    //private SQLiteDatabase db;
-    //private ChatData banco;
+
+    //TIMMER
+    private Timer myTimer;
 
 
     // private Activity context;
+    //EditText msgenv;
 
     String user;
+    String cell;
     String codigo;
     String descricao;
     EditText msg;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         setContentView(R.layout.activity_chatview);
 
+=======
+        setContentView(R.layout.chatview);
+>>>>>>> 7e0244d914cecdb98ae8ef828c1883fac3936216
         //instancia o chat controller class
         chatController = new ChatController(this);
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewchatView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -71,29 +80,41 @@ public class ChatViewActivity extends BaseMenu {
         chatview = new ArrayList<>();
 
         Intent intent = getIntent();
+        cell = intent.getStringExtra("Usercelular");
         user = intent.getStringExtra("Userchat");
         codigo = intent.getStringExtra("Usercodigo");
         descricao = intent.getStringExtra("Userdesc");
 
         msg = (EditText) findViewById(R.id.edit_escrevemensagem);
 
+        msg.setText(""+cell);
         //msg.setText(""+user + " "+ codigo + " " +descricao );
-
+        //requestQueue = Volley.newRequestQueue(this);
         requestQueue = Volley.newRequestQueue(this);
 
-        getData();
+        //getData();
 
-        recyclerView.addOnScrollListener(rVOnScrollListener);
+        final Handler handler = new Handler();
+        handler.postDelayed( new Runnable() {
+            @Override
+            public void run() {
+                getData();
+                setaAdaptador();
+                adapter.notifyDataSetChanged();
+                handler.postDelayed( this, 2000 );
+            }
+        },  5000 );
 
-        //initializing our adapter
-        //adapter = new ChatViewAdapter(chatview, this);
+       // recyclerView.addOnScrollListener(rVOnScrollListener);
 
-        //Adding adapter to recyclerview
-//        recyclerView.setAdapter(adapter);
-        setaAdaptador();
+        //setaAdaptador();
+
+
+
     }
 
-    private RecyclerView.OnScrollListener rVOnScrollListener = new RecyclerView.OnScrollListener() {
+
+    /*private RecyclerView.OnScrollListener rVOnScrollListener = new RecyclerView.OnScrollListener() {
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView,
@@ -106,18 +127,14 @@ public class ChatViewActivity extends BaseMenu {
             }
         }
 
-
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, -dy);
             if (isLastItemDisplaying(recyclerView)) {
                 getData();
             }
-
-
         }
-    };
-
+    };*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,7 +156,6 @@ public class ChatViewActivity extends BaseMenu {
                         }
                         catch (Exception e){
                             Toast.makeText(ChatViewActivity.this, "Não existem outras mensagens "+ e, Toast.LENGTH_SHORT).show();
-
                         }
                     }
                 },
@@ -154,9 +170,13 @@ public class ChatViewActivity extends BaseMenu {
     }
 
 
+
+
+
     private void getData() {
         //Adding the method to the queue by calling the method getDataFromServer
-        requestQueue.add(getDataFromServer(ChatViewUtils.DATA_URL+"page="+_requestCount+"&CODIGO="+codigo+"&USUARIOCLIENTE="+user));
+        //cell = cell.replace("+", "");
+        requestQueue.add(getDataFromServer(ChatViewUtils.DATA_URL+"&CODIGO="+codigo+"&CELULARCLIENTE="+cell));
         //Incrementing the request counter
         _requestCount++;
     }
@@ -170,10 +190,11 @@ public class ChatViewActivity extends BaseMenu {
 
                 json = array.getJSONObject(i);
                 chatvieww.setId(json.getString(ChatViewUtils.TAG_ID));
+                chatvieww.setCelular(json.getString(ChatViewUtils.TAG_CELULAR));
                 chatvieww.setCodigo(json.getString(ChatViewUtils.TAG_CODIGO));
                 chatvieww.setUsername(json.getString(ChatViewUtils.TAG_USERCHAT));
                 chatvieww.setMensagem(json.getString(ChatViewUtils.TAG_MENSAGEM));
-
+                cell = chatvieww.getCelular();
                // ChatController chatController = new ChatController(getBaseContext());
 
 
@@ -197,9 +218,9 @@ public class ChatViewActivity extends BaseMenu {
 
             // if flag is true item exists, don't add.
             if(!flag){
-                chatController.insereDado(chatvieww.getId(),chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem());
+                chatController.insereDado(chatvieww.getId(), chatvieww.getCelular() ,chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem());
                 chatview.add(chatvieww);
-                adapter = new ChatViewAdapter(chatController.carregaTodosDados(), this);
+                adapter = new ChatViewAdapter(chatController.carregaTodosDados(chatvieww.getCelular()), this);
                 //Adding adapter to recyclerview
                 recyclerView.setAdapter(adapter);
             }
@@ -208,16 +229,20 @@ public class ChatViewActivity extends BaseMenu {
         adapter.notifyDataSetChanged();
     }
 
-    public void setaAdaptador(){
 
-        adapter = new ChatViewAdapter(chatController.carregaTodosDados(), this);
+
+    public void setaAdaptador(){
+        //setaAdaptador();
+        adapter = new ChatViewAdapter(chatController.carregaTodosDados(cell), this);
         //Adding adapter to recyclerview
         recyclerView.setAdapter(adapter);
+        //This method runs in the same thread as the UI.
+
+        //Do something to the UI thread here
 
     }
 
-
-    private boolean isLastItemDisplaying(RecyclerView recyclerView) {
+    /*private boolean isLastItemDisplaying(RecyclerView recyclerView) {
 
         if (recyclerView.getAdapter().getItemCount() != 0) {
             int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
@@ -236,6 +261,6 @@ public class ChatViewActivity extends BaseMenu {
                 return true;
         }
         return false;
-    }
+    }*/
 
 }

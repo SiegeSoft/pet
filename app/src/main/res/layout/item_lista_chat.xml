@@ -5,19 +5,35 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="3dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/usercodigo"
+                android:id="@+id/userid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:text="ID"
+                android:textSize="@dimen/raca"
+                android:maxLength="13"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/usercodigo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Codigo"
+                android:layout_below="@+id/userid"
                 android:textSize="@dimen/raca"
                 android:maxLength="13"
                 android:textStyle="bold" />

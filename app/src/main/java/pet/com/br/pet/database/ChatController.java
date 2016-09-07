@@ -22,13 +22,14 @@ public class ChatController {
         banco = new ChatData(context);
     }
 
-    public String insereDado(String id, String codigo, String username, String mensagem) {
+    public String insereDado(String id, String celular, String codigo, String username, String mensagem) {
         ContentValues valores;
         long resultado;
 
         db = banco.getWritableDatabase();
         valores = new ContentValues();
         valores.put(ChatData.C_ID_1, id);
+        valores.put(ChatData.C_CELULAR_1, celular);
         valores.put(ChatData.C_CODIGO_1, codigo);
         valores.put(ChatData.C_USERNAME_1, username);
         valores.put(ChatData.C_MSG_1, mensagem);
@@ -40,46 +41,42 @@ public class ChatController {
             return "Erro ao inserir registro";
         else
             return "Registro Inserido com sucesso";
-
     }
 
-    public List<ChatView> carregaTodosDados() {
-        ChatView chatview;
-        List<ChatView> chatViewList = new ArrayList<ChatView>();
+    public List<ChatView> carregaTodosDados(String celular) {
+            ChatView chatview;
+            List<ChatView> chatViewList = new ArrayList<ChatView>();
 
-        String[] campos = {banco.C_ID_1, banco.C_CODIGO_1, banco.C_USERNAME_1, banco.C_MSG_1};
-        db = banco.getWritableDatabase();
-        Cursor cursor = db.query(banco.TABLE_1, campos, null, null, null, null, null);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-
-                    chatview = new ChatView();
-                    chatview.setId(cursor.getString(0));
-                    chatview.setCodigo(cursor.getString(1));
-                    chatview.setUsername(cursor.getString(2));
-                    chatview.setMensagem(cursor.getString(3));
-
-                    boolean flag = false;
-                    for(ChatView chat : chatViewList){
-                        if(null != chat.getId() && null != chatview.getId()){
-                            if(chat.getId().equals(chatview.getId())){
-                                // Item exists
-                                flag = true;
-                                break;
+            String[] campos = {banco.C_ID_1, banco.C_CODIGO_1, banco.C_USERNAME_1, banco.C_MSG_1};
+        String whereClause = banco.C_CELULAR_1+"=?";
+        String [] whereArgs = {celular};
+            db = banco.getWritableDatabase();
+            Cursor cursor = db.query(banco.TABLE_1, campos, whereClause, whereArgs, null, null, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    do {
+                        chatview = new ChatView();
+                        chatview.setId(cursor.getString(0));
+                        chatview.setCodigo(cursor.getString(1));
+                        chatview.setUsername(cursor.getString(2));
+                        chatview.setMensagem(cursor.getString(3));
+                        boolean flag = false;
+                        for (ChatView chat : chatViewList) {
+                            if (null != chat.getId() && null != chatview.getId()) {
+                                if (chat.getId().equals(chatview.getId())) {
+                                    // Item exists
+                                    flag = true;
+                                    break;
+                                }
                             }
                         }
-                    }
-
-                    if(!flag){
-                        chatViewList.add(chatview);
-                    }
-
-                } while (cursor.moveToNext());
+                        if (!flag) {
+                            chatViewList.add(chatview);
+                        }
+                    } while (cursor.moveToNext());
+                }
             }
+            db.close();
+            return chatViewList;
         }
-        db.close();
-        return chatViewList;
-    }
-
 }
