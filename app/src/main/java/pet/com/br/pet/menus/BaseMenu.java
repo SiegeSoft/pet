@@ -17,8 +17,7 @@ import android.widget.FrameLayout;
 import pet.com.br.pet.R;
 import pet.com.br.pet.anuncio.AnunciosActivity;
 import pet.com.br.pet.anuncio.CadastroAnuncioActivity;
-import pet.com.br.pet.chat.ChatActivity;
-import pet.com.br.pet.gps.BuscaRapidaActivity;
+import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 
 /**
  * Created by rafae on 19/08/2016.
@@ -136,9 +135,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
                 break;
 
             case R.id.sub_chat:
-                iniciaOutraActivity(ChatActivity.class);
                 fullLayout.closeDrawer(GravityCompat.START);
-                finish();
                 break;
 
             case R.id.sub_conta:

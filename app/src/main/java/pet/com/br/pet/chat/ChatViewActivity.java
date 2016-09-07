@@ -1,8 +1,6 @@
 package pet.com.br.pet.chat;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +26,6 @@ import java.util.List;
 import pet.com.br.pet.R;
 import pet.com.br.pet.adapters.ChatViewAdapter;
 import pet.com.br.pet.database.ChatController;
-import pet.com.br.pet.database.ChatData;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.ChatView;
 import pet.com.br.pet.utils.ChatViewUtils;
@@ -62,7 +59,7 @@ public class ChatViewActivity extends BaseMenu {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chatview);
+        setContentView(R.layout.activity_chatview);
 
         //instancia o chat controller class
         chatController = new ChatController(this);
