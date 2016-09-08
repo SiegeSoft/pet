@@ -22,13 +22,6 @@
 
             android:layout_above="@+id/botaoenviar"/>
 
-        <ProgressBar
-            android:id="@+id/progressBarchatView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
-
-
         <EditText
             android:id="@+id/edit_escrevemensagem"
             android:layout_width="fill_parent"
@@ -45,6 +38,7 @@
             android:layout_height="wrap_content"
             android:text="Enviar"
             android:textSize="25sp"
+            android:onClick="botaoenviarmensagem"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             />

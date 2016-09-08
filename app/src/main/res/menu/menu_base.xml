@@ -6,7 +6,8 @@
 
         <menu>
             <item android:id="@+id/sub_ver_anuncio"
-                android:title="Anuncios" android:state_pressed="true" android:icon="@android:drawable/ic_menu_add"/>
+                android:title="Anuncios" android:state_pressed="true" android:icon="@android:drawable/ic_menu_add"
+                />
 
             <group android:checkableBehavior="single" android:visible="false">
 

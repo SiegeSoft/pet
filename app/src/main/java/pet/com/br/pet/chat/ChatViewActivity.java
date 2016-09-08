@@ -1,5 +1,6 @@
 package pet.com.br.pet.chat;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,10 +12,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -22,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import pet.com.br.pet.R;
@@ -30,6 +35,8 @@ import pet.com.br.pet.database.ChatController;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.ChatView;
 import pet.com.br.pet.utils.ChatViewUtils;
+
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,6 +45,8 @@ import java.util.TimerTask;
  * Created by iaco_ on 28/08/2016.
  */
 public class ChatViewActivity extends BaseMenu {
+
+    //LISTVIEW
     private List<ChatView> chatview;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -47,25 +56,29 @@ public class ChatViewActivity extends BaseMenu {
     private ChatController chatController;
     private List<ChatView> chatViewList;
 
-    //TIMMER
+    //TIMMER HANDLER
     private Timer myTimer;
 
 
     // private Activity context;
-    //EditText msgenv;
 
+    //INTENT VARS
     String user;
     String cell;
     String codigo;
     String descricao;
-    EditText msg;
+    //ditText msg;
 
+    //SENDDATACHAT
+    EditText mensagem;
+    String mg;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatview);
+        mensagem = (EditText) findViewById(R.id.edit_escrevemensagem);
 
 
         //instancia o chat controller class
@@ -82,14 +95,12 @@ public class ChatViewActivity extends BaseMenu {
         codigo = intent.getStringExtra("Usercodigo");
         descricao = intent.getStringExtra("Userdesc");
 
-        msg = (EditText) findViewById(R.id.edit_escrevemensagem);
+        //msg = (EditText) findViewById(R.id.edit_escrevemensagem);
 
-        msg.setText(""+cell);
+        //msg.setText(""+cell);
         //msg.setText(""+user + " "+ codigo + " " +descricao );
-        //requestQueue = Volley.newRequestQueue(this);
-        requestQueue = Volley.newRequestQueue(this);
 
-        //getData();
+        requestQueue = Volley.newRequestQueue(this);
 
         final Handler handler = new Handler();
         handler.postDelayed( new Runnable() {
@@ -98,15 +109,11 @@ public class ChatViewActivity extends BaseMenu {
                 getData();
                 setaAdaptador();
                 adapter.notifyDataSetChanged();
-                handler.postDelayed( this, 2000 );
+                handler.postDelayed( this, 3000 );
             }
-        },  5000 );
+        },  3000 );
 
        // recyclerView.addOnScrollListener(rVOnScrollListener);
-
-        //setaAdaptador();
-
-
 
     }
 
@@ -140,27 +147,27 @@ public class ChatViewActivity extends BaseMenu {
     }
 
     private JsonArrayRequest getDataFromServer(String url) {
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarchatView);
-        progressBar.setVisibility(View.VISIBLE);
-        setProgressBarIndeterminateVisibility(true);
+        //final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarchatView);
+        //progressBar.setVisibility(View.VISIBLE);
+        //setProgressBarIndeterminateVisibility(true);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
                             parseData(response);
-                            progressBar.setVisibility(View.GONE);
+                            //progressBar.setVisibility(View.GONE);
                         }
                         catch (Exception e){
-                            Toast.makeText(ChatViewActivity.this, "Não existem outras mensagens "+ e, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(ChatViewActivity.this, "Não existem outras mensagens "+ e, Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(ChatViewActivity.this, "Não existem outras mensagens", Toast.LENGTH_SHORT).show();
+                        //progressBar.setVisibility(View.GONE);
+                        //Toast.makeText(ChatViewActivity.this, "Não existem outras mensagens", Toast.LENGTH_SHORT).show();
                     }
                 });
         return jsonArrayRequest;
@@ -192,8 +199,6 @@ public class ChatViewActivity extends BaseMenu {
                 chatvieww.setUsername(json.getString(ChatViewUtils.TAG_USERCHAT));
                 chatvieww.setMensagem(json.getString(ChatViewUtils.TAG_MENSAGEM));
                 cell = chatvieww.getCelular();
-               // ChatController chatController = new ChatController(getBaseContext());
-
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -239,6 +244,60 @@ public class ChatViewActivity extends BaseMenu {
 
     }
 
+    public void botaoenviarmensagem(View v){
+            String mg = mensagem.getText().toString().trim();
+
+            if(mg!= "" && mg.length() > 0){enviaMensagem(mg);}else{
+                Toast.makeText(ChatViewActivity.this, "Campo mensagem vazio ;)", Toast.LENGTH_SHORT).show();
+            }
+    }
+
+    public void enviaMensagem(final String msg){
+        //mg = mensagem.getText().toString().trim();
+        msg.trim();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ChatViewUtils.DATA_MENSAGEM,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try{
+                            if(response.trim().equals("success")){
+                                mensagem.setText("");
+                            }else{
+                                Toast.makeText(ChatViewActivity.this, "Não foi possivel cadastrar a mensagem", Toast.LENGTH_SHORT).show();
+                            }
+                        }catch(Exception e){
+                            Toast.makeText(ChatViewActivity.this, "Não foi possivel cadastrar a mensagem", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ChatViewActivity.this, "Não foi possivel cadastrar a mensagem", Toast.LENGTH_SHORT).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<String,String>();
+                map.put("CODIGO",codigo);
+                map.put("MENSAGEM" ,msg);
+                map.put("MEUNOME",codigo);
+                map.put("MEUCELULAR",codigo);
+                map.put("NOMEOUTRO",codigo);
+                map.put("CELULAROUTRO",codigo);
+                return map;
+            }
+        };
+        RequestQueue requestQueueNew = Volley.newRequestQueue(this);
+        requestQueueNew.add(stringRequest);
+
+    }
+
+
+
+
+
     /*private boolean isLastItemDisplaying(RecyclerView recyclerView) {
 
         if (recyclerView.getAdapter().getItemCount() != 0) {
@@ -259,5 +318,7 @@ public class ChatViewActivity extends BaseMenu {
         }
         return false;
     }*/
+
+
 
 }
