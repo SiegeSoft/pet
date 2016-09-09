@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pet.com.br.pet.R;
+import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.BuscaRapida;
 import pet.com.br.pet.tindercard.FlingCardListener;
 import pet.com.br.pet.tindercard.SwipeFlingAdapterView;
@@ -48,13 +49,11 @@ import pet.com.br.pet.utils.BuscaRapidaUtils;
  * Edit by rafael on 30/08/2016.
  */
 
-public class BuscaRapidaActivity extends AppCompatActivity implements FlingCardListener.ActionDownInterface {
+public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.ActionDownInterface {
 
 
     public static MyAppAdapter _myAppAdapter;
     private String _getLatitude, _getLongitude;
-    private TextView myatualLongitude;
-    private TextView myatualLatitude;
     private RequestQueue requestQueue;
     public static ViewHolder _viewHolder;
     private SwipeFlingAdapterView _flingContainer;
@@ -112,19 +111,21 @@ public class BuscaRapidaActivity extends AppCompatActivity implements FlingCardL
             public void onLeftCardExit(Object dataObject) {
                 _buscaRapidaLista.remove(0);
                 _myAppAdapter.notifyDataSetChanged();
-                getData();
+
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
                 _buscaRapidaLista.remove(0);
                 _myAppAdapter.notifyDataSetChanged();
-                getData();
+
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-
+                if(itemsInAdapter == 0) {
+                    getData();
+                }
             }
 
             @Override
@@ -260,21 +261,19 @@ public class BuscaRapidaActivity extends AppCompatActivity implements FlingCardL
                 LayoutInflater inflater = getLayoutInflater();
                 rowView = inflater.inflate(R.layout.item_busca_rapida, parent, false);
 
-                // configure view holder
                 _viewHolder = new ViewHolder();
                 _viewHolder._nome = (TextView) rowView.findViewById(R.id.raca);
                 _viewHolder._info = (TextView) rowView.findViewById(R.id.infos);
-                _viewHolder._descrcao = (TextView) rowView.findViewById(R.id.descricao);
                 _viewHolder._background = (FrameLayout) rowView.findViewById(R.id.background);
                 _viewHolder._foto = (ImageView) rowView.findViewById(R.id.cardImage);
                 rowView.setTag(_viewHolder);
             } else {
                 _viewHolder = (ViewHolder) convertView.getTag();
             }
+
             _viewHolder._nome.setText(_buscaRapidaLista.get(position).getRaca());
             _viewHolder._info.setText("Idade: " + _buscaRapidaLista.get(position).getIdade() + " Doação/Venda: " + _buscaRapidaLista.get(position).getTipoVenda()
                     + " Dono: " + _buscaRapidaLista.get(position).getDono());
-            _viewHolder._descrcao.setText(_buscaRapidaLista.get(position).getDescricao());
             _viewHolder._foto.setImageBitmap(_buscaRapidaLista.get(position).getImgid());
             return rowView;
         }
