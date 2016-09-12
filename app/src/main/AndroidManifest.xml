@@ -12,7 +12,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <permission android:name="pet.com.br.pet.database.provedor.permission.CHAT_PROVEDOR" android:protectionLevel="normal" />
+
+    <permission
+        android:name="pet.com.br.pet.database.provedor.permission.CHAT_PROVEDOR"
+        android:protectionLevel="normal" />
 
     <uses-permission android:name="pet.com.br.pet.database.provedor.permission.CHAT_PROVEDOR" />
 
@@ -25,27 +28,25 @@
         <activity
             android:name=".anuncio.AnunciosActivity"
             android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity android:name=".anuncio.CadastroAnuncioActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".anuncio.CadastroAnuncioActivity"
             android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".chat.ChatActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".chat.ChatActivity"
             android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".chat.ChatViewActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".chat.ChatViewActivity"
             android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".buscaRapida.BuscaRapidaActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".buscaRapida.BuscaRapidaActivity"
             android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
-        <activity android:name=".autentica.Login"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".autentica.Login"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -54,6 +55,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".buscaRapida.InfoBuscaRapidaActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

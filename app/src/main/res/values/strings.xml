@@ -3,4 +3,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
+    <string name="descricao">Descrição:</string>
+    <string name="categoria">Categoria:</string>
+    <string name="doa_ou_venda">Doação ou Venda:</string>
+    <string name="dono">Dono:</string>
 </resources>

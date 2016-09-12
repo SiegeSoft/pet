@@ -18,6 +18,8 @@ public class BuscaRapida {
     private String codigo;
     private String descricao;
     private String categoria;
+    private String stringImg;
+
 
     public String getId() {
         return id;
@@ -63,7 +65,12 @@ public class BuscaRapida {
         return imgid;
     }
 
+    public String getStringImg() {
+        return stringImg;
+    }
+
     public void setImgid(String imgid) {
+        this.stringImg = imgid;
         byte[] decodedString = Base64.decode(imgid, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         this.imgid = decodedByte;

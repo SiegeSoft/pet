@@ -2,13 +2,13 @@ package pet.com.br.pet.buscaRapida;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,9 +25,10 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,6 +59,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     public static ViewHolder _viewHolder;
     private SwipeFlingAdapterView _flingContainer;
     private List<BuscaRapida> _buscaRapidaLista;
+    private Context _context;
 
     public static void removeBackground() {
         _viewHolder._background.setVisibility(View.GONE);
@@ -68,7 +70,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_busca_rapida);
-
+        _context = this;
         _flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         _buscaRapidaLista = new ArrayList<BuscaRapida>();
 
@@ -93,7 +95,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _getLongitude = "" + longitude;
 
         requestQueue = Volley.newRequestQueue(this);
-        getData();
 
 
         _myAppAdapter = new MyAppAdapter(_buscaRapidaLista, BuscaRapidaActivity.this);
@@ -123,7 +124,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                if(itemsInAdapter == 0) {
+                if(itemsInAdapter == 0){
                     getData();
                 }
             }
@@ -141,16 +142,23 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-
-                View view = _flingContainer.getSelectedView();
-                view.findViewById(R.id.background).setAlpha(0);
-
-                _myAppAdapter.notifyDataSetChanged();
+                showInfos(itemPosition);
             }
         });
 
     }
 
+    private void showInfos(int position){
+        Intent intent = new Intent(_context, InfoBuscaRapidaActivity.class);
+        intent.putExtra("codigo",_buscaRapidaLista.get(position).getCodigo());
+        intent.putExtra("raca",_buscaRapidaLista.get(position).getRaca());
+        intent.putExtra("idade",_buscaRapidaLista.get(position).getIdade());
+        intent.putExtra("descricao",_buscaRapidaLista.get(position).getDescricao());
+        intent.putExtra("categoria",_buscaRapidaLista.get(position).getCategoria());
+        intent.putExtra("vendaoudoa",_buscaRapidaLista.get(position).getTipoVenda());
+        intent.putExtra("dono",_buscaRapidaLista.get(position).getDono());
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -164,15 +172,15 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     }
 
 
-    private JsonObjectRequest getDataFromServer(String latitude, String longitude) {
+    private JsonArrayRequest getDataFromServer(String latitude, String longitude) {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.VISIBLE);
         setProgressBarIndeterminateVisibility(true);
 
-        JsonObjectRequest json = new JsonObjectRequest(BuscaRapidaUtils.DATA_GPS_URL + latitude + "&LON=" + longitude,
-                new Response.Listener<JSONObject>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(BuscaRapidaUtils.DATA_GPS_URL + latitude + "&LON=" + longitude,
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         parseData(response);
                         progressBar.setVisibility(View.GONE);
                     }
@@ -184,29 +192,32 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                         Toast.makeText(BuscaRapidaActivity.this, "Sem conexao com o servidor", Toast.LENGTH_LONG).show();
                     }
                 });
-        return json;
+        return jsonArrayRequest;
     }
 
 
-    private void parseData(JSONObject json) {
-        BuscaRapida buscaRapida;
-        try {
-            buscaRapida = new BuscaRapida();
-            buscaRapida.setId(json.getString(BuscaRapidaUtils.TAG_ID));
-            buscaRapida.setCodigo(json.getString(BuscaRapidaUtils.TAG_COD));
-            buscaRapida.setRaca(json.getString(BuscaRapidaUtils.TAG_RACA));
-            buscaRapida.setCategoria(json.getString(BuscaRapidaUtils.TAG_CATEGORIA));
-            buscaRapida.setDescricao(json.getString(BuscaRapidaUtils.TAG_DESCRICAO));
-            buscaRapida.setIdade(json.getString(BuscaRapidaUtils.TAG_IDADE));
-            buscaRapida.setTipoVenda(json.getString(BuscaRapidaUtils.TAG_VALOR));
-            buscaRapida.setDono(json.getString(BuscaRapidaUtils.TAG_DONO));
-            buscaRapida.setImgid(json.getString(BuscaRapidaUtils.TAG_IMAGEMPATCH));
+    private void parseData(JSONArray array) {
+        for (int i = 0; i < array.length(); i++) {
+            BuscaRapida buscaRapida = new BuscaRapida();
+            JSONObject json = null;
+            try {
+                json = array.getJSONObject(i);
+                buscaRapida.setId(json.getString(BuscaRapidaUtils.TAG_ID));
+                buscaRapida.setCodigo(json.getString(BuscaRapidaUtils.TAG_COD));
+                buscaRapida.setRaca(json.getString(BuscaRapidaUtils.TAG_RACA));
+                buscaRapida.setCategoria(json.getString(BuscaRapidaUtils.TAG_CATEGORIA));
+                buscaRapida.setDescricao(json.getString(BuscaRapidaUtils.TAG_DESCRICAO));
+                buscaRapida.setIdade(json.getString(BuscaRapidaUtils.TAG_IDADE));
+                buscaRapida.setTipoVenda(json.getString(BuscaRapidaUtils.TAG_VALOR));
+                buscaRapida.setDono(json.getString(BuscaRapidaUtils.TAG_DONO));
+                buscaRapida.setImgid(json.getString(BuscaRapidaUtils.TAG_IMAGEMPATCH));
 
+            } catch (JSONException e) {
+                Toast.makeText(BuscaRapidaActivity.this, "Error ao consultar o banco de dados" + e, Toast.LENGTH_SHORT).show();
+            }
             _buscaRapidaLista.add(buscaRapida);
-            _myAppAdapter.notifyDataSetChanged();
-        } catch (JSONException e) {
-            Toast.makeText(BuscaRapidaActivity.this, "Error ao consultar o banco de dados" + e, Toast.LENGTH_SHORT).show();
         }
+        _myAppAdapter.notifyDataSetChanged();
     }
 
 
@@ -222,7 +233,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
     public static class ViewHolder {
         public static FrameLayout _background;
-        public TextView _nome, _info, _descrcao;
+        public TextView _nome, _info;
         public ImageView _foto;
 
     }
@@ -272,8 +283,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             }
 
             _viewHolder._nome.setText(_buscaRapidaLista.get(position).getRaca());
-            _viewHolder._info.setText("Idade: " + _buscaRapidaLista.get(position).getIdade() + " Doação/Venda: " + _buscaRapidaLista.get(position).getTipoVenda()
-                    + " Dono: " + _buscaRapidaLista.get(position).getDono());
+            _viewHolder._info.setText("Idade: " + _buscaRapidaLista.get(position).getIdade());
             _viewHolder._foto.setImageBitmap(_buscaRapidaLista.get(position).getImgid());
             return rowView;
         }

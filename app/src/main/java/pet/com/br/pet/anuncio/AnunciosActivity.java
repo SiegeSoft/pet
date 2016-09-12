@@ -152,16 +152,16 @@ public class AnunciosActivity extends BaseMenu {
 
 
     private void getData() {
-        //Adding the method to the queue by calling the method getDataFromServer
+
         requestQueue.add(getDataFromServer(AnunciosUtils.DATA_URL+String.valueOf(requestCount)));
-        //Incrementing the request counter
+
         requestCount++;
     }
 
     private void getNewData() {
-        //Adding the method to the queue by calling the method getDataFromServer
+
         requestQueue.add(getNewDataFromServer(AnunciosUtils.DATA_NEW_URL+String.valueOf(requestCountInit)));
-        //Incrementing the request counter
+
         requestCountInit++;
     }
 

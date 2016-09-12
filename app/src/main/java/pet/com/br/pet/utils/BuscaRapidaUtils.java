@@ -5,6 +5,7 @@ package pet.com.br.pet.utils;
  */
 public class BuscaRapidaUtils {
     public static final String DATA_GPS_URL = "http://thebossgamestudio.xyz/pet/pegarGPS.php?LAT=";
+    public static final String DATA_IMAGE_URL = "http://thebossgamestudio.xyz/pet/getOneAnuncio.php?codigo=";
     public static final String TAG_ID = "id";
     public static final String TAG_LAT = "LAT";
     public static final String TAG_LON = "LON";
