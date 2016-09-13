@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -68,6 +69,9 @@ public class ChatViewActivity extends BaseMenu {
     String codigo;
     String descricao;
     //ditText msg;
+    TelephonyManager tm;
+    String number;
+
 
     //SENDDATACHAT
     EditText mensagem;
@@ -80,6 +84,8 @@ public class ChatViewActivity extends BaseMenu {
         setContentView(R.layout.activity_chatview);
         mensagem = (EditText) findViewById(R.id.edit_escrevemensagem);
 
+        tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+        number = tm.getLine1Number();
 
         //instancia o chat controller class
         chatController = new ChatController(this);
@@ -90,7 +96,6 @@ public class ChatViewActivity extends BaseMenu {
         chatview = new ArrayList<>();
 
         Intent intent = getIntent();
-        cell = intent.getStringExtra("Usercelular");
         user = intent.getStringExtra("Userchat");
         codigo = intent.getStringExtra("Usercodigo");
         descricao = intent.getStringExtra("Userdesc");
@@ -180,7 +185,7 @@ public class ChatViewActivity extends BaseMenu {
     private void getData() {
         //Adding the method to the queue by calling the method getDataFromServer
         //cell = cell.replace("+", "");
-        requestQueue.add(getDataFromServer(ChatViewUtils.DATA_URL+"&CODIGO="+codigo+"&CELULARCLIENTE="+cell));
+        requestQueue.add(getDataFromServer(ChatViewUtils.DATA_URL+"&CODIGO="+codigo+"&USUARIODESTINO="+user));
         //Incrementing the request counter
         _requestCount++;
     }
@@ -194,11 +199,10 @@ public class ChatViewActivity extends BaseMenu {
 
                 json = array.getJSONObject(i);
                 chatvieww.setId(json.getString(ChatViewUtils.TAG_ID));
-                chatvieww.setCelular(json.getString(ChatViewUtils.TAG_CELULAR));
                 chatvieww.setCodigo(json.getString(ChatViewUtils.TAG_CODIGO));
                 chatvieww.setUsername(json.getString(ChatViewUtils.TAG_USERCHAT));
                 chatvieww.setMensagem(json.getString(ChatViewUtils.TAG_MENSAGEM));
-                cell = chatvieww.getCelular();
+                chatvieww.setMeunome("iaco");
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -220,9 +224,9 @@ public class ChatViewActivity extends BaseMenu {
 
             // if flag is true item exists, don't add.
             if(!flag){
-                chatController.insereDado(chatvieww.getId(), chatvieww.getCelular() ,chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem());
+                chatController.insereDado(chatvieww.getId(),chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem());
                 chatview.add(chatvieww);
-                adapter = new ChatViewAdapter(chatController.carregaTodosDados(chatvieww.getCelular()), this);
+                adapter = new ChatViewAdapter(chatController.carregaTodosDados(chatvieww.getUsername()), this);
                 //Adding adapter to recyclerview
                 recyclerView.setAdapter(adapter);
             }
@@ -235,7 +239,7 @@ public class ChatViewActivity extends BaseMenu {
 
     public void setaAdaptador(){
         //setaAdaptador();
-        adapter = new ChatViewAdapter(chatController.carregaTodosDados(cell), this);
+        adapter = new ChatViewAdapter(chatController.carregaTodosDados(user), this);
         //Adding adapter to recyclerview
         recyclerView.setAdapter(adapter);
         //This method runs in the same thread as the UI.
@@ -283,7 +287,6 @@ public class ChatViewActivity extends BaseMenu {
                 map.put("CODIGO",codigo);
                 map.put("MENSAGEM" ,msg);
                 map.put("MEUNOME",codigo);
-                map.put("MEUCELULAR",codigo);
                 map.put("NOMEOUTRO",codigo);
                 map.put("CELULAROUTRO",codigo);
                 return map;

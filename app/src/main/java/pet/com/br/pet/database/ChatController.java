@@ -22,14 +22,13 @@ public class ChatController {
         banco = new ChatData(context);
     }
 
-    public String insereDado(String id, String celular, String codigo, String username, String mensagem) {
+    public String insereDado(String id, String codigo, String username, String mensagem) {
         ContentValues valores;
         long resultado;
 
         db = banco.getWritableDatabase();
         valores = new ContentValues();
         valores.put(ChatData.C_ID_1, id);
-        valores.put(ChatData.C_CELULAR_1, celular);
         valores.put(ChatData.C_CODIGO_1, codigo);
         valores.put(ChatData.C_USERNAME_1, username);
         valores.put(ChatData.C_MSG_1, mensagem);
@@ -43,13 +42,13 @@ public class ChatController {
             return "Registro Inserido com sucesso";
     }
 
-    public List<ChatView> carregaTodosDados(String celular) {
+    public List<ChatView> carregaTodosDados(String Username) {
             ChatView chatview;
             List<ChatView> chatViewList = new ArrayList<ChatView>();
 
             String[] campos = {banco.C_ID_1, banco.C_CODIGO_1, banco.C_USERNAME_1, banco.C_MSG_1};
-        String whereClause = banco.C_CELULAR_1+"=?";
-        String [] whereArgs = {celular};
+        String whereClause =banco.C_USERNAME_1+"=?";
+        String [] whereArgs = {Username};
             db = banco.getWritableDatabase();
             Cursor cursor = db.query(banco.TABLE_1, campos, whereClause, whereArgs, null, null, null);
             if (cursor != null) {

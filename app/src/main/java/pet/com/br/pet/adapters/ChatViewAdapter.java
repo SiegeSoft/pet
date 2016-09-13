@@ -3,14 +3,18 @@ package pet.com.br.pet.adapters;
 import android.app.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +23,7 @@ import org.w3c.dom.Text;
 import java.util.List;
 
 import pet.com.br.pet.R;
+import pet.com.br.pet.chat.ChatViewActivity;
 import pet.com.br.pet.database.ChatController;
 import pet.com.br.pet.database.ChatData;
 import pet.com.br.pet.models.ChatView;
@@ -31,14 +36,12 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
     private Activity context;
     private List<ChatView> chatView;
 
-
     public ChatViewAdapter(List<ChatView> chatView, Activity context) {
         super();
+
         this.chatView = chatView;
         this.context = context;
     }
-
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -52,33 +55,35 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-
-        //ChatView userChatView = chatView.get(position);
-
-
-
-
         holder.txtUserid.setText(chatView.get(position).getId());
         holder.txtUserchat.setText(chatView.get(position).getCodigo());
         holder.txtUsercodigo.setText(chatView.get(position).getUsername());
         holder.txtUsermsg.setText(chatView.get(position).getMensagem());
 
+        String meunome;
+        String nomeoutro;
 
+        nomeoutro = chatView.get(position).getUsername();
+        meunome = chatView.get(position).getMeunome();
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)holder.cardView.getLayoutParams();
+        if(nomeoutro != meunome){
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            holder.cardView.setLayoutParams(params);
+        }else{
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.cardView.setLayoutParams(params);
+        }
+
+        //holder.cardView.setparent
 //        holder.txtUserid.setText(userChatView.getId());
 //        holder.txtUserchat.setText(userChatView.getUsername());
 //        holder.txtUsercodigo.setText(userChatView.getCodigo());
 //        holder.txtUsermsg.setText(userChatView.getMensagem());
-
         //holder.txtUsercodigo.setText();
-
         /*holder.itemView.setOnClickListener(new View.OnClickListener(){
-
-
-
             @Override
 
             public void onClick(View v) {
-
                 //Intent intent = new Intent(v.getContext(), ChatViewActivity.class);
                 //intent.putExtra("Userchat", userChat.getUsername());
                 //intent.putExtra("Usercodigo", userChat.getCodigo());
@@ -88,7 +93,6 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
                 //context.finish();
             }
         });*/
-
     }
 
     @Override
@@ -96,14 +100,14 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
         return chatView.size();
     }
 
-
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtUserid;
         TextView txtUserchat;
         TextView txtUsercodigo;
         TextView txtUsermsg;
-
+        CardView cardView;
+        Context context;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -111,8 +115,8 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
             txtUserchat = (TextView) itemView.findViewById(R.id.userchatView);
             txtUsercodigo = (TextView) itemView.findViewById(R.id.usercodigoView);
             txtUsermsg = (TextView) itemView.findViewById(R.id.usermsgView);
-
-
+            cardView = (CardView) itemView.findViewById(R.id.cardChatView);
+            context = itemView.getContext();
         }
     }
 

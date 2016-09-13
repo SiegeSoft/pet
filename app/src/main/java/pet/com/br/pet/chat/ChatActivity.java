@@ -135,7 +135,6 @@ public class ChatActivity extends BaseMenu {
             try {
                 json = array.getJSONObject(i);
                 chat1.setId(json.getString(ChatUtils.TAG_ID));
-                chat1.setCelular(json.getString(ChatUtils.TAG_CELULAR));
                 chat1.setCodigo(json.getString(ChatUtils.TAG_CODIGO));
                 chat1.setUsername(json.getString(ChatUtils.TAG_USERCHAT));
                 chat1.setDescricao(json.getString(ChatUtils.TAG_DESCRICAO));
@@ -146,8 +145,8 @@ public class ChatActivity extends BaseMenu {
 
             boolean flag = false;
             for(Chat chaT : chat){
-                if(null != chaT.getCelular() && null != chat1.getCelular()){
-                    if(chaT.getCelular().equals(chat1.getCelular())){
+                if(null != chaT.getUsername() && null != chat1.getUsername()){
+                    if(chaT.getUsername().equals(chat1.getUsername())){
                         // Item exists
                         flag = true;
                         break;
