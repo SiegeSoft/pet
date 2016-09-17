@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -29,6 +28,7 @@ import pet.com.br.pet.R;
 import pet.com.br.pet.adapters.AnunciosAdapter;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Anuncios;
+import pet.com.br.pet.models.Profile;
 import pet.com.br.pet.utils.AnunciosUtils;
 
 
@@ -44,6 +44,8 @@ public class AnunciosActivity extends BaseMenu {
     private RequestQueue requestQueue;
     private int requestCount = 1, requestCountInit = 2;
 
+    //String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class AnunciosActivity extends BaseMenu {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         anuncios = new ArrayList<>();
+
 
 
         requestQueue = Volley.newRequestQueue(this);

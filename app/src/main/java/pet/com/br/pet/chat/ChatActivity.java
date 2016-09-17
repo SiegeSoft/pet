@@ -27,6 +27,7 @@ import pet.com.br.pet.adapters.ChatViewAdapter;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Chat;
 import pet.com.br.pet.models.ChatView;
+import pet.com.br.pet.models.Profile;
 import pet.com.br.pet.utils.ChatUtils;
 
 /**
@@ -121,7 +122,7 @@ public class ChatActivity extends BaseMenu {
 
     private void getData() {
         //Adding the method to the queue by calling the method getDataFromServer
-        requestQueue.add(getDataFromServer(ChatUtils.DATA_URL+"&myusername=iaco"));
+        requestQueue.add(getDataFromServer(ChatUtils.DATA_URL+ "myusername="+ Profile.getUsername()));
         //Incrementing the request counter
         requestCount++;
     }

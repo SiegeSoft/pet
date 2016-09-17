@@ -18,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+
 import org.w3c.dom.Text;
 
 import java.util.List;
@@ -43,6 +45,8 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
         this.context = context;
     }
 
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -56,23 +60,23 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         holder.txtUserid.setText(chatView.get(position).getId());
-        holder.txtUserchat.setText(chatView.get(position).getCodigo());
-        holder.txtUsercodigo.setText(chatView.get(position).getUsername());
+        holder.txtUsercodigo.setText(chatView.get(position).getCodigo());
+        holder.txtUserchat.setText(chatView.get(position).getUsername());
         holder.txtUsermsg.setText(chatView.get(position).getMensagem());
 
         String meunome;
         String nomeoutro;
 
-        nomeoutro = chatView.get(position).getUsername();
-        meunome = chatView.get(position).getMeunome();
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)holder.cardView.getLayoutParams();
-        if(nomeoutro != meunome){
-            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            holder.cardView.setLayoutParams(params);
-        }else{
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            holder.cardView.setLayoutParams(params);
-        }
+        //nomeoutro = chatView.get(position).getUsername();
+        //meunome = chatView.get(position).getMeunome();
+       // RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)holder.cardView.getLayoutParams();
+        //if(nomeoutro != meunome){
+        //    params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        //    holder.cardView.setLayoutParams(params);
+       // }else{
+       //     params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        //    holder.cardView.setLayoutParams(params);
+        //}
 
         //holder.cardView.setparent
 //        holder.txtUserid.setText(userChatView.getId());

@@ -9,7 +9,6 @@ public class ChatView {
     private String codigo;
     private String username;
     private String mensagem;
-    private String meunome;
 
     public String getId() {
         return id;
@@ -33,14 +32,6 @@ public class ChatView {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getMeunome() {
-        return meunome;
-    }
-
-    public void setMeunome(String meunome) {
-        this.meunome = meunome;
     }
 
     public String getMensagem() {

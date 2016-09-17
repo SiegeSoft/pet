@@ -1,16 +1,13 @@
 package pet.com.br.pet.chat;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -35,11 +32,12 @@ import pet.com.br.pet.adapters.ChatViewAdapter;
 import pet.com.br.pet.database.ChatController;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.ChatView;
+import pet.com.br.pet.models.Profile;
 import pet.com.br.pet.utils.ChatViewUtils;
 
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -55,37 +53,24 @@ public class ChatViewActivity extends BaseMenu {
     private RequestQueue requestQueue;
     private int _requestCount = 1;
     private ChatController chatController;
-    private List<ChatView> chatViewList;
-
-    //TIMMER HANDLER
-    private Timer myTimer;
-
 
     // private Activity context;
 
     //INTENT VARS
     String user;
-    String cell;
     String codigo;
     String descricao;
-    //ditText msg;
-    TelephonyManager tm;
     String number;
-
 
     //SENDDATACHAT
     EditText mensagem;
-    String mg;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatview);
-        mensagem = (EditText) findViewById(R.id.edit_escrevemensagem);
 
-        tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
-        number = tm.getLine1Number();
+        mensagem = (EditText) findViewById(R.id.edit_escrevemensagem);
 
         //instancia o chat controller class
         chatController = new ChatController(this);
@@ -100,50 +85,19 @@ public class ChatViewActivity extends BaseMenu {
         codigo = intent.getStringExtra("Usercodigo");
         descricao = intent.getStringExtra("Userdesc");
 
-        //msg = (EditText) findViewById(R.id.edit_escrevemensagem);
-
-        //msg.setText(""+cell);
-        //msg.setText(""+user + " "+ codigo + " " +descricao );
-
         requestQueue = Volley.newRequestQueue(this);
-
+        //setaAdaptadorUsuarioDestino();
+        setaAdaptadorUsuarioDestino(user);
         final Handler handler = new Handler();
         handler.postDelayed( new Runnable() {
             @Override
             public void run() {
-                getData();
-                setaAdaptador();
-                adapter.notifyDataSetChanged();
+                getDataUsuarioDestino();
+                //adapter.notifyDataSetChanged();
                 handler.postDelayed( this, 3000 );
             }
         },  3000 );
-
-       // recyclerView.addOnScrollListener(rVOnScrollListener);
-
     }
-
-
-    /*private RecyclerView.OnScrollListener rVOnScrollListener = new RecyclerView.OnScrollListener() {
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView,
-                                         int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            switch (newState){
-                case RecyclerView.SCROLL_STATE_IDLE:
-                    getData();
-                    break;
-            }
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, -dy);
-            if (isLastItemDisplaying(recyclerView)) {
-                getData();
-            }
-        }
-    };*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -151,47 +105,37 @@ public class ChatViewActivity extends BaseMenu {
         return true;
     }
 
-    private JsonArrayRequest getDataFromServer(String url) {
-        //final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarchatView);
-        //progressBar.setVisibility(View.VISIBLE);
-        //setProgressBarIndeterminateVisibility(true);
+    //RECEBER MENSAGENS DOS OUTROS USUARIOS
+    private JsonArrayRequest getUsuarioDestinoDataFromServer(String url) {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            parseData(response);
-                            //progressBar.setVisibility(View.GONE);
+                            parseDataUsuarioDestino(response);
                         }
                         catch (Exception e){
-                            //Toast.makeText(ChatViewActivity.this, "Não existem outras mensagens "+ e, Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //progressBar.setVisibility(View.GONE);
-                        //Toast.makeText(ChatViewActivity.this, "Não existem outras mensagens", Toast.LENGTH_SHORT).show();
                     }
                 });
         return jsonArrayRequest;
     }
 
-
-
-
-
-    private void getData() {
+    //INICIAR O RECEBIMENTO DAS MENSAGENS DOS UUARIOS
+    private void getDataUsuarioDestino() {
         //Adding the method to the queue by calling the method getDataFromServer
-        //cell = cell.replace("+", "");
-        requestQueue.add(getDataFromServer(ChatViewUtils.DATA_URL+"&CODIGO="+codigo+"&USUARIODESTINO="+user));
+        requestQueue.add(getUsuarioDestinoDataFromServer(ChatViewUtils.DATA_URL+"&CODIGO="+codigo+"&USUARIODESTINO="+user+"&USUARIO="+Profile.getUsername()));
         //Incrementing the request counter
         _requestCount++;
     }
 
-
-    private void parseData(JSONArray array) {
+    //CONVERTE EM STRING AS SUAS MENSAGENS DOS OUTROS USUARIOS
+    private void parseDataUsuarioDestino(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
             ChatView chatvieww = new ChatView();
             JSONObject json = null;
@@ -200,15 +144,13 @@ public class ChatViewActivity extends BaseMenu {
                 json = array.getJSONObject(i);
                 chatvieww.setId(json.getString(ChatViewUtils.TAG_ID));
                 chatvieww.setCodigo(json.getString(ChatViewUtils.TAG_CODIGO));
-                chatvieww.setUsername(json.getString(ChatViewUtils.TAG_USERCHAT));
+                chatvieww.setUsername(json.getString(ChatViewUtils.TAG_USUARIODESTINO));
                 chatvieww.setMensagem(json.getString(ChatViewUtils.TAG_MENSAGEM));
-                chatvieww.setMeunome("iaco");
+                //ChatView.setMeunome(Profile.getUsername().toString());
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
 
             // Linear search, see if the id exists
             boolean flag = false;
@@ -224,30 +166,33 @@ public class ChatViewActivity extends BaseMenu {
 
             // if flag is true item exists, don't add.
             if(!flag){
-                chatController.insereDado(chatvieww.getId(),chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem());
-                chatview.add(chatvieww);
-                adapter = new ChatViewAdapter(chatController.carregaTodosDados(chatvieww.getUsername()), this);
-                //Adding adapter to recyclerview
-                recyclerView.setAdapter(adapter);
+                chatController.insereDado(chatvieww.getId(),chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem(), chatvieww.getUsername());
+                //chatview.add(chatvieww);
+                setaAdaptadorUsuarioDestino(chatvieww.getUsername());
             }
         }
         // Notifying the adapter that data has been added or changed
-        adapter.notifyDataSetChanged();
     }
-
-
-
-    public void setaAdaptador(){
-        //setaAdaptador();
-        adapter = new ChatViewAdapter(chatController.carregaTodosDados(user), this);
+    //ATUALIZA O ADAPTADOR DAS MENSAGENS DE OUTROS USUARIOS
+    public void setaAdaptadorUsuarioDestino(String username){
         //Adding adapter to recyclerview
-        recyclerView.setAdapter(adapter);
-        //This method runs in the same thread as the UI.
-
-        //Do something to the UI thread here
-
+        try {
+            ChatView chat = new ChatView();
+            chat.setUsername(user);
+            chatview.add(chat);
+            adapter = new ChatViewAdapter(chatController.carregaTodosDadosUsuarioDestino(username), this);
+            recyclerView.setAdapter(adapter);
+            //This method runs in the same thread as the UI.
+            adapter.notifyDataSetChanged();
+            //Do something to the UI thread here
+        }
+        catch (Exception e){
+            Toast.makeText(ChatViewActivity.this, "Banco de dados error: "+ e, Toast.LENGTH_SHORT).show();
+        }
     }
 
+
+    //INSERIR MENSAGENS
     public void botaoenviarmensagem(View v){
             String mg = mensagem.getText().toString().trim();
 
@@ -257,7 +202,6 @@ public class ChatViewActivity extends BaseMenu {
     }
 
     public void enviaMensagem(final String msg){
-        //mg = mensagem.getText().toString().trim();
         msg.trim();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ChatViewUtils.DATA_MENSAGEM,
                 new Response.Listener<String>() {
@@ -265,13 +209,16 @@ public class ChatViewActivity extends BaseMenu {
                     public void onResponse(String response) {
                         try{
                             if(response.trim().equals("success")){
+                                Toast.makeText(ChatViewActivity.this, "Mensagem enviada à "+user, Toast.LENGTH_SHORT).show();
+                                String uniqueId = UUID.randomUUID().toString();
+                                chatController.insereDado(uniqueId, codigo, user, msg, Profile.getUsername());
                                 mensagem.setText("");
+                                setaAdaptadorUsuarioDestino(user);
                             }else{
                                 Toast.makeText(ChatViewActivity.this, "Não foi possivel cadastrar a mensagem", Toast.LENGTH_SHORT).show();
                             }
                         }catch(Exception e){
                             Toast.makeText(ChatViewActivity.this, "Não foi possivel cadastrar a mensagem", Toast.LENGTH_SHORT).show();
-
                         }
                     }
                 },
@@ -283,12 +230,13 @@ public class ChatViewActivity extends BaseMenu {
                 }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                String meunomee;
+                meunomee = Profile.getUsername().toString();
                 Map<String,String> map = new HashMap<String,String>();
                 map.put("CODIGO",codigo);
                 map.put("MENSAGEM" ,msg);
-                map.put("MEUNOME",codigo);
-                map.put("NOMEOUTRO",codigo);
-                map.put("CELULAROUTRO",codigo);
+                map.put("MEUNOME", meunomee);
+                map.put("NOMEOUTRO",user);
                 return map;
             }
         };
@@ -296,32 +244,6 @@ public class ChatViewActivity extends BaseMenu {
         requestQueueNew.add(stringRequest);
 
     }
-
-
-
-
-
-    /*private boolean isLastItemDisplaying(RecyclerView recyclerView) {
-
-        if (recyclerView.getAdapter().getItemCount() != 0) {
-            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-
-            if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1)
-                return true;
-        }
-        return false;
-    }
-
-    private boolean isFirstItemDisplaying(RecyclerView recyclerView) {
-        if (recyclerView.getAdapter().getItemCount() != 0) {
-            int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-
-            if (firstVisibleItemPosition != RecyclerView.NO_POSITION && firstVisibleItemPosition == 0)
-                return true;
-        }
-        return false;
-    }*/
-
 
 
 }

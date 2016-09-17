@@ -22,7 +22,7 @@ public class ChatController {
         banco = new ChatData(context);
     }
 
-    public String insereDado(String id, String codigo, String username, String mensagem) {
+    public String insereDado(String id, String codigo, String username, String mensagem, String username2) {
         ContentValues valores;
         long resultado;
 
@@ -32,6 +32,7 @@ public class ChatController {
         valores.put(ChatData.C_CODIGO_1, codigo);
         valores.put(ChatData.C_USERNAME_1, username);
         valores.put(ChatData.C_MSG_1, mensagem);
+        valores.put(ChatData.C_USERNAME_2, username2);
 
         resultado = db.insert(ChatData.TABLE_1, null, valores);
         db.close();
@@ -42,13 +43,15 @@ public class ChatController {
             return "Registro Inserido com sucesso";
     }
 
-    public List<ChatView> carregaTodosDados(String Username) {
+
+    public List<ChatView> carregaTodosDadosUsuarioDestino(String Username) {
+
             ChatView chatview;
             List<ChatView> chatViewList = new ArrayList<ChatView>();
 
-            String[] campos = {banco.C_ID_1, banco.C_CODIGO_1, banco.C_USERNAME_1, banco.C_MSG_1};
-        String whereClause =banco.C_USERNAME_1+"=?";
-        String [] whereArgs = {Username};
+            String[] campos = {banco.C_ID_1, banco.C_CODIGO_1, banco.C_USERNAME_1, banco.C_MSG_1, banco.C_USERNAME_2};
+            String whereClause = banco.C_USERNAME_1 + "=?";
+            String[] whereArgs = {Username};
             db = banco.getWritableDatabase();
             Cursor cursor = db.query(banco.TABLE_1, campos, whereClause, whereArgs, null, null, null);
             if (cursor != null) {
@@ -57,7 +60,14 @@ public class ChatController {
                         chatview = new ChatView();
                         chatview.setId(cursor.getString(0));
                         chatview.setCodigo(cursor.getString(1));
-                        chatview.setUsername(cursor.getString(2));
+                        String name1,name2;
+                        name1 =cursor.getString(2);
+                        name2 = cursor.getString(4);
+                        if (name1 == name2) {
+                            chatview.setUsername(cursor.getString(2));
+                        } else {
+                            chatview.setUsername(cursor.getString(4));
+                        }
                         chatview.setMensagem(cursor.getString(3));
                         boolean flag = false;
                         for (ChatView chat : chatViewList) {
@@ -78,4 +88,6 @@ public class ChatController {
             db.close();
             return chatViewList;
         }
+
+
 }

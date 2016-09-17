@@ -17,6 +17,8 @@ public class ChatData extends SQLiteOpenHelper {
     public static final String C_CODIGO_1 = "CODIGO";
     public static final String C_USERNAME_1 = "USERNAME";
     public static final String C_MSG_1 = "MENSAGEM";
+    public static final String C_USERNAME_2 = "OTHERUSERNAME";
+
 
     public ChatData(Context context){
         super(context, DB_NAME, null, DB_VERSION);
@@ -26,8 +28,8 @@ public class ChatData extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         try{
-            String sql = "create table " + TABLE_1 + " (" + C_ID_1 + " integer primary key autoincrement, "
-                    + C_CODIGO_1 + " text, " + C_USERNAME_1 + " text, " + C_MSG_1 + " text)";
+            String sql = "create table " + TABLE_1 + " (" + C_ID_1 + " text, "
+                    + C_CODIGO_1 + " text, " + C_USERNAME_1 + " text, " + C_MSG_1 + " text, " + C_USERNAME_2 + " text)";
             db.execSQL(sql);
         }catch(Exception e){
             Log.e("Error DbHelper", e.getMessage());

@@ -21,7 +21,7 @@ import java.util.Map;
 
 import pet.com.br.pet.anuncio.AnunciosActivity;
 import pet.com.br.pet.R;
-import pet.com.br.pet.utils.UsuarioUtils;
+import pet.com.br.pet.models.Profile;
 
 /**
  * Created by iaco_ on 15/08/2016.
@@ -69,7 +69,6 @@ public class Login  extends AppCompatActivity {
                                         .create()
                                         .show();
                                 loading.dismiss();
-
                             }
                         }catch(Exception e){
                             loading.dismiss();
@@ -110,8 +109,9 @@ public class Login  extends AppCompatActivity {
     }
 
     private void abrirConta(){
-        UsuarioUtils.setUserName(username);
+        Profile.setUsername(username);
         Intent intent = new Intent(this, AnunciosActivity.class);
+        //intent.putExtra("user", UsuarioUtils.getUserName());
         startActivity(intent);
         finish();
 

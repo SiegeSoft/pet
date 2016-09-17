@@ -7,4 +7,7 @@
     <string name="categoria">Categoria:</string>
     <string name="doa_ou_venda">Doação ou Venda:</string>
     <string name="dono">Dono:</string>
+    <string name="ProfileName"></string>
+    <string name="ProfileNameContact"></string>
+
 </resources>
