@@ -13,14 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.anuncio.AnunciosActivity;
 import pet.com.br.pet.anuncio.CadastroAnuncioActivity;
+import pet.com.br.pet.autentica.Login;
+import pet.com.br.pet.autentica.LoginManager;
 import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 import pet.com.br.pet.chat.ChatActivity;
-import pet.com.br.pet.models.Profile;
 
 /**
  * Created by rafae on 19/08/2016.
@@ -33,8 +33,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
     private ActionBarDrawerToggle drawerToggle;
     private int selectedNavItemId;
     private boolean isSelectedAnuncios = true, isSelectedNegociacoes = true;
-
-    TextView menuuser;
+    private LoginManager _loginManager;
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -53,10 +52,6 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
          * instead we pass it our inflated layout.
          */
         super.setContentView(fullLayout);
-
-        Profile profile = new Profile();
-        menuuser = (TextView) findViewById(R.id.Text_MenuUser);
-        menuuser.setText(""+profile.getUsername());
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
@@ -154,9 +149,21 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
 
             case R.id.sub_sair:
                 fullLayout.closeDrawer(GravityCompat.START);
+                _loginManager = new LoginManager(this);
+                if(_loginManager.logoutUser()){
+                    logout();
+                }
                 break;
         }
         return onOptionsItemSelected(menuItem);
+    }
+
+    private void logout(){
+        Intent i = new Intent(this, Login.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+        finish();
     }
 
     private void iniciaOutraActivity(Class c){

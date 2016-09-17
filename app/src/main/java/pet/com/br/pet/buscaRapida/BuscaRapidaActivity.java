@@ -33,14 +33,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import pet.com.br.pet.R;
+import pet.com.br.pet.autentica.Login;
+import pet.com.br.pet.autentica.LoginManager;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.BuscaRapida;
+import pet.com.br.pet.models.Profile;
 import pet.com.br.pet.tindercard.FlingCardListener;
 import pet.com.br.pet.tindercard.SwipeFlingAdapterView;
 import pet.com.br.pet.utils.BuscaRapidaUtils;
+import pet.com.br.pet.models.Usuario;
 
 /**
  * Created by iaco_ on 24/08/2016.
@@ -61,6 +66,13 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     private List<BuscaRapida> _buscaRapidaLista;
     private Context _context;
 
+    private HashMap<String, String> _userDetails;
+    private ArrayList<String> arrayLikes = new ArrayList<>();
+    private ArrayList<String> arrayDislikes = new ArrayList<>();
+
+
+    private LoginManager _loginManager;
+
     public static void removeBackground() {
         _viewHolder._background.setVisibility(View.GONE);
         _myAppAdapter.notifyDataSetChanged();
@@ -70,6 +82,26 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_busca_rapida);
+
+        _loginManager = new LoginManager(getApplicationContext());
+
+        if(!_loginManager.checkLogin()){
+            Intent i = new Intent(this, Login.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            finish();
+        } else {
+            _userDetails = _loginManager.getUserDetails();
+            Usuario.setUserName(_userDetails.get(LoginManager.KEY_NAME));
+            Usuario.setLikes(_userDetails.get(LoginManager.KEY_LIKE));
+            Usuario.setDislikes(_userDetails.get(LoginManager.KEY_DISLIKE));
+            Profile.setUsername(_userDetails.get(LoginManager.KEY_NAME));
+            arrayLikes.addAll(Usuario.getLikes());
+            arrayDislikes.addAll(Usuario.getDislikes());
+        }
+
+
         _context = this;
         _flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         _buscaRapidaLista = new ArrayList<BuscaRapida>();
@@ -94,8 +126,9 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _getLatitude = "" + latitude;
         _getLongitude = "" + longitude;
 
-        requestQueue = Volley.newRequestQueue(this);
 
+        requestQueue = Volley.newRequestQueue(this);
+        getData();
 
         _myAppAdapter = new MyAppAdapter(_buscaRapidaLista, BuscaRapidaActivity.this);
         _flingContainer.setAdapter(_myAppAdapter);
@@ -112,13 +145,18 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             public void onLeftCardExit(Object dataObject) {
                 _buscaRapidaLista.remove(0);
                 _myAppAdapter.notifyDataSetChanged();
-
+                if(_buscaRapidaLista.size() == 0){
+                    getData();
+                }
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
                 _buscaRapidaLista.remove(0);
                 _myAppAdapter.notifyDataSetChanged();
+                if(_buscaRapidaLista.size() == 0){
+                    getData();
+                }
 
             }
 
@@ -148,15 +186,23 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
     }
 
-    private void showInfos(int position){
+    private void setLike(String id){
+
+    }
+
+    private void setDislike(String id){
+
+    }
+
+    private void showInfos(int position) {
         Intent intent = new Intent(_context, InfoBuscaRapidaActivity.class);
-        intent.putExtra("codigo",_buscaRapidaLista.get(position).getCodigo());
-        intent.putExtra("raca",_buscaRapidaLista.get(position).getRaca());
-        intent.putExtra("idade",_buscaRapidaLista.get(position).getIdade());
-        intent.putExtra("descricao",_buscaRapidaLista.get(position).getDescricao());
-        intent.putExtra("categoria",_buscaRapidaLista.get(position).getCategoria());
-        intent.putExtra("vendaoudoa",_buscaRapidaLista.get(position).getTipoVenda());
-        intent.putExtra("dono",_buscaRapidaLista.get(position).getDono());
+        intent.putExtra("codigo", _buscaRapidaLista.get(position).getCodigo());
+        intent.putExtra("raca", _buscaRapidaLista.get(position).getRaca());
+        intent.putExtra("idade", _buscaRapidaLista.get(position).getIdade());
+        intent.putExtra("descricao", _buscaRapidaLista.get(position).getDescricao());
+        intent.putExtra("categoria", _buscaRapidaLista.get(position).getCategoria());
+        intent.putExtra("vendaoudoa", _buscaRapidaLista.get(position).getTipoVenda());
+        intent.putExtra("dono", _buscaRapidaLista.get(position).getDono());
         startActivity(intent);
     }
 
@@ -215,7 +261,9 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             } catch (JSONException e) {
                 Toast.makeText(BuscaRapidaActivity.this, "Error ao consultar o banco de dados" + e, Toast.LENGTH_SHORT).show();
             }
-            _buscaRapidaLista.add(buscaRapida);
+            if(!buscaRapida.getDono().equals(Usuario.getUserName())) {
+                _buscaRapidaLista.add(buscaRapida);
+            }
         }
         _myAppAdapter.notifyDataSetChanged();
     }
