@@ -7,21 +7,26 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import pet.com.br.pet.anuncio.AnunciosActivity;
 import pet.com.br.pet.R;
-import pet.com.br.pet.models.Profile;
+import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 
 /**
  * Created by iaco_ on 15/08/2016.
@@ -29,14 +34,22 @@ import pet.com.br.pet.models.Profile;
 public class Login  extends AppCompatActivity {
 
     private static final String LOGIN_URL = "http://thebossgamestudio.xyz/pet/login.php";
+    private static final String USER_DETAIL_URL = "http://thebossgamestudio.xyz/pet/userData.php?user=";
+
     private static final String KEY_USERNAME="USERNAME";
     private static final String KEY_PASSWORD="PASSWORD";
+    private static final String KEY_LIKES="LIKES";
+    private static final String KEY_DISLIKE="DISLIKE";
     private EditText editTextUsername;
     private EditText editTextPassword;
 
     private String username;
     private String password;
     private ProgressDialog loading;
+
+    private LoginManager _session;
+    private String _name, _likes, _dislikes;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +58,7 @@ public class Login  extends AppCompatActivity {
 
         editTextUsername = (EditText) findViewById(R.id.editText_login);
         editTextPassword = (EditText) findViewById(R.id.editText_senha);
+        _session = new LoginManager(getApplicationContext());
 
     }
 
@@ -52,7 +66,6 @@ public class Login  extends AppCompatActivity {
         username = editTextUsername.getText().toString().trim();
         password = editTextPassword.getText().toString().trim();
         loading = ProgressDialog.show(this, "Aguarde...", "Carregando...", false, false);
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -60,8 +73,7 @@ public class Login  extends AppCompatActivity {
 
                         try{
                             if(response.trim().equals("success")){
-                                loading.dismiss();
-                                abrirConta();
+                                getInfos();
                                 }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
                                 builder.setMessage("ERRO AO REALIZAR O LOGIN SENHA OU USUARIO INVALIDO")
@@ -69,6 +81,7 @@ public class Login  extends AppCompatActivity {
                                         .create()
                                         .show();
                                 loading.dismiss();
+
                             }
                         }catch(Exception e){
                             loading.dismiss();
@@ -108,13 +121,46 @@ public class Login  extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+
+    private void getInfos(){
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(USER_DETAIL_URL+username,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject json = response.getJSONObject(i);
+                                _name = ""+json.getString(KEY_USERNAME);
+                                _likes = ""+json.getString(KEY_LIKES);
+                                _dislikes =""+json.getString(KEY_DISLIKE);
+                                _session.createLoginSession(_name,_likes,_dislikes);
+                                abrirConta();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } finally {
+                                loading.dismiss();
+                            }
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        loading.dismiss();
+                        Toast.makeText(Login.this, "Sem conexao com o servidor", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jsonArrayRequest);
+
+    }
+
     private void abrirConta(){
-        Profile.setUsername(username);
-        Intent intent = new Intent(this, AnunciosActivity.class);
-        //intent.putExtra("user", UsuarioUtils.getUserName());
+        Intent intent = new Intent(this, BuscaRapidaActivity.class);
         startActivity(intent);
         finish();
-
     }
 
     public void login(View v) {

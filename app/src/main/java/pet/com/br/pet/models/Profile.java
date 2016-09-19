@@ -5,15 +5,6 @@ package pet.com.br.pet.models;
  */
 public class Profile {
     static String username;
-    static String id;
-
-    public String getId() {
-        return id;
-    }
-
-    public static void setId(String id) {
-        Profile.id = id;
-    }
 
     public static String getUsername() {
         return username;
