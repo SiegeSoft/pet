@@ -54,7 +54,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
                 intent.putExtra("Usercodigo", userChat.getCodigo());
                 intent.putExtra("Userdesc", userChat.getDescricao());
                 v.getContext().startActivity(intent);
-                context.finish();
+                //context.finish();
         //context.finish();
     }
 });

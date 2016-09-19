@@ -45,6 +45,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class ChatViewActivity extends BaseMenu {
 
+
     //LISTVIEW
     private List<ChatView> chatview;
     private RecyclerView recyclerView;
@@ -79,7 +80,6 @@ public class ChatViewActivity extends BaseMenu {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         chatview = new ArrayList<>();
-
         Intent intent = getIntent();
         user = intent.getStringExtra("Userchat");
         codigo = intent.getStringExtra("Usercodigo");
@@ -88,6 +88,9 @@ public class ChatViewActivity extends BaseMenu {
         requestQueue = Volley.newRequestQueue(this);
         //setaAdaptadorUsuarioDestino();
         setaAdaptadorUsuarioDestino(user);
+        int recyclerposition = recyclerView.getAdapter().getItemCount();
+        //recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() -1);
+        recyclerView.scrollToPosition(recyclerposition-1);
         final Handler handler = new Handler();
         handler.postDelayed( new Runnable() {
             @Override
@@ -97,6 +100,13 @@ public class ChatViewActivity extends BaseMenu {
                 handler.postDelayed( this, 3000 );
             }
         },  3000 );
+
+    }
+
+
+    @Override
+    protected boolean useDrawerToggle() {
+        return false;
     }
 
     @Override
@@ -182,8 +192,13 @@ public class ChatViewActivity extends BaseMenu {
             chatview.add(chat);
             adapter = new ChatViewAdapter(chatController.carregaTodosDadosUsuarioDestino(username), this);
             recyclerView.setAdapter(adapter);
+
             //This method runs in the same thread as the UI.
             adapter.notifyDataSetChanged();
+            int recyclerposition = recyclerView.getAdapter().getItemCount();
+            recyclerView.scrollToPosition(recyclerposition-1);
+
+            //recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
             //Do something to the UI thread here
         }
         catch (Exception e){

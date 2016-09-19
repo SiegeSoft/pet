@@ -22,8 +22,13 @@
                 android:id="@+id/imgAnimal"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
+                android:scaleType="centerCrop"
                 android:layout_alignParentLeft="true"
                 android:padding="10dp"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="6dp"
+                android:background="#f5f5f5"
                 android:src="@drawable/pata" />
 
 

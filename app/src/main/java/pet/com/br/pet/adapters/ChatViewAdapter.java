@@ -1,11 +1,13 @@
 package pet.com.br.pet.adapters;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +31,7 @@ import pet.com.br.pet.chat.ChatViewActivity;
 import pet.com.br.pet.database.ChatController;
 import pet.com.br.pet.database.ChatData;
 import pet.com.br.pet.models.ChatView;
+import pet.com.br.pet.models.Profile;
 
 /**
  * Created by iaco_ on 29/08/2016.
@@ -56,27 +59,37 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
     }
 
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         holder.txtUserid.setText(chatView.get(position).getId());
         holder.txtUsercodigo.setText(chatView.get(position).getCodigo());
-        holder.txtUserchat.setText(chatView.get(position).getUsername());
+        //holder.txtUserchat.setText(chatView.get(position).getUsername());
         holder.txtUsermsg.setText(chatView.get(position).getMensagem());
 
         String meunome;
         String nomeoutro;
 
-        //nomeoutro = chatView.get(position).getUsername();
-        //meunome = chatView.get(position).getMeunome();
-       // RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)holder.cardView.getLayoutParams();
-        //if(nomeoutro != meunome){
-        //    params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        //    holder.cardView.setLayoutParams(params);
-       // }else{
-       //     params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        //    holder.cardView.setLayoutParams(params);
-        //}
+        nomeoutro = chatView.get(position).getUsername();
+        meunome = Profile.getUsername();
+        if(nomeoutro != meunome){
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.cardView.getLayoutParams();
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+            params.removeRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            params.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            params.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            holder.cardView.setLayoutParams(params);
+            holder.txtUserchat.setText(nomeoutro);
+        }else{
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.cardView.getLayoutParams();
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+            params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            params.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            params.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            holder.cardView.setLayoutParams(params);
+            holder.txtUserchat.setText(meunome);
+        }
 
         //holder.cardView.setparent
 //        holder.txtUserid.setText(userChatView.getId());
