@@ -87,11 +87,14 @@ public class ChatViewActivity extends BaseMenu {
         descricao = intent.getStringExtra("Userdesc");
 
         requestQueue = Volley.newRequestQueue(this);
-        //setaAdaptadorUsuarioDestino();
+
         setaAdaptadorUsuarioDestino(user);
+
+        //INICIA O PROGRAMA NA ULTIMA ATUALIZAÇÃO DO RECYCLERVIEW
         int recyclerposition = recyclerView.getAdapter().getItemCount();
-        //recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() -1);
         recyclerView.scrollToPosition(recyclerposition-1);
+
+        //ATUALIZA AS INFORMAÇÕES A CADA 3 SEGUNDOS
         final Handler handler = new Handler();
         handler.postDelayed( new Runnable() {
             @Override
@@ -166,6 +169,8 @@ public class ChatViewActivity extends BaseMenu {
 
             // Linear search, see if the id exists
             boolean flag = false;
+
+            //VERIFICA SE EXISTEM IDS DUPLICADOS
             for(ChatView chat : chatview){
                 if(null != chat.getId() && null != chatvieww.getId()){
                     if(chat.getId().equals(chatvieww.getId())){

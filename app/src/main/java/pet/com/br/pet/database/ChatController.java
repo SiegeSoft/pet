@@ -46,48 +46,55 @@ public class ChatController {
 
     public List<ChatView> carregaTodosDadosUsuarioDestino(String Username, String Codigo) {
 
-            ChatView chatview;
-            List<ChatView> chatViewList = new ArrayList<ChatView>();
+        ChatView chatview;
+        List<ChatView> chatViewList = new ArrayList<ChatView>();
 
-            String[] campos = {banco.C_ID_1, banco.C_CODIGO_1, banco.C_USERNAME_1, banco.C_MSG_1, banco.C_USERNAME_2};
-            String whereClause = banco.C_USERNAME_1 + "=?" + " AND " + banco.C_CODIGO_1 +"=?";
-            String[] whereArgs = {Username, Codigo};
-            db = banco.getWritableDatabase();
-            Cursor cursor = db.query(banco.TABLE_1, campos, whereClause, whereArgs, null, null, null);
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    do {
-                        chatview = new ChatView();
-                        chatview.setId(cursor.getString(0));
-                        chatview.setCodigo(cursor.getString(1));
-                        String name1,name2;
-                        name1 =cursor.getString(2);
-                        name2 = cursor.getString(4);
-                        if (name1 == name2) {
-                            chatview.setUsername(cursor.getString(2));
-                        } else {
-                            chatview.setUsername(cursor.getString(4));
-                        }
-                        chatview.setMensagem(cursor.getString(3));
-                        boolean flag = false;
-                        for (ChatView chat : chatViewList) {
-                            if (null != chat.getId() && null != chatview.getId()) {
-                                if (chat.getId().equals(chatview.getId())) {
-                                    // Item exists
-                                    flag = true;
-                                    break;
-                                }
+        //QUERY DB
+        String[] campos = {banco.C_ID_1, banco.C_CODIGO_1, banco.C_USERNAME_1, banco.C_MSG_1, banco.C_USERNAME_2};
+        String whereClause = banco.C_USERNAME_1 + "=?" + " AND " + banco.C_CODIGO_1 + "=?";
+        String[] whereArgs = {Username, Codigo};
+
+        db = banco.getWritableDatabase();
+        Cursor cursor = db.query(banco.TABLE_1, campos, whereClause, whereArgs, null, null, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    chatview = new ChatView();
+                    chatview.setId(cursor.getString(0));
+                    chatview.setCodigo(cursor.getString(1));
+                    String name1, name2;
+                    name1 = cursor.getString(2);
+                    name2 = cursor.getString(4);
+
+                    //VERIFICA SE O SEU USUARIO É IGUAL AO USUARIO TEMPORARIO
+                    if (name1 == name2) {
+                        chatview.setUsername(cursor.getString(2));
+                    } else {
+                        chatview.setUsername(cursor.getString(4));
+                    }
+                    chatview.setMensagem(cursor.getString(3));
+                    boolean flag = false;
+
+                    //VERIFICA SE EXISTEM ID'S DUPLICADOS
+                    for (ChatView chat : chatViewList) {
+                        if (null != chat.getId() && null != chatview.getId()) {
+                            if (chat.getId().equals(chatview.getId())) {
+                                // Item exists
+                                flag = true;
+                                break;
                             }
                         }
-                        if (!flag) {
-                            chatViewList.add(chatview);
-                        }
-                    } while (cursor.moveToNext());
-                }
+                    }
+                    if (!flag) {
+                        chatViewList.add(chatview);
+                    }
+                } while (cursor.moveToNext());
             }
-            db.close();
-            return chatViewList;
         }
+        db.close();
+        return chatViewList;
+    }
 
 
 }

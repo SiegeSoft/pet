@@ -56,7 +56,6 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
     }
 
 
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -69,15 +68,18 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
+        //CALCULA A DIFERENCA DOS USUARIOS
         final boolean isMe = Profile.getUsername() != null &&
                 Profile.getUsername().equals(chatView.get(position).getUsername());
 
         RelativeLayout.LayoutParams params =
                 new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
-        if(isMe){
 
-            Toast.makeText(holder.context, ""+position, Toast.LENGTH_SHORT).show();
+        //VERIFICA SE É O SEU USUARIO
+        if (isMe) {
+
+            Toast.makeText(holder.context, "" + position, Toast.LENGTH_SHORT).show();
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             holder.cardView.setLayoutParams(params);
             holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
@@ -88,8 +90,11 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
             holder.txtUsercodigo.setText(chatView.get(position).getCodigo());
             holder.txtUserchat.setText(chatView.get(position).getUsername());
             holder.txtUsermsg.setText(chatView.get(position).getMensagem());
-        }else{
-            Toast.makeText(holder.context, "MESSAGE OUT "+position, Toast.LENGTH_SHORT).show();
+        } else {
+
+            //VERIFICA SE ESSE É O OUTRO USUARIO
+
+            Toast.makeText(holder.context, "MESSAGE OUT " + position, Toast.LENGTH_SHORT).show();
             params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             holder.cardView.setLayoutParams(params);
             holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
