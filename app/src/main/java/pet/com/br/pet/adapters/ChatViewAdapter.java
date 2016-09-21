@@ -5,17 +5,24 @@ import android.app.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,36 +66,40 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
     }
 
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        holder.txtUserid.setText(chatView.get(position).getId());
-        holder.txtUsercodigo.setText(chatView.get(position).getCodigo());
-        //holder.txtUserchat.setText(chatView.get(position).getUsername());
-        holder.txtUsermsg.setText(chatView.get(position).getMensagem());
+        final boolean isMe = Profile.getUsername() != null &&
+                Profile.getUsername().equals(chatView.get(position).getUsername());
 
-        String meunome;
-        String nomeoutro;
+        RelativeLayout.LayoutParams params =
+                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+        if(isMe){
 
-        nomeoutro = chatView.get(position).getUsername();
-        meunome = Profile.getUsername();
-        if(nomeoutro != meunome){
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.cardView.getLayoutParams();
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-            params.removeRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            params.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-            params.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            Toast.makeText(holder.context, ""+position, Toast.LENGTH_SHORT).show();
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             holder.cardView.setLayoutParams(params);
-            holder.txtUserchat.setText(nomeoutro);
+            holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
+            holder.relativechatView.setBackgroundResource(R.drawable.in_message_bg);
+
+            //atribuir aos textviews
+            holder.txtUserid.setText(chatView.get(position).getId());
+            holder.txtUsercodigo.setText(chatView.get(position).getCodigo());
+            holder.txtUserchat.setText(chatView.get(position).getUsername());
+            holder.txtUsermsg.setText(chatView.get(position).getMensagem());
         }else{
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.cardView.getLayoutParams();
-            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-            params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            params.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-            params.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            Toast.makeText(holder.context, "MESSAGE OUT "+position, Toast.LENGTH_SHORT).show();
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             holder.cardView.setLayoutParams(params);
-            holder.txtUserchat.setText(meunome);
+            holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
+            holder.relativechatView.setBackgroundResource(R.drawable.out_message_bg);
+
+            //atribuir aos textviews
+            holder.txtUserid.setText(chatView.get(position).getId());
+            holder.txtUsercodigo.setText(chatView.get(position).getCodigo());
+            holder.txtUserchat.setText(chatView.get(position).getUsername());
+            holder.txtUsermsg.setText(chatView.get(position).getMensagem());
         }
 
         //holder.cardView.setparent
@@ -125,6 +136,7 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
         TextView txtUsermsg;
         CardView cardView;
         Context context;
+        RelativeLayout relativechatView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -134,6 +146,8 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
             txtUsermsg = (TextView) itemView.findViewById(R.id.usermsgView);
             cardView = (CardView) itemView.findViewById(R.id.cardChatView);
             context = itemView.getContext();
+            relativechatView = (RelativeLayout) itemView.findViewById(R.id.relative_chatview);
+
         }
     }
 

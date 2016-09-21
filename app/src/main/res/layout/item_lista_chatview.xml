@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -8,14 +8,16 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cardChatView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="4dp"
-        card_view:cardCornerRadius="3dp"
+        card_view:cardElevation="0dp"
+        card_view:cardMaxElevation="0dp"
         >
 
         <RelativeLayout
+            android:id="@+id/relative_chatview"
+            android:background="@drawable/in_message_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -110,10 +111,12 @@ public class ChatViewActivity extends BaseMenu {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
+
 
     //RECEBER MENSAGENS DOS OUTROS USUARIOS
     private JsonArrayRequest getUsuarioDestinoDataFromServer(String url) {
@@ -141,7 +144,6 @@ public class ChatViewActivity extends BaseMenu {
         //Adding the method to the queue by calling the method getDataFromServer
         requestQueue.add(getUsuarioDestinoDataFromServer(ChatViewUtils.DATA_URL+"&CODIGO="+codigo+"&USUARIODESTINO="+user+"&USUARIO="+Profile.getUsername()));
         //Incrementing the request counter
-        _requestCount++;
     }
 
     //CONVERTE EM STRING AS SUAS MENSAGENS DOS OUTROS USUARIOS
@@ -187,10 +189,10 @@ public class ChatViewActivity extends BaseMenu {
     public void setaAdaptadorUsuarioDestino(String username){
         //Adding adapter to recyclerview
         try {
-            ChatView chat = new ChatView();
-            chat.setUsername(user);
-            chatview.add(chat);
-            adapter = new ChatViewAdapter(chatController.carregaTodosDadosUsuarioDestino(username), this);
+            //ChatView chat = new ChatView();
+            //chat.setUsername(user);
+            //chatview.add(chat);
+            adapter = new ChatViewAdapter(chatController.carregaTodosDadosUsuarioDestino(username, codigo), this);
             recyclerView.setAdapter(adapter);
 
             //This method runs in the same thread as the UI.

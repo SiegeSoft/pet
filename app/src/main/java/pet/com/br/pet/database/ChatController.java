@@ -44,14 +44,14 @@ public class ChatController {
     }
 
 
-    public List<ChatView> carregaTodosDadosUsuarioDestino(String Username) {
+    public List<ChatView> carregaTodosDadosUsuarioDestino(String Username, String Codigo) {
 
             ChatView chatview;
             List<ChatView> chatViewList = new ArrayList<ChatView>();
 
             String[] campos = {banco.C_ID_1, banco.C_CODIGO_1, banco.C_USERNAME_1, banco.C_MSG_1, banco.C_USERNAME_2};
-            String whereClause = banco.C_USERNAME_1 + "=?";
-            String[] whereArgs = {Username};
+            String whereClause = banco.C_USERNAME_1 + "=?" + " AND " + banco.C_CODIGO_1 +"=?";
+            String[] whereArgs = {Username, Codigo};
             db = banco.getWritableDatabase();
             Cursor cursor = db.query(banco.TABLE_1, campos, whereClause, whereArgs, null, null, null);
             if (cursor != null) {
