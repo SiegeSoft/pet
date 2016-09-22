@@ -148,7 +148,7 @@ public class Login  extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loading.dismiss();
-                        Toast.makeText(Login.this, "Sem conexao com o servidor", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Login.this, "Sem conexao com o servidor"+error, Toast.LENGTH_LONG).show();
                     }
                 });
 

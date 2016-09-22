@@ -67,11 +67,14 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     private Context _context;
 
     private HashMap<String, String> _userDetails;
-    private ArrayList<String> arrayLikes = new ArrayList<>();
-    private ArrayList<String> arrayDislikes = new ArrayList<>();
+    private ArrayList<String> _arrayLikes = new ArrayList<>();
+    private ArrayList<String> _arrayDislikes = new ArrayList<>();
+    private ArrayList<String> _arrayIds = new ArrayList<>();
 
 
     private LoginManager _loginManager;
+
+    private float _noRepeatTimes = 0;
 
     public static void removeBackground() {
         _viewHolder._background.setVisibility(View.GONE);
@@ -85,20 +88,23 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
         _loginManager = new LoginManager(getApplicationContext());
 
-        if(!_loginManager.checkLogin()){
+        if (!_loginManager.checkLogin()) {
             Intent i = new Intent(this, Login.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
             finish();
+
         } else {
+
             _userDetails = _loginManager.getUserDetails();
             Usuario.setUserName(_userDetails.get(LoginManager.KEY_NAME));
             Usuario.setLikes(_userDetails.get(LoginManager.KEY_LIKE));
             Usuario.setDislikes(_userDetails.get(LoginManager.KEY_DISLIKE));
             Profile.setUsername(_userDetails.get(LoginManager.KEY_NAME));
-            arrayLikes.addAll(Usuario.getLikes());
-            arrayDislikes.addAll(Usuario.getDislikes());
+            _arrayLikes.addAll(Usuario.getLikes());
+            _arrayDislikes.addAll(Usuario.getDislikes());
+
         }
 
 
@@ -127,8 +133,9 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _getLongitude = "" + longitude;
 
 
+
         requestQueue = Volley.newRequestQueue(this);
-        getData();
+
 
         _myAppAdapter = new MyAppAdapter(_buscaRapidaLista, BuscaRapidaActivity.this);
         _flingContainer.setAdapter(_myAppAdapter);
@@ -143,18 +150,20 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
             @Override
             public void onLeftCardExit(Object dataObject) {
+                setDislike(_buscaRapidaLista.get(0).getId());
                 _buscaRapidaLista.remove(0);
                 _myAppAdapter.notifyDataSetChanged();
-                if(_buscaRapidaLista.size() == 0){
+                if (_buscaRapidaLista.size() == 0) {
                     getData();
                 }
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
+                setLike(_buscaRapidaLista.get(0).getId());
                 _buscaRapidaLista.remove(0);
                 _myAppAdapter.notifyDataSetChanged();
-                if(_buscaRapidaLista.size() == 0){
+                if (_buscaRapidaLista.size() == 0) {
                     getData();
                 }
 
@@ -162,9 +171,13 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                if(itemsInAdapter == 0){
-                    getData();
-                }
+               if (_noRepeatTimes <= 6) {
+                   if (itemsInAdapter == 0) {
+                       getData();                       
+                    }
+                } else{
+                   Toast.makeText(BuscaRapidaActivity.this, "Sem anuncios", Toast.LENGTH_LONG).show();
+               }
             }
 
             @Override
@@ -186,13 +199,34 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
     }
 
-    private void setLike(String id){
-
+    private void setLike(String id) {
+        if (_arrayLikes.size() == 1) {
+            if (_arrayLikes.get(0).equals("")) {
+                _arrayLikes.remove(0);
+            }
+        }
+        _arrayLikes.add(id);
+        _arrayIds.add(id);
+        for (int a = 0; a < _arrayLikes.size(); a++) {
+            Log.v("Likes", _arrayLikes.get(a));
+            Log.v("Array Ids", _arrayIds.get(a));
+        }
     }
 
-    private void setDislike(String id){
-
+    private void setDislike(String id) {
+        if (_arrayDislikes.size() == 1) {
+            if (_arrayDislikes.get(0).equals("")) {
+                _arrayDislikes.remove(0);
+            }
+        }
+        _arrayDislikes.add(id);
+        _arrayIds.add(id);
+        for (int a = 0; a < _arrayDislikes.size(); a++) {
+            Log.v("DisLikes", _arrayDislikes.get(a));
+            Log.v("Array Ids", _arrayIds.get(a));
+        }
     }
+
 
     private void showInfos(int position) {
         Intent intent = new Intent(_context, InfoBuscaRapidaActivity.class);
@@ -245,6 +279,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     private void parseData(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
             BuscaRapida buscaRapida = new BuscaRapida();
+            boolean equals = false;
             JSONObject json = null;
             try {
                 json = array.getJSONObject(i);
@@ -261,11 +296,45 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             } catch (JSONException e) {
                 Toast.makeText(BuscaRapidaActivity.this, "Error ao consultar o banco de dados" + e, Toast.LENGTH_SHORT).show();
             }
-            if(!buscaRapida.getDono().equals(Usuario.getUserName())) {
-                _buscaRapidaLista.add(buscaRapida);
+            if (!buscaRapida.getDono().equals(Usuario.getUserName())) {
+                if (_buscaRapidaLista.size() == 0) {
+                    isFirstEquals(buscaRapida, equals);
+                } else {
+                    isEquals(buscaRapida, equals);
+                }
             }
         }
         _myAppAdapter.notifyDataSetChanged();
+    }
+
+    private void isFirstEquals(BuscaRapida buscaRapida, boolean equals) {
+        for (int x = 0; x < _arrayIds.size(); x++) {
+            if (_arrayIds.get(x).equals(buscaRapida.getId())) {
+                equals = true;
+                _noRepeatTimes++;
+                break;
+            }
+        }
+        if (!equals) {
+            _buscaRapidaLista.add(buscaRapida);
+            _noRepeatTimes--;
+        }
+    }
+
+    private void isEquals(BuscaRapida buscaRapida, boolean equals) {
+        if (!_buscaRapidaLista.get(_buscaRapidaLista.size() - 1).getId().equals(buscaRapida.getId())) {
+            for (int x = 0; x < _arrayIds.size(); x++) {
+                if (_arrayIds.get(x).equals(buscaRapida.getId())) {
+                    equals = true;
+                    _noRepeatTimes++;
+                    break;
+                }
+            }
+            if (!equals) {
+                _buscaRapidaLista.add(buscaRapida);
+                _noRepeatTimes--;
+            }
+        }
     }
 
 
@@ -278,7 +347,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     /**
      * Adapter
      */
-
     public static class ViewHolder {
         public static FrameLayout _background;
         public TextView _nome, _info;

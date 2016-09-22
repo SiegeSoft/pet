@@ -13,6 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import java.util.HashMap;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.anuncio.AnunciosActivity;
@@ -21,6 +24,7 @@ import pet.com.br.pet.autentica.Login;
 import pet.com.br.pet.autentica.LoginManager;
 import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 import pet.com.br.pet.chat.ChatActivity;
+
 
 /**
  * Created by rafae on 19/08/2016.
@@ -34,6 +38,9 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
     private int selectedNavItemId;
     private boolean isSelectedAnuncios = true, isSelectedNegociacoes = true;
     private LoginManager _loginManager;
+    private HashMap<String, String> _userDetails;
+
+    private TextView _nomeDoUsuario;
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -52,6 +59,11 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
          * instead we pass it our inflated layout.
          */
         super.setContentView(fullLayout);
+
+        _nomeDoUsuario = (TextView) findViewById(R.id.Text_MenuUser);
+        _loginManager = new LoginManager(this);
+        _userDetails = _loginManager.getUserDetails();
+        _nomeDoUsuario.setText(_userDetails.get(LoginManager.KEY_NAME));
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
