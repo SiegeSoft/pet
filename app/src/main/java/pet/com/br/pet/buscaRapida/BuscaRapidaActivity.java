@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -71,6 +73,9 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     private ArrayList<String> _arrayDislikes = new ArrayList<>();
     private ArrayList<String> _arrayIds = new ArrayList<>();
 
+    private TextView _textOops, _textConfings;
+    private ImageView _pets;
+    private ImageButton _btnHeart, _btnShare, _btnNext;
 
     private LoginManager _loginManager;
 
@@ -106,6 +111,13 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             _arrayDislikes.addAll(Usuario.getDislikes());
 
         }
+
+        _pets = (ImageView) findViewById(R.id.pets);
+        _textOops = (TextView) findViewById(R.id.txtViewOops);
+        _textConfings = (TextView) findViewById(R.id.txtViewConfings);
+        _btnHeart = (ImageButton) findViewById(R.id.btnHeart);
+        _btnNext = (ImageButton) findViewById(R.id.btnNext);
+        _btnShare = (ImageButton) findViewById(R.id.btnShare);
 
 
         _context = this;
@@ -171,11 +183,12 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-               if (_noRepeatTimes <= 6) {
+               if (_noRepeatTimes <= 3) {
                    if (itemsInAdapter == 0) {
-                       getData();                       
+                       getData();
                     }
                 } else{
+                   setPetsVisibleImage();
                    Toast.makeText(BuscaRapidaActivity.this, "Sem anuncios", Toast.LENGTH_LONG).show();
                }
             }
@@ -197,6 +210,15 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             }
         });
 
+    }
+
+    private void setPetsVisibleImage(){
+        _pets.setVisibility(View.VISIBLE);
+        _textOops.setVisibility(View.VISIBLE);
+        _textConfings.setVisibility(View.VISIBLE);
+        _btnHeart.setVisibility(View.GONE);
+        _btnNext.setVisibility(View.GONE);
+        _btnShare.setVisibility(View.GONE);
     }
 
     private void setLike(String id) {

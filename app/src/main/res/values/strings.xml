@@ -9,5 +9,7 @@
     <string name="dono">Dono:</string>
     <string name="ProfileName"></string>
     <string name="ProfileNameContact"></string>
+    <string name="oops">Oops!</string>
+    <string name="nas_configuracoes">Não foi encontrado novos pets proximos a você! Tente alterar a distancia nas configurações</string>
 
 </resources>
