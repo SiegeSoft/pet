@@ -213,7 +213,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_confings) {
             return true;
         }
         return super.onOptionsItemSelected(item);

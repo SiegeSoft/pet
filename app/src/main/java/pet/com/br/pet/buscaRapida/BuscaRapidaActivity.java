@@ -1,7 +1,9 @@
 package pet.com.br.pet.buscaRapida;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -10,9 +12,11 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.view.ViewGroup;
@@ -21,6 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +86,8 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
     private float _noRepeatTimes = 0;
 
+    private long _distance = 10;
+
     public static void removeBackground() {
         _viewHolder._background.setVisibility(View.GONE);
         _myAppAdapter.notifyDataSetChanged();
@@ -101,7 +108,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             finish();
 
         } else {
-
             _userDetails = _loginManager.getUserDetails();
             Usuario.setUserName(_userDetails.get(LoginManager.KEY_NAME));
             Usuario.setLikes(_userDetails.get(LoginManager.KEY_LIKE));
@@ -109,7 +115,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             Profile.setUsername(_userDetails.get(LoginManager.KEY_NAME));
             _arrayLikes.addAll(Usuario.getLikes());
             _arrayDislikes.addAll(Usuario.getDislikes());
-
         }
 
         _pets = (ImageView) findViewById(R.id.pets);
@@ -118,6 +123,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _btnHeart = (ImageButton) findViewById(R.id.btnHeart);
         _btnNext = (ImageButton) findViewById(R.id.btnNext);
         _btnShare = (ImageButton) findViewById(R.id.btnShare);
+
 
 
         _context = this;
@@ -221,6 +227,17 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _btnShare.setVisibility(View.GONE);
     }
 
+    private void setAnunciosVisibleImage(){
+        _pets.setVisibility(View.GONE);
+        _textOops.setVisibility(View.GONE);
+        _textConfings.setVisibility(View.GONE);
+        _btnHeart.setVisibility(View.VISIBLE);
+        _btnNext.setVisibility(View.VISIBLE);
+        _btnShare.setVisibility(View.VISIBLE);
+    }
+
+
+
     private void setLike(String id) {
         if (_arrayLikes.size() == 1) {
             if (_arrayLikes.get(0).equals("")) {
@@ -265,21 +282,106 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        menu.findItem(R.id.action_confings).setVisible(true);
         return true;
     }
 
 
-    private void getData() {
-        requestQueue.add(getDataFromServer(_getLatitude, _getLongitude));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_confings) {
+            dialogSettings(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
-    private JsonArrayRequest getDataFromServer(String latitude, String longitude) {
+    private void dialogSettings(final Activity activity){
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.activity_settings_busca_rapida, null);
+        final SeekBar seekBar = (SeekBar) alertLayout.findViewById(R.id.distanceBar);
+        final TextView txtDistance = (TextView) alertLayout.findViewById(R.id.distance);
+        final TextView txtCity = (TextView) alertLayout.findViewById(R.id.range);
+
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                txtDistance.setText(String.valueOf(progress));
+
+                if(progress < 20){
+                    txtCity.setText(R.string.neighborhood);
+
+                } else if(progress >= 20 && progress < 80){
+                    txtCity.setText(R.string.city);
+
+                } else if(progress >= 80 && progress < 150){
+                    txtCity.setText(R.string.more_city);
+
+                } else if(progress >= 150 && progress < 250) {
+                    txtCity.setText(R.string.state);
+
+                } else if(progress >= 250 && progress <= 600) {
+                    txtCity.setText(R.string.more_state);
+
+                } else {
+                    txtCity.setText(R.string.all_country);
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+        alert.setTitle(R.string.titleSettings);
+        alert.setView(alertLayout);
+        alert.setCancelable(false);
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                _distance = seekBar.getProgress();
+                setAnunciosVisibleImage();
+                getData();
+                Toast.makeText(activity, ""+_distance, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+
+
+    private void getData() {
+        requestQueue.add(getDataFromServer(_getLatitude, _getLongitude, _distance));
+    }
+
+
+    private JsonArrayRequest getDataFromServer(String latitude, String longitude, long distance) {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.VISIBLE);
         setProgressBarIndeterminateVisibility(true);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(BuscaRapidaUtils.DATA_GPS_URL + latitude + "&LON=" + longitude,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(BuscaRapidaUtils.DATA_GPS_URL + latitude + "&LON=" + longitude + "&DISTANCE="+String.valueOf(distance),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -296,6 +398,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                 });
         return jsonArrayRequest;
     }
+
 
 
     private void parseData(JSONArray array) {
@@ -364,6 +467,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     public void onActionDownPerform() {
         Log.e("action", "bingo");
     }
+
 
 
     /**
