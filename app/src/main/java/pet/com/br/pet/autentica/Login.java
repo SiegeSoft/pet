@@ -33,8 +33,8 @@ import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
  */
 public class Login  extends AppCompatActivity {
 
-    private static final String LOGIN_URL = "http://thebossgamestudio.xyz/pet/login.php";
-    private static final String USER_DETAIL_URL = "http://thebossgamestudio.xyz/pet/userData.php?user=";
+    private static final String LOGIN_URL = "http://kahvitech.com/pet/login.php";
+    private static final String USER_DETAIL_URL = "http://kahvitech.com/pet/informacoesCurtidas.php?user=";
 
     private static final String KEY_USERNAME="USERNAME";
     private static final String KEY_PASSWORD="PASSWORD";

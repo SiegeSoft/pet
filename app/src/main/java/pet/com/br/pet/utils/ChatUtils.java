@@ -5,11 +5,13 @@ package pet.com.br.pet.utils;
  */
 public class ChatUtils {
 
-    public static final String DATA_URL = "http://thebossgamestudio.xyz/pet/getChat.php?";
+    public static final String DATA_URL = "http://kahvitech.com/pet/chat.php?";
     public static final String TAG_ID = "id";
     public static final String TAG_CODIGO = "CODIGO";
-    public static final String TAG_USERCHAT = "USUARIODESTINO";
+    public static final String TAG_USUARIO = "USUARIO";
+    public static final String TAG_USUARIODESTINO = "USUARIODESTINO";
     public static final String TAG_DESCRICAO = "DESCRICAO";
+
 
 
 

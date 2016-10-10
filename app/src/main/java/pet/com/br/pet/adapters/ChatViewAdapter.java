@@ -31,6 +31,8 @@ import com.android.volley.Response;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import pet.com.br.pet.R;
@@ -47,28 +49,34 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
 
     private Activity context;
     private List<ChatView> chatView;
+    private static int dataDia = 0;
+    private static int dataMes = 0;
+    private static int dataAno = 0;
+
 
     public ChatViewAdapter(List<ChatView> chatView, Activity context) {
         super();
 
         this.chatView = chatView;
         this.context = context;
-    }
 
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_lista_chatview, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
-    }
 
+    }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         //CALCULA A DIFERENCA DOS USUARIOS
+
         final boolean isMe = Profile.getUsername() != null &&
                 Profile.getUsername().equals(chatView.get(position).getUsername());
 
@@ -76,57 +84,100 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
                 new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        //VERIFICA SE É O SEU USUARIO
-        if (isMe) {
+        //VERIFICAR DATA ATUAL
+        Calendar calendario = Calendar.getInstance();
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-            Toast.makeText(holder.context, "" + position, Toast.LENGTH_SHORT).show();
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            holder.cardView.setLayoutParams(params);
-            holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
-            holder.relativechatView.setBackgroundResource(R.drawable.in_message_bg);
+        SimpleDateFormat datadia = new SimpleDateFormat("dd");
+        final String DataDia = datadia.format(calendario.getTime());
+        SimpleDateFormat datames = new SimpleDateFormat("MM");
+        final String DataMes = datames.format(calendario.getTime());
+        SimpleDateFormat dataano = new SimpleDateFormat("yyyy");
+        final String DataAno = dataano.format(calendario.getTime());
 
-            //atribuir aos textviews
-            holder.txtUserid.setText(chatView.get(position).getId());
-            holder.txtUsercodigo.setText(chatView.get(position).getCodigo());
-            holder.txtUserchat.setText(chatView.get(position).getUsername());
-            holder.txtUsermsg.setText(chatView.get(position).getMensagem());
-        } else {
+        String iDataDia = DataDia;
+        String iDataMes = DataMes;
+        String iDataAno = DataAno;
 
-            //VERIFICA SE ESSE É O OUTRO USUARIO
+        int currentdataDia = Integer.parseInt(chatView.get(position).getDia());
+        int dataMes = Integer.parseInt(chatView.get(position).getMes());
+        int dataAno = Integer.parseInt(chatView.get(position).getAno());
 
-            Toast.makeText(holder.context, "MESSAGE OUT " + position, Toast.LENGTH_SHORT).show();
-            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            holder.cardView.setLayoutParams(params);
-            holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
-            holder.relativechatView.setBackgroundResource(R.drawable.out_message_bg);
+        if(!(position == 0)) {
+            //int previousdataDia = Integer.parseInt(chatView.get(position-1).getDia());
 
-            //atribuir aos textviews
-            holder.txtUserid.setText(chatView.get(position).getId());
-            holder.txtUsercodigo.setText(chatView.get(position).getCodigo());
-            holder.txtUserchat.setText(chatView.get(position).getUsername());
-            holder.txtUsermsg.setText(chatView.get(position).getMensagem());
+            if (chatView.get(position).getDia().equals(chatView.get(position-1).getDia())) {
+                    holder.txtMsgDay.setVisibility(View.GONE);
+                    holder.cardView.setContentPadding(0,0,0,0);
+                } else {
+                    if(currentdataDia == Integer.parseInt(iDataDia)){
+                        holder.txtMsgDay.setVisibility(View.VISIBLE);
+                        holder.txtMsgDay.setText("HOJE");
+                        holder.cardView.setContentPadding(0,80,0,0);
+                        //previousdataDia = currentdataDia;
+                    }else if(currentdataDia == Integer.parseInt(iDataDia)- 1){
+                        holder.txtMsgDay.setVisibility(View.VISIBLE);
+                        holder.txtMsgDay.setText("ONTEM");
+                        holder.cardView.setContentPadding(0,80,0,0);
+                        //previousdataDia = currentdataDia;
+                    }else if(!(currentdataDia == Integer.parseInt(iDataDia)- 1 && currentdataDia == Integer.parseInt(iDataDia))){
+                        holder.txtMsgDay.setVisibility(View.VISIBLE);
+                        holder.txtMsgDay.setText(""+ currentdataDia+ "/" + dataMes + "/" + dataAno);
+                        holder.cardView.setContentPadding(0,80,0,0);
+                    }
+                    //previousdataDia = currentdataDia;
+                }
+        }else {
+;
+            if(currentdataDia == Integer.parseInt(iDataDia)){
+                holder.txtMsgDay.setVisibility(View.VISIBLE);
+                holder.txtMsgDay.setText("HOJE");
+                holder.cardView.setContentPadding(0,80,0,0);
+            }else if(currentdataDia == Integer.parseInt(iDataDia)- 1){
+                holder.txtMsgDay.setVisibility(View.VISIBLE);
+                holder.txtMsgDay.setText("ONTEM");
+                holder.cardView.setContentPadding(0,80,0,0);
+            }else if(currentdataDia != Integer.parseInt(iDataDia)- 1 && currentdataDia != Integer.parseInt(iDataDia)){
+                holder.txtMsgDay.setVisibility(View.VISIBLE);
+                holder.txtMsgDay.setText(""+ currentdataDia+ "/" + dataMes + "/" + dataAno);
+                holder.cardView.setContentPadding(0,80,0,0);
+            }
         }
 
-        //holder.cardView.setparent
-//        holder.txtUserid.setText(userChatView.getId());
-//        holder.txtUserchat.setText(userChatView.getUsername());
-//        holder.txtUsercodigo.setText(userChatView.getCodigo());
-//        holder.txtUsermsg.setText(userChatView.getMensagem());
-        //holder.txtUsercodigo.setText();
-        /*holder.itemView.setOnClickListener(new View.OnClickListener(){
-            @Override
 
-            public void onClick(View v) {
-                //Intent intent = new Intent(v.getContext(), ChatViewActivity.class);
-                //intent.putExtra("Userchat", userChat.getUsername());
-                //intent.putExtra("Usercodigo", userChat.getCodigo());
-                //intent.putExtra("Userdesc", userChat.getDescricao());
-                //v.getContext().startActivity(intent);
-                //context.finish();
-                //context.finish();
+            if (isMe) {
+                //Exibe a data da mensagem caso o dia for atual
+
+                //VERIFICA SE É O SEU USUARIO
+
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                holder.cardView.setLayoutParams(params);
+                holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
+                holder.relativechatView.setBackgroundResource(R.drawable.in_message_bg);
+
+                //Atribuir aos textviews
+
+                holder.txtUserchat.setText(chatView.get(position).getUsername());
+                holder.txtUsermsg.setText(chatView.get(position).getMensagem());
+
+            } else {
+
+                //VERIFICA SE ESSE É O OUTRO USUARIO
+
+                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                holder.cardView.setLayoutParams(params);
+                holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
+                holder.relativechatView.setBackgroundResource(R.drawable.out_message_bg);
+
+                //Atribuir aos textviews
+
+                holder.txtUserchat.setText(chatView.get(position).getUsername());
+                holder.txtUsermsg.setText(chatView.get(position).getMensagem());
+
             }
-        });*/
-    }
+
+            }
+
 
     @Override
     public int getItemCount() {
@@ -139,16 +190,22 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
         TextView txtUserchat;
         TextView txtUsercodigo;
         TextView txtUsermsg;
+        TextView txtMsgDay;
+
         CardView cardView;
         Context context;
         RelativeLayout relativechatView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            txtUserid = (TextView) itemView.findViewById(R.id.chatid);
+
+            //txtUserid = (TextView) itemView.findViewById(R.id.chatid);
             txtUserchat = (TextView) itemView.findViewById(R.id.userchatView);
-            txtUsercodigo = (TextView) itemView.findViewById(R.id.usercodigoView);
+            //txtUsercodigo = (TextView) itemView.findViewById(R.id.usercodigoView);
             txtUsermsg = (TextView) itemView.findViewById(R.id.usermsgView);
+            txtMsgDay = (TextView) itemView.findViewById(R.id.txtMsgDay);
+
+
             cardView = (CardView) itemView.findViewById(R.id.cardChatView);
             context = itemView.getContext();
             relativechatView = (RelativeLayout) itemView.findViewById(R.id.relative_chatview);

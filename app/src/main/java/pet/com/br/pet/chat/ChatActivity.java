@@ -1,8 +1,11 @@
 package pet.com.br.pet.chat;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -28,6 +31,7 @@ import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Chat;
 import pet.com.br.pet.models.ChatView;
 import pet.com.br.pet.models.Profile;
+import pet.com.br.pet.utils.AnunciosUtils;
 import pet.com.br.pet.utils.ChatUtils;
 
 /**
@@ -41,12 +45,17 @@ public class ChatActivity extends BaseMenu {
     private RecyclerView.Adapter adapter;
 
     private RequestQueue requestQueue;
-    private int requestCount = 1, requestCountInit = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ab.setTitle("NEGOCIAÇÕES");
+        ab.setSubtitle("Inicie as suas negociações ;)");
+
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewchat);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -124,7 +133,6 @@ public class ChatActivity extends BaseMenu {
         //Adding the method to the queue by calling the method getDataFromServer
         requestQueue.add(getDataFromServer(ChatUtils.DATA_URL+ "myusername="+ Profile.getUsername()));
         //Incrementing the request counter
-        requestCount++;
     }
 
 
@@ -134,11 +142,14 @@ public class ChatActivity extends BaseMenu {
             JSONObject json = null;
 
             try {
+
                 json = array.getJSONObject(i);
                 chat1.setId(json.getString(ChatUtils.TAG_ID));
                 chat1.setCodigo(json.getString(ChatUtils.TAG_CODIGO));
-                chat1.setUsername(json.getString(ChatUtils.TAG_USERCHAT));
+                chat1.setUsername(json.getString(ChatUtils.TAG_USUARIO));
+                chat1.setUsernameDestino(json.getString(ChatUtils.TAG_USUARIODESTINO));
                 chat1.setDescricao(json.getString(ChatUtils.TAG_DESCRICAO));
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -161,6 +172,16 @@ public class ChatActivity extends BaseMenu {
         }
         //Notifying the adapter that data has been added or changed
         adapter.notifyDataSetChanged();
+    }
+
+    private Bitmap decodeBase64(String input) {
+        if (input.equals("")) {
+            return null;
+        } else {
+            byte[] decodedString = Base64.decode(input, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            return decodedByte;
+        }
     }
 
     public void setaAdaptador(){

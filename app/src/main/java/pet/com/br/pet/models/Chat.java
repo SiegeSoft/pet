@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 public class Chat {
     private String username;
+    private String usernameDestino;
     private String codigo;
     private String descricao;
     private String id;
@@ -26,6 +27,14 @@ public class Chat {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getUsernameDestino() {
+        return usernameDestino;
+    }
+
+    public void setUsernameDestino(String usernameDestino) {
+        this.usernameDestino = usernameDestino;
     }
 
     public String getCodigo() {

@@ -1,6 +1,8 @@
 package pet.com.br.pet.adapters;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import pet.com.br.pet.R;
@@ -49,15 +52,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(v.getContext(), ChatViewActivity.class);
-                intent.putExtra("Userchat", userChat.getUsername());
-                intent.putExtra("Usercodigo", userChat.getCodigo());
-                intent.putExtra("Userdesc", userChat.getDescricao());
-                v.getContext().startActivity(intent);
-                //context.finish();
-        //context.finish();
-    }
-});
+
+                    intent.putExtra("Userchat", userChat.getUsername());
+                    intent.putExtra("Usercodigo", userChat.getCodigo());
+                    intent.putExtra("Userdesc", userChat.getDescricao());
+                    v.getContext().startActivity(intent);
+            }
+        });
 
     }
 

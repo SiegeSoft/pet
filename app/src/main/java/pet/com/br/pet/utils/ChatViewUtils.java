@@ -5,10 +5,14 @@ package pet.com.br.pet.utils;
  */
 public class ChatViewUtils {
 
-public static final String DATA_URL = "http://thebossgamestudio.xyz/pet/getChatViewUSUARIODESTINO.php?";
-public static final String DATA_MENSAGEM = "http://thebossgamestudio.xyz/pet/inserirMensagem.php";
-public static final String TAG_ID = "id";
-public static final String TAG_CODIGO = "CODIGO";
-public static final String TAG_USUARIODESTINO = "USUARIO";
-public static final String TAG_MENSAGEM = "MENSAGEM";
+    public static final String DATA_URL = "http://kahvitech.com/pet/chatUsuarioDestino.php?";
+    public static final String DATA_MENSAGEM = "http://kahvitech.com/pet/cadastraMensagem.php";
+    public static final String TAG_ID = "id";
+    public static final String TAG_CODIGO = "CODIGO";
+    public static final String TAG_USUARIODESTINO = "USUARIO";
+    public static final String TAG_MENSAGEM = "MENSAGEM";
+    public static final String TAG_DIA = "DIA";
+    public static final String TAG_MES = "MES";
+    public static final String TAG_ANO = "ANO";
+
 }
