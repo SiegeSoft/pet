@@ -1,29 +1,29 @@
 package pet.com.br.pet.chat;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.internal.view.menu.MenuView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -39,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,18 +52,19 @@ import pet.com.br.pet.database.ChatController;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.ChatView;
 import pet.com.br.pet.models.Profile;
+import pet.com.br.pet.textviewcustom.ScrollTextView;
 import pet.com.br.pet.utils.ChatViewUtils;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
 
 
 /**
  * Created by iaco_ on 28/08/2016.
  */
 public class ChatViewActivity extends BaseMenu {
-
+    private TextView titleTV;
 
     //LISTVIEW
     private List<ChatView> chatview;
@@ -119,11 +121,38 @@ public class ChatViewActivity extends BaseMenu {
         codigo = intent.getStringExtra("Usercodigo");
         descricao = intent.getStringExtra("Userdesc");
 
+        //android.support.v7.app.ActionBar ab = getSupportActionBar();
+        //ab.setTitle((Html.fromHtml("<font color=\"#ff9900\">"+"-"+"</font>"+"<font color=\"#000000\">"+user+"</font>")));
+        //ab.setSubtitle((Html.fromHtml("<font color=\"#ff9900\">"+"-."+"</font>"+"<font color=\"#000000\">"+"Visualisado: Hoje as 16:00"+"</font>")));
+        //ab.setIcon(R.drawable.andy);
         android.support.v7.app.ActionBar ab = getSupportActionBar();
-        ab.setTitle((Html.fromHtml("<font color=\"#ff9900\">"+"-"+"</font>"+"<font color=\"#000000\">"+user+"</font>")));
-        ab.setSubtitle((Html.fromHtml("<font color=\"#ff9900\">"+"-."+"</font>"+"<font color=\"#000000\">"+"Visualisado: Hoje as 16:00"+"</font>")));
-        ab.setIcon(R.drawable.andy);
+        ab.setDisplayShowTitleEnabled(false);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View customView = inflater.inflate(R.layout.menu_chatview_text, null);
+        //titleTV = (TextView) customView.findViewById(R.id.title);
+        //titleTV.setSelected(true);
+        ab.setCustomView(customView);
+        ab.setDisplayShowCustomEnabled(true);
+
+        ScrollTextView scrolltext=(ScrollTextView) findViewById(R.id.scrolltext);
+
+        scrolltext.setText("testeeee");
+        scrolltext.setTextColor(Color.BLACK);
+        scrolltext.startScroll();
+        //scrolltext.pauseScroll();
+        if(scrolltext.mSlr.isFinished()){
+            scrolltext.startScroll();
+        }
+
+        Drawable icon = this.getResources().getDrawable(R.drawable.andy);
+
+        Bitmap bitmap = ((BitmapDrawable)icon).getBitmap();
+
+        Drawable drawable = new BitmapDrawable(getResources(), createCircleBitmap(bitmap));
+        getSupportActionBar().setIcon(drawable);
+
         setaAdaptadorUsuarioDestino(user);
+
         int recyclerposition = recyclerView.getAdapter().getItemCount();
         recyclerView.scrollToPosition(recyclerposition-1);
         ChatView.setAdaptercontador(recyclerView.getAdapter().getItemCount());
@@ -146,6 +175,28 @@ public class ChatViewActivity extends BaseMenu {
       //  int recyclerposition = recyclerView.getAdapter().getItemCount();
        // recyclerView.scrollToPosition(recyclerposition - 1);
 
+    }
+
+    public Bitmap createCircleBitmap(Bitmap bitmapimg){
+        Bitmap output = Bitmap.createBitmap(bitmapimg.getWidth(),
+                bitmapimg.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = Color.parseColor("#AB47BC");
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmapimg.getWidth(),
+                bitmapimg.getHeight());
+
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setStrokeWidth((float) 1);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(bitmapimg.getWidth() / 2,
+                bitmapimg.getHeight() / 2, bitmapimg.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmapimg, rect, rect, paint);
+        return output;
     }
 
     @Override

@@ -17,6 +17,7 @@ import java.util.List;
 import pet.com.br.pet.R;
 import pet.com.br.pet.chat.ChatViewActivity;
 import pet.com.br.pet.models.Chat;
+import pet.com.br.pet.models.Profile;
 
 /**
  * Created by iaco_ on 27/08/2016.
@@ -44,10 +45,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Chat userChat = chat.get(position);
 
-        holder.txtUserid.setText(userChat.getId());
-        holder.txtUserchat.setText(userChat.getUsername());
-        holder.txtUsercodigo.setText(userChat.getCodigo());
-        holder.txtUserdesc.setText(userChat.getDescricao());
+
+        //holder.txtUserid.setText(userChat.getId());
+        holder.txtUserchat.setText("Usuario: "+chat.get(position).getUsername());
+        holder.txtUsercodigo.setText("Cod: "+ chat.get(position).getCodigo());
+        holder.txtUserdesc.setText("Anuncio: "+ chat.get(position).getDescricao());
+
         holder.itemView.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -62,7 +65,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             }
         });
 
-    }
+        }
 
     @Override
     public int getItemCount() {
@@ -71,7 +74,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        final TextView txtUserid;
+        //final TextView txtUserid;
         final TextView txtUserchat;
         final TextView txtUsercodigo;
         final TextView txtUserdesc;
@@ -80,7 +83,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         public ViewHolder(View itemView) {
             super(itemView);
 
-            txtUserid = (TextView) itemView.findViewById(R.id.userid);
+            //txtUserid = (TextView) itemView.findViewById(R.id.userid);
             txtUserchat = (TextView) itemView.findViewById(R.id.userchat);
             txtUsercodigo = (TextView) itemView.findViewById(R.id.usercodigo);
             txtUserdesc = (TextView) itemView.findViewById(R.id.userdesc);

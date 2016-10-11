@@ -20,24 +20,15 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/userid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="ID"
-                android:textSize="@dimen/raca"
-                android:maxLength="13"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/usercodigo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Codigo"
-                android:layout_below="@+id/userid"
                 android:textSize="@dimen/raca"
-                android:maxLength="20"
+                android:maxLength="25"
+                android:textColor="#000000"
+                android:fontFamily="sans-serif-condensed"
                 android:textStyle="bold" />
 
             <TextView
@@ -47,8 +38,10 @@
                 android:layout_marginTop="2dp"
                 android:text="Usuario"
                 android:layout_below="@+id/usercodigo"
+                android:textColor="#000000"
+                android:fontFamily="sans-serif-condensed"
                 android:textSize="@dimen/raca"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
             <TextView
                 android:id="@+id/userdesc"
                 android:layout_width="wrap_content"
@@ -56,9 +49,11 @@
                 android:layout_marginTop="2dp"
                 android:layout_below="@+id/userchat"
                 android:text="Descrição"
+                android:textColor="#000000"
+                android:fontFamily="sans-serif-condensed"
                 android:textSize="@dimen/raca"
-                android:maxLength="13"
-                android:textStyle="bold" />
+                android:maxLength="25"
+                android:textStyle="normal" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

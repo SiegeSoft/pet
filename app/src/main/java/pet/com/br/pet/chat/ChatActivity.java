@@ -55,7 +55,6 @@ public class ChatActivity extends BaseMenu {
         ab.setTitle("NEGOCIAÇÕES");
         ab.setSubtitle("Inicie as suas negociações ;)");
 
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewchat);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -64,7 +63,6 @@ public class ChatActivity extends BaseMenu {
         requestQueue = Volley.newRequestQueue(this);
         getData();
         recyclerView.addOnScrollListener(rVOnScrollListener);
-        setaAdaptador();
 
     }
 
@@ -114,7 +112,7 @@ public class ChatActivity extends BaseMenu {
                             progressBar.setVisibility(View.GONE);
                         }
                         catch (Exception e){
-                            Toast.makeText(ChatActivity.this, "Não existem outras mensagens"+ e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChatActivity.this, "Erro: Sem comunicacao com o servidor"+ e, Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
@@ -157,7 +155,9 @@ public class ChatActivity extends BaseMenu {
 
             boolean flag = false;
             for(Chat chaT : chat){
-                if(null != chaT.getUsername() && null != chat1.getUsername()){
+                if(null != chaT.getUsername() && null != chat1.getUsername() && chaT.getUsername().toString() != "null"
+                        && chat1.getUsername().toString() != "null" && chaT.getUsername().toString() != ""
+                        && chat1.getUsername().toString() != ""){
                     if(chaT.getUsername().equals(chat1.getUsername())){
                         // Item exists
                         flag = true;
@@ -168,10 +168,11 @@ public class ChatActivity extends BaseMenu {
             // if flag is true item exists, don't add.
             if(!flag){
                 chat.add(chat1);
+                setaAdaptador();
             }
         }
         //Notifying the adapter that data has been added or changed
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
     }
 
     private Bitmap decodeBase64(String input) {
@@ -189,6 +190,9 @@ public class ChatActivity extends BaseMenu {
         adapter = new ChatAdapter(chat, this);
         //Adding adapter to recyclerview
         recyclerView.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+
     }
 
     private boolean isLastItemDisplaying(RecyclerView recyclerView) {
