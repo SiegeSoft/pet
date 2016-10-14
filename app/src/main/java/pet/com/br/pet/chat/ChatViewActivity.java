@@ -66,6 +66,8 @@ import java.util.logging.Logger;
 public class ChatViewActivity extends BaseMenu {
     private TextView titleTV;
 
+    private int scrollvalue = 0 ;
+
     //LISTVIEW
     private List<ChatView> chatview;
     private RecyclerView recyclerView;
@@ -131,18 +133,17 @@ public class ChatViewActivity extends BaseMenu {
         View customView = inflater.inflate(R.layout.menu_chatview_text, null);
         //titleTV = (TextView) customView.findViewById(R.id.title);
         //titleTV.setSelected(true);
+
+
         ab.setCustomView(customView);
         ab.setDisplayShowCustomEnabled(true);
+        TextView texttitle =(TextView) findViewById(R.id.textview_tittle);
+        texttitle.setText(""+user);
 
         ScrollTextView scrolltext=(ScrollTextView) findViewById(R.id.scrolltext);
 
-        scrolltext.setText("testeeee");
-        scrolltext.setTextColor(Color.BLACK);
-        scrolltext.startScroll();
-        //scrolltext.pauseScroll();
-        if(scrolltext.mSlr.isFinished()){
-            scrolltext.startScroll();
-        }
+        scrolltext.setText("Visualisado: Hoje as 14:30");
+        scrolltext.initialScroll();
 
         Drawable icon = this.getResources().getDrawable(R.drawable.andy);
 
@@ -166,6 +167,11 @@ public class ChatViewActivity extends BaseMenu {
             @Override
             public void run() {
                 getDataUsuarioDestino();
+                if(scrollvalue == 0){
+                    ScrollTextView scrolltext=(ScrollTextView) findViewById(R.id.scrolltext);
+                    scrolltext.startScroll();
+                    scrollvalue = 1;
+                }
                 //adapter.notifyDataSetChanged();
                 handler.postDelayed( this, 3000 );
             }

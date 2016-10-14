@@ -1,6 +1,7 @@
 package pet.com.br.pet.textviewcustom;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -14,7 +15,7 @@ public class ScrollTextView extends TextView {
     public Scroller mSlr;
 
     // milliseconds for a round of scrolling
-    private int mRndDuration = 2000;
+    private int mRndDuration = 3000;
 
     // the X offset when paused
     private int mXPaused = 0;
@@ -88,9 +89,47 @@ public class ScrollTextView extends TextView {
                 / scrollingLen)).intValue();
 
         setVisibility(VISIBLE);
-        mSlr.startScroll(mXPaused, 0, distance, 0, duration);
+        mSlr.startScroll(mXPaused+390, 0, distance-580, 0,duration-2300);
         invalidate();
         mPaused = false;
+
+    }
+
+    public void stoppedScroll() {
+
+        if (!mPaused)
+            return;
+
+        // Do not know why it would not scroll sometimes
+        // if setHorizontallyScrolling is called in constructor.
+        setHorizontallyScrolling(true);
+        // use LinearInterpolator for steady scrolling
+        mSlr = new Scroller(this.getContext(), new LinearInterpolator());
+        setScroller(mSlr);
+        setVisibility(VISIBLE);
+        mSlr.startScroll(0, 0, 0, 0, 0);
+        setText("Hoje as 14:30");
+        //invalidate();
+        //mPaused = false;
+
+    }
+
+    public void initialScroll() {
+
+        if (!mPaused)
+            return;
+
+        // Do not know why it would not scroll sometimes
+        // if setHorizontallyScrolling is called in constructor.
+        setHorizontallyScrolling(true);
+        // use LinearInterpolator for steady scrolling
+        mSlr = new Scroller(this.getContext(), new LinearInterpolator());
+        setScroller(mSlr);
+        setVisibility(VISIBLE);
+        mSlr.startScroll(0, 0, 0, 0, 0);
+        //invalidate();
+        //mPaused = false;
+
     }
 
     /**
@@ -139,7 +178,8 @@ public class ScrollTextView extends TextView {
         if (null == mSlr) return;
 
         if (mSlr.isFinished() && (!mPaused)) {
-            this.startScroll();
+            this.pauseScroll();
+            this.stoppedScroll();
         }
     }
 
