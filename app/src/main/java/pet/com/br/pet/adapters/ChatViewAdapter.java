@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -105,11 +107,11 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
                         holder.txtMsgDay.setText("ONTEM");
                         holder.cardView.setContentPadding(0,80,0,0);
                         //previousdataDia = currentdataDia;
-                    }else if(!(currentdataDia == Integer.parseInt(iDataDia)- 1 && currentdataDia == Integer.parseInt(iDataDia))
+                    }else if(!(currentdataDia == Integer.parseInt(iDataDia)- 1 && currentdataDia == Integer.parseInt(iDataDia)
                             && currentdataMes == Integer.parseInt(iDataMes)- 1 && currentdataMes == Integer.parseInt(iDataMes)
-                            && currentdataAno == Integer.parseInt(iDataAno)- 1 && currentdataAno == Integer.parseInt(iDataAno)){
+                            && currentdataAno == Integer.parseInt(iDataAno)- 1 && currentdataAno == Integer.parseInt(iDataAno))){
                         holder.txtMsgDay.setVisibility(View.VISIBLE);
-                        holder.txtMsgDay.setText(""+ currentdataDia+ "/" + dataMes + "/" + dataAno);
+                        holder.txtMsgDay.setText(""+ currentdataDia+ "/" + currentdataMes + "/" + currentdataAno);
                         holder.cardView.setContentPadding(0,80,0,0);
                     }
                     //previousdataDia = currentdataDia;
@@ -128,11 +130,11 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
                 holder.txtMsgDay.setVisibility(View.VISIBLE);
                 holder.txtMsgDay.setText("ONTEM");
                 holder.cardView.setContentPadding(0,80,0,0);
-            }else if(currentdataDia != Integer.parseInt(iDataDia)- 1 && currentdataDia != Integer.parseInt(iDataDia)
-                    && currentdataMes != Integer.parseInt(iDataMes)- 1 && currentdataMes != Integer.parseInt(iDataMes)
-                    && currentdataAno != Integer.parseInt(iDataAno)- 1 && currentdataAno != Integer.parseInt(iDataAno)){
+            }else if(!(currentdataDia == Integer.parseInt(iDataDia)- 1 && currentdataDia == Integer.parseInt(iDataDia)
+                    && currentdataMes == Integer.parseInt(iDataMes)- 1 && currentdataMes == Integer.parseInt(iDataMes)
+                    && currentdataAno == Integer.parseInt(iDataAno)- 1 && currentdataAno == Integer.parseInt(iDataAno))){
                 holder.txtMsgDay.setVisibility(View.VISIBLE);
-                holder.txtMsgDay.setText(""+ currentdataDia+ "/" + dataMes + "/" + dataAno);
+                holder.txtMsgDay.setText(""+ currentdataDia+ "/" + currentdataMes + "/" + currentdataAno);
                 holder.cardView.setContentPadding(0,80,0,0);
             }
         }
@@ -152,6 +154,7 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
 
                 //holder.txtUserchat.setText(chatView.get(position).getUsername());
                 holder.txtUsermsg.setText(chatView.get(position).getMensagem());
+                holder.txthora.setText(""+chatView.get(position).getHorah()+":"+chatView.get(position).getHoram());
 
             } else {
 
@@ -166,7 +169,7 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
 
                 //holder.txtUserchat.setText(chatView.get(position).getUsername());
                 holder.txtUsermsg.setText(chatView.get(position).getMensagem());
-
+                holder.txthora.setText(""+chatView.get(position).getHorah()+":"+chatView.get(position).getHoram());
             }
 
             }
@@ -184,6 +187,7 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
         TextView txtUsercodigo;
         TextView txtUsermsg;
         TextView txtMsgDay;
+        TextView txthora;
 
         CardView cardView;
         Context context;
@@ -197,11 +201,13 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
             //txtUsercodigo = (TextView) itemView.findViewById(R.id.usercodigoView);
             txtUsermsg = (TextView) itemView.findViewById(R.id.usermsgView);
             txtMsgDay = (TextView) itemView.findViewById(R.id.txtMsgDay);
+            txthora = (TextView) itemView.findViewById(R.id.hora);
 
 
             cardView = (CardView) itemView.findViewById(R.id.cardChatView);
             context = itemView.getContext();
             relativechatView = (RelativeLayout) itemView.findViewById(R.id.relative_chatview);
+
 
         }
     }

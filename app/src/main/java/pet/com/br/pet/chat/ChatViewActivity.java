@@ -89,6 +89,12 @@ public class ChatViewActivity extends BaseMenu {
     EditText mensagem;
     Button botaoEnviar;
 
+    //horas
+    String HoraH;
+    String HoraM;
+    String HoraS;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -277,6 +283,12 @@ public class ChatViewActivity extends BaseMenu {
                 chatvieww.setMes(json.getString(ChatViewUtils.TAG_MES));
                 chatvieww.setAno(json.getString(ChatViewUtils.TAG_ANO));
 
+                chatvieww.setHorah(json.getString(ChatViewUtils.TAG_HORAH));
+                chatvieww.setHoram(json.getString(ChatViewUtils.TAG_HORAM));
+                chatvieww.setHoras(json.getString(ChatViewUtils.TAG_HORAS));
+
+
+
                 //ChatView.setMeunome(Profile.getUsername().toString());
 
             } catch (JSONException e) {
@@ -299,7 +311,7 @@ public class ChatViewActivity extends BaseMenu {
 
             // if flag is true item exists, don't add.
             if(!flag){
-                chatController.insereDado(chatvieww.getId(),chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem(), chatvieww.getUsername(), chatvieww.getDia(), chatvieww.getMes(), chatvieww.getAno());
+                chatController.insereDado(chatvieww.getId(),chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem(), chatvieww.getUsername(), chatvieww.getDia(), chatvieww.getMes(), chatvieww.getAno(), chatvieww.getHorah(), chatvieww.getHoram(), chatvieww.getHoras());
                 //chatview.add(chatvieww);
                 setaAdaptadorUsuarioDestino(chatvieww.getUsername());
             }
@@ -354,6 +366,12 @@ public class ChatViewActivity extends BaseMenu {
         final String DataMes = datames.format(calendario.getTime());
         SimpleDateFormat dataano = new SimpleDateFormat("yyyy");
         final String DataAno = dataano.format(calendario.getTime());
+        SimpleDateFormat horah = new SimpleDateFormat("HH");
+        HoraH = horah.format(calendario.getTime());
+        SimpleDateFormat horam = new SimpleDateFormat("mm");
+        HoraM = horam.format(calendario.getTime());
+         SimpleDateFormat horaS = new SimpleDateFormat("ss");
+        HoraS = horaS.format(calendario.getTime());
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ChatViewUtils.DATA_MENSAGEM,
@@ -366,7 +384,7 @@ public class ChatViewActivity extends BaseMenu {
                                 String uniqueId = UUID.randomUUID().toString();
 
                                 //ENVIAR PARA O BANCO DE DADOS
-                                chatController.insereDado(uniqueId, codigo, user, msg, Profile.getUsername(), DataDia, DataMes, DataAno);
+                                chatController.insereDado(uniqueId, codigo, user, msg, Profile.getUsername(), DataDia, DataMes, DataAno, HoraH, HoraM, HoraS);
                                 mensagem.setText("");
 
                                 //ATUALIZA O ADAPTADOR
@@ -397,6 +415,9 @@ public class ChatViewActivity extends BaseMenu {
                 map.put("DIA",DataDia);
                 map.put("MES",DataMes);
                 map.put("ANO",DataAno);
+                map.put("HORAH",HoraH);
+                map.put("HORAM",HoraM);
+                map.put("HORAS",HoraS);
                 return map;
             }
         };

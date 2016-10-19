@@ -21,6 +21,10 @@ public class ChatData extends SQLiteOpenHelper {
     public static final String C_DIA = "DIA";
     public static final String C_MES = "MES";
     public static final String C_ANO = "ANO";
+    public static final String C_HORAH = "HORAH";
+    public static final String C_HORAM = "HORAM";
+    public static final String C_HORAS = "HORAS";
+
 
 
     public ChatData(Context context){
@@ -32,7 +36,7 @@ public class ChatData extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         try{
             String sql = "create table " + TABLE_1 + " (" + C_ID_1 + " text, "
-                    + C_CODIGO_1 + " text, " + C_USERNAME_1 + " text, " + C_MSG_1 + " text, " + C_USERNAME_2 + " text, " + C_DIA + " text, " + C_MES + " text, " + C_ANO + " text)";
+                    + C_CODIGO_1 + " text, " + C_USERNAME_1 + " text, " + C_MSG_1 + " text, " + C_USERNAME_2 + " text, " + C_DIA + " text, " + C_MES + " text, " + C_ANO + " text, " + C_HORAH + " text, " + C_HORAM + " text, " + C_HORAS + " text)";
             db.execSQL(sql);
         }catch(Exception e){
             Log.e("Error DbHelper", e.getMessage());

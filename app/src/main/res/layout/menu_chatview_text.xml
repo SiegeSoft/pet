@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:paddingLeft="10dp"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         android:maxLines="1"
         android:id="@+id/textview_tittle"
         />
@@ -19,7 +19,7 @@
         android:paddingLeft="12dp"
         android:paddingBottom="2dp"
         android:layout_below="@+id/textview_tittle"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         android:maxLines="1"
         android:id="@+id/scrolltext">
     </pet.com.br.pet.textviewcustom.ScrollTextView>

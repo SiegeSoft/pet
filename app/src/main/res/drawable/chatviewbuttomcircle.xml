@@ -23,7 +23,7 @@
             <!-- CONTENT LAYER -->
             <item android:bottom="2dp" android:right="2dp">
                 <shape>
-                    <solid android:color="#ff9900" />
+                    <solid android:color="#a48f78" />
                     <corners android:radius="60dip"/>
                 </shape>
             </item>

@@ -12,6 +12,10 @@ public class ChatView {
     private String dia;
     private String mes;
     private String ano;
+
+    private String horah;
+    private String horam;
+    private String horas;
     private static long adaptercontador;
 
     public String getId() {
@@ -73,4 +77,21 @@ public class ChatView {
     public static void setAdaptercontador(long adaptercontador) {
         ChatView.adaptercontador = adaptercontador;}
 
+    public String getHorah() {
+        return horah;
+    }
+
+    public void setHorah(String horah) {this.horah = horah;}
+
+    public String getHoram() {
+        return horam;
+    }
+
+    public void setHoram(String horam) {this.horam = horam;}
+
+    public String getHoras() {
+        return horas;
+    }
+
+    public void setHoras(String horas) {this.horas = horas;}
 }

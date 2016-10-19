@@ -14,5 +14,8 @@ public class ChatViewUtils {
     public static final String TAG_DIA = "DIA";
     public static final String TAG_MES = "MES";
     public static final String TAG_ANO = "ANO";
+    public static final String TAG_HORAH = "HORAH";
+    public static final String TAG_HORAM = "HORAM";
+    public static final String TAG_HORAS = "HORAS";
 
 }
