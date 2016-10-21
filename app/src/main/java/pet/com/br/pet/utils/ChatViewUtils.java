@@ -7,6 +7,7 @@ public class ChatViewUtils {
 
     public static final String DATA_URL = "http://kahvitech.com/pet/chatUsuarioDestino.php?";
     public static final String DATA_MENSAGEM = "http://kahvitech.com/pet/cadastraMensagem.php";
+    public static final String DATA_ULTIMOHORARIO = "http://kahvitech.com/pet/horarioVisualizado.php?";
     public static final String TAG_ID = "id";
     public static final String TAG_CODIGO = "CODIGO";
     public static final String TAG_USUARIODESTINO = "USUARIO";
@@ -17,5 +18,9 @@ public class ChatViewUtils {
     public static final String TAG_HORAH = "HORAH";
     public static final String TAG_HORAM = "HORAM";
     public static final String TAG_HORAS = "HORAS";
+    public static final String TAG_ULTIMAHORAH = "HORAH";
+    public static final String TAG_ULTIMAHORAM = "HORAM";
+    public static final String TAG_ULTIMAHORAS = "HORAS";
+
 
 }

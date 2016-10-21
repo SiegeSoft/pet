@@ -9,6 +9,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 import android.widget.TextView;
 
+import pet.com.br.pet.models.ChatView;
+
 public class ScrollTextView extends TextView {
 
     // scrolling feature
@@ -71,7 +73,6 @@ public class ScrollTextView extends TextView {
      * resume the scroll from the pausing point
      */
     public void resumeScroll() {
-
         if (!mPaused)
             return;
 
@@ -89,7 +90,7 @@ public class ScrollTextView extends TextView {
                 / scrollingLen)).intValue();
 
         setVisibility(VISIBLE);
-        mSlr.startScroll(mXPaused+390, 0, distance-580, 0,duration-2300);
+        mSlr.startScroll(mXPaused+320, 0, distance-315, 0,duration - 2800);
         invalidate();
         mPaused = false;
 
@@ -108,13 +109,19 @@ public class ScrollTextView extends TextView {
         setScroller(mSlr);
         setVisibility(VISIBLE);
         mSlr.startScroll(0, 0, 0, 0, 0);
-        setText("Hoje as 14:30");
+        if(!(ChatView.getUltimaHorahHorah() == null && ChatView.getUltimaHoram() == null)) {
+            setText("Hoje as "+ChatView.getUltimaHorahHorah()+ ":"+ChatView.getUltimaHoram());
+        }else{
+
+        }
+        //setText("Hoje as 14:30");
         //invalidate();
         //mPaused = false;
 
     }
 
     public void initialScroll() {
+        setText("Visualisado: Hoje as " + ChatView.getUltimaHorahHorah() + ":" + ChatView.getUltimaHoram());
 
         if (!mPaused)
             return;
@@ -129,7 +136,6 @@ public class ScrollTextView extends TextView {
         mSlr.startScroll(0, 0, 0, 0, 0);
         //invalidate();
         //mPaused = false;
-
     }
 
     /**

@@ -48,6 +48,7 @@ import java.util.List;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.adapters.ChatViewAdapter;
+import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 import pet.com.br.pet.database.ChatController;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.ChatView;
@@ -95,6 +96,7 @@ public class ChatViewActivity extends BaseMenu {
     String HoraS;
 
 
+    ScrollTextView scrolltext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,20 +104,6 @@ public class ChatViewActivity extends BaseMenu {
 
         mensagem = (EditText) findViewById(R.id.edit_escrevemensagem);
         botaoEnviar = (Button) findViewById(R.id.botaoenviar);
-
-        /* final Handler hhandler = new Handler();
-        hhandler.postDelayed( new Runnable() {
-           @Override
-            public void run() {
-                if (mensagem.length() > 0) {
-                    botaoEnviar.setText("➤");
-                } else {
-                    botaoEnviar.setText("⌨");
-            }
-                hhandler.postDelayed( this, 0 );
-            }
-        },  0 );*/
-
 
         //instancia o chat controller class
         chatController = new ChatController(this);
@@ -129,43 +117,42 @@ public class ChatViewActivity extends BaseMenu {
         codigo = intent.getStringExtra("Usercodigo");
         descricao = intent.getStringExtra("Userdesc");
 
-        //android.support.v7.app.ActionBar ab = getSupportActionBar();
-        //ab.setTitle((Html.fromHtml("<font color=\"#ff9900\">"+"-"+"</font>"+"<font color=\"#000000\">"+user+"</font>")));
-        //ab.setSubtitle((Html.fromHtml("<font color=\"#ff9900\">"+"-."+"</font>"+"<font color=\"#000000\">"+"Visualisado: Hoje as 16:00"+"</font>")));
-        //ab.setIcon(R.drawable.andy);
+        //ACTION BAR PERSONALIZADA
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         ab.setDisplayShowTitleEnabled(false);
         LayoutInflater inflater = LayoutInflater.from(this);
         View customView = inflater.inflate(R.layout.menu_chatview_text, null);
-        //titleTV = (TextView) customView.findViewById(R.id.title);
-        //titleTV.setSelected(true);
-
 
         ab.setCustomView(customView);
         ab.setDisplayShowCustomEnabled(true);
+
+        //SETA O NOME DO USUARIO/MARQUEE DA ULTIMA VISUALIZAÇÃO
         TextView texttitle =(TextView) findViewById(R.id.textview_tittle);
-        texttitle.setText(""+user);
+        scrolltext=(ScrollTextView) findViewById(R.id.scrolltext);
 
-        ScrollTextView scrolltext=(ScrollTextView) findViewById(R.id.scrolltext);
+        requestQueue = Volley.newRequestQueue(this);
 
-        scrolltext.setText("Visualisado: Hoje as 14:30");
-        scrolltext.initialScroll();
-
+        if(ChatView.getUltimaHorahHorah() == null && ChatView.getUltimaHoram() == null) {
+            texttitle.setText(""+user);
+            getUltimoHorarioVisualisado();
+        }else{
+            scrolltext.initialScroll();
+        }
         Drawable icon = this.getResources().getDrawable(R.drawable.andy);
 
         Bitmap bitmap = ((BitmapDrawable)icon).getBitmap();
 
         Drawable drawable = new BitmapDrawable(getResources(), createCircleBitmap(bitmap));
         getSupportActionBar().setIcon(drawable);
+        //FIM
 
         setaAdaptadorUsuarioDestino(user);
 
+        //INICIA O PROGRAMA NA ULTIMA ATUALIZAÇÃO DO RECYCLERVIEW
         int recyclerposition = recyclerView.getAdapter().getItemCount();
         recyclerView.scrollToPosition(recyclerposition-1);
         ChatView.setAdaptercontador(recyclerView.getAdapter().getItemCount());
 
-
-        requestQueue = Volley.newRequestQueue(this);
 
         //ATUALIZA AS INFORMAÇÕES A CADA 3 SEGUNDOS
         final Handler handler = new Handler();
@@ -182,11 +169,6 @@ public class ChatViewActivity extends BaseMenu {
                 handler.postDelayed( this, 3000 );
             }
         },  3000 );
-
-        //INICIA O PROGRAMA NA ULTIMA ATUALIZAÇÃO DO RECYCLERVIEW
-      //  int recyclerposition = recyclerView.getAdapter().getItemCount();
-       // recyclerView.scrollToPosition(recyclerposition - 1);
-
     }
 
     public Bitmap createCircleBitmap(Bitmap bitmapimg){
@@ -258,12 +240,43 @@ public class ChatViewActivity extends BaseMenu {
         return jsonArrayRequest;
     }
 
+    //RECEBER ULTIMO HORARIO VISUALIZADO
+    //RECEBER MENSAGENS DOS OUTROS USUARIOS
+    private JsonArrayRequest getUltimoHorarioVisualisadoFromServer(String url) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            parseDataUltimoHorarioVisualisado(response);
+                        }
+                        catch (Exception e){
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+        return jsonArrayRequest;
+    }
+
+
+
     //INICIAR O RECEBIMENTO DAS MENSAGENS DOS UUARIOS
     private void getDataUsuarioDestino() {
         //Adding the method to the queue by calling the method getDataFromServer
         requestQueue.add(getUsuarioDestinoDataFromServer(ChatViewUtils.DATA_URL+"&CODIGO="+codigo+"&USUARIODESTINO="+user+"&USUARIO="+Profile.getUsername()));
         //Incrementing the request counter
     }
+
+    private void getUltimoHorarioVisualisado() {
+        //Adding the method to the queue by calling the method getDataFromServer
+        requestQueue.add(getUltimoHorarioVisualisadoFromServer(ChatViewUtils.DATA_ULTIMOHORARIO+"&codigo="+codigo+"&myusername="+Profile.getUsername()+"&usuariodestino="+user));
+        //Incrementing the request counter
+    }
+
 
     //CONVERTE EM STRING AS SUAS MENSAGENS DOS OUTROS USUARIOS
     private void parseDataUsuarioDestino(JSONArray array) {
@@ -287,17 +300,12 @@ public class ChatViewActivity extends BaseMenu {
                 chatvieww.setHoram(json.getString(ChatViewUtils.TAG_HORAM));
                 chatvieww.setHoras(json.getString(ChatViewUtils.TAG_HORAS));
 
-
-
-                //ChatView.setMeunome(Profile.getUsername().toString());
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             // Linear search, see if the id exists
             boolean flag = false;
-
             //VERIFICA SE EXISTEM IDS DUPLICADOS
             for(ChatView chat : chatview){
                 if(null != chat.getId() && null != chatvieww.getId()){
@@ -308,7 +316,6 @@ public class ChatViewActivity extends BaseMenu {
                     }
                 }
             }
-
             // if flag is true item exists, don't add.
             if(!flag){
                 chatController.insereDado(chatvieww.getId(),chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem(), chatvieww.getUsername(), chatvieww.getDia(), chatvieww.getMes(), chatvieww.getAno(), chatvieww.getHorah(), chatvieww.getHoram(), chatvieww.getHoras());
@@ -316,33 +323,57 @@ public class ChatViewActivity extends BaseMenu {
                 setaAdaptadorUsuarioDestino(chatvieww.getUsername());
             }
         }
-        // Notifying the adapter that data has been added or changed
     }
+
+    //CONVERTE EM STRING AS SUAS MENSAGENS DOS OUTROS USUARIOS
+    private void parseDataUltimoHorarioVisualisado(JSONArray array) {
+        for (int i = 0; i < array.length(); i++) {
+            ChatView chatvieww = new ChatView();
+            JSONObject json = null;
+            try {
+                //PUXA OS ITEMS DO BANCO DE DADOS
+                json = array.getJSONObject(i);
+
+                chatvieww.setUltimaHorahHorah(json.getString(ChatViewUtils.TAG_ULTIMAHORAH));
+                chatvieww.setUltimaHoramHoram(json.getString(ChatViewUtils.TAG_ULTIMAHORAM));
+                chatvieww.setUltimaHorasHoras(json.getString(ChatViewUtils.TAG_ULTIMAHORAS));
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if(!(ChatView.getUltimaHorahHorah() == null && ChatView.getUltimaHoram() == null)) {
+                scrolltext.initialScroll();
+            }else{
+                Toast.makeText(ChatViewActivity.this, "Nao foi possivel obter a hora", Toast.LENGTH_LONG).show();
+            }
+
+
+        }
+    }
+
+
+
+
+
+
     //ATUALIZA O ADAPTADOR DAS MENSAGENS DE OUTROS USUARIOS
     public void setaAdaptadorUsuarioDestino(String username){
         //Adding adapter to recyclerview
         try {
-            //ChatView chat = new ChatView();
-            //chat.setUsername(user);
-            //chatview.add(chat);
             adapter = new ChatViewAdapter(chatController.carregaTodosDadosUsuarioDestino(username, codigo), this);
             recyclerView.setAdapter(adapter);
-
             //This method runs in the same thread as the UI.
             adapter.notifyDataSetChanged();
             int recyclerposition = recyclerView.getAdapter().getItemCount();
             recyclerView.scrollToPosition(recyclerposition-1);
             ChatView.setAdaptercontador(recyclerView.getAdapter().getItemCount());
-
-
-            //recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
-            //Do something to the UI thread here
         }
         catch (Exception e){
             Toast.makeText(ChatViewActivity.this, "Banco de dados error: "+ e, Toast.LENGTH_SHORT).show();
         }
     }
-
 
     //INSERIR MENSAGENS
     public void botaoenviarmensagem(View v){
@@ -403,6 +434,7 @@ public class ChatViewActivity extends BaseMenu {
                         Toast.makeText(ChatViewActivity.this, "Não foi possivel cadastrar a mensagem", Toast.LENGTH_SHORT).show();
                     }
                 }){
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 String meunomee;

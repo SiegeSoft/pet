@@ -12,11 +12,14 @@ public class ChatView {
     private String dia;
     private String mes;
     private String ano;
-
     private String horah;
     private String horam;
     private String horas;
     private static long adaptercontador;
+    private static String ultimaHorah;
+    private static String ultimaHoram;
+    private static String ultimaHoras;
+
 
     public String getId() {
         return id;
@@ -94,4 +97,30 @@ public class ChatView {
     }
 
     public void setHoras(String horas) {this.horas = horas;}
+
+    //
+
+    public static String getUltimaHorahHorah() {
+        return ultimaHorah;
+    }
+
+    public static void setUltimaHorahHorah(String ultimaHorah) {
+        ChatView.ultimaHorah = ultimaHorah;}
+
+    public static String getUltimaHoram() {
+        return ultimaHoram;
+    }
+
+    public static void setUltimaHoramHoram(String ultimaHoram) {
+        ChatView.ultimaHoram = ultimaHoram;}
+
+    public static String getUltimaHorasHoras() {
+        return ultimaHoras;
+    }
+
+    public static void setUltimaHorasHoras(String ultimaHoras) {
+        ChatView.ultimaHoras = ultimaHoras;}
+
+
+
 }

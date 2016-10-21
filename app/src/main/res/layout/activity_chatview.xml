@@ -46,21 +46,19 @@
             android:scrollbarStyle="outsideInset"
             android:scrollbars="vertical"
             android:layout_toLeftOf="@+id/botaoenviar"
-            android:background="@drawable/edittextbaloon"
-            />
+            android:background="@drawable/edittextbaloon" />
         <Button
             android:id="@+id/botaoenviar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
             android:text="➢"
             android:textStyle="bold|italic"
             android:textColor="#e6ffffff"
             android:textSize="38sp"
-            android:paddingBottom="8dp"
             android:onClick="botaoenviarmensagem"
             android:background="@drawable/chatviewbuttomcircle"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            />
+            android:layout_alignParentRight="true" />
+
     </RelativeLayout>
 </RelativeLayout>
