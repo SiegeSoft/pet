@@ -138,6 +138,7 @@ public class ChatViewActivity extends BaseMenu {
         }else{
             scrolltext.initialScroll();
         }
+
         Drawable icon = this.getResources().getDrawable(R.drawable.andy);
 
         Bitmap bitmap = ((BitmapDrawable)icon).getBitmap();
