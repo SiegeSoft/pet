@@ -1,19 +1,33 @@
+/**
+ * Created by iaco_ on 24/08/2016.
+ */
+
+/**
+ * Edit by rafael on 30/08/2016.
+ */
+
 package pet.com.br.pet.buscaRapida;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
+
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.view.ViewGroup;
@@ -22,6 +36,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +46,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,8 +64,10 @@ import pet.com.br.pet.models.BuscaRapida;
 import pet.com.br.pet.models.Profile;
 import pet.com.br.pet.tindercard.FlingCardListener;
 import pet.com.br.pet.tindercard.SwipeFlingAdapterView;
-import pet.com.br.pet.utils.BuscaRapidaUtils;
 import pet.com.br.pet.models.Usuario;
+import pet.com.br.pet.utils.TagUtils;
+import pet.com.br.pet.utils.UrlUtils;
+
 
 /**
  * Created by iaco_ on 24/08/2016.
@@ -60,9 +79,13 @@ import pet.com.br.pet.models.Usuario;
 
 public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.ActionDownInterface {
 
+    static final Integer LOCATION = 0x1;
+    static final Integer WRITE_EXST = 0x2;
+    static final Integer READ_EXST = 0x3;
+    static final Integer GPS_SETTINGS = 0x7;
 
     public static MyAppAdapter _myAppAdapter;
-    private String _getLatitude; private String _getLongitude;
+    private String _getLatitude, _getLongitude;
     private RequestQueue requestQueue;
     public static ViewHolder _viewHolder;
     private SwipeFlingAdapterView _flingContainer;
@@ -70,22 +93,26 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     private Context _context;
 
     private HashMap<String, String> _userDetails;
-    private ArrayList<String> _arrayLikes = new ArrayList<>();
-    private ArrayList<String> _arrayDislikes = new ArrayList<>();
-    private ArrayList<String> _arrayIds = new ArrayList<>();
+    private static ArrayList<String> _arrayLikes = new ArrayList<>();
+    private static ArrayList<String> _arrayDislikes = new ArrayList<>();
+    private static ArrayList<String> _arrayIds = new ArrayList<>();
 
     private TextView _textOops, _textConfings;
     private ImageView _pets;
     private ImageButton _btnHeart, _btnShare, _btnNext;
+    private RelativeLayout _rodape;
 
     private LoginManager _loginManager;
 
     private float _noRepeatTimes = 0;
 
+    private long _distance = 10;
+
     public static void removeBackground() {
         _viewHolder._background.setVisibility(View.GONE);
         _myAppAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +129,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             finish();
 
         } else {
-
             _userDetails = _loginManager.getUserDetails();
             Usuario.setUserName(_userDetails.get(LoginManager.KEY_NAME));
             Usuario.setLikes(_userDetails.get(LoginManager.KEY_LIKE));
@@ -110,7 +136,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             Profile.setUsername(_userDetails.get(LoginManager.KEY_NAME));
             _arrayLikes.addAll(Usuario.getLikes());
             _arrayDislikes.addAll(Usuario.getDislikes());
-
         }
 
         _pets = (ImageView) findViewById(R.id.pets);
@@ -119,6 +144,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _btnHeart = (ImageButton) findViewById(R.id.btnHeart);
         _btnNext = (ImageButton) findViewById(R.id.btnNext);
         _btnShare = (ImageButton) findViewById(R.id.btnShare);
+        _rodape = (RelativeLayout) findViewById(R.id.rodape);
 
 
         _context = this;
@@ -138,19 +164,15 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             return;
         }
 
-        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        double longitude = location.getLongitude();
+        double latitude = location.getLatitude();
+        _getLatitude = "" + latitude;
+        _getLongitude = "" + longitude;
 
-        if (location != null) {
-            _getLatitude = "" + location.getLatitude();
-            _getLongitude = "" + location.getLongitude();
-        }else {
-            Toast.makeText(BuscaRapidaActivity.this, "GPS DESATIVADO", Toast.LENGTH_LONG).show();
-        }
 
 
         requestQueue = Volley.newRequestQueue(this);
-
 
         _myAppAdapter = new MyAppAdapter(_buscaRapidaLista, BuscaRapidaActivity.this);
         _flingContainer.setAdapter(_myAppAdapter);
@@ -186,14 +208,13 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-               if (_noRepeatTimes <= 3) {
-                   if (itemsInAdapter == 0) {
-                       getData();
+                if (_noRepeatTimes <= 3) {
+                    if (itemsInAdapter == 0) {
+                        getData();
                     }
                 } else{
-                   setPetsVisibleImage();
-                   Toast.makeText(BuscaRapidaActivity.this, "Sem anuncios", Toast.LENGTH_LONG).show();
-               }
+                    setPetsVisibleImage();
+                }
             }
 
             @Override
@@ -222,7 +243,20 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _btnHeart.setVisibility(View.GONE);
         _btnNext.setVisibility(View.GONE);
         _btnShare.setVisibility(View.GONE);
+        _rodape.setVisibility(View.GONE);
     }
+
+    private void setAnunciosVisibleImage(){
+        _pets.setVisibility(View.GONE);
+        _textOops.setVisibility(View.GONE);
+        _textConfings.setVisibility(View.GONE);
+        _btnHeart.setVisibility(View.VISIBLE);
+        _btnNext.setVisibility(View.VISIBLE);
+        _btnShare.setVisibility(View.VISIBLE);
+        _rodape.setVisibility(View.VISIBLE);
+    }
+
+
 
     private void setLike(String id) {
         if (_arrayLikes.size() == 1) {
@@ -268,21 +302,107 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        menu.findItem(R.id.action_confings).setVisible(true);
         return true;
     }
 
 
-    private void getData() {
-        requestQueue.add(getDataFromServer(_getLatitude, _getLongitude));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_confings) {
+            dialogSettings(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
-    private JsonArrayRequest getDataFromServer(String latitude, String longitude) {
+    private void dialogSettings(final Activity activity){
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.activity_settings_busca_rapida, null);
+        final SeekBar seekBar = (SeekBar) alertLayout.findViewById(R.id.distanceBar);
+        final TextView txtDistance = (TextView) alertLayout.findViewById(R.id.distance);
+        final TextView txtCity = (TextView) alertLayout.findViewById(R.id.range);
+
+        txtDistance.setText("10");
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                txtDistance.setText(String.valueOf(progress));
+
+                if(progress < 30){
+                    txtCity.setText(R.string.neighborhood);
+
+                } else if(progress >= 30 && progress < 50){
+                    txtCity.setText(R.string.city);
+
+                } else if(progress >= 50 && progress < 100){
+                    txtCity.setText(R.string.more_city);
+
+                } else if(progress >= 100 && progress < 200) {
+                    txtCity.setText(R.string.state);
+
+                } else if(progress >= 200 && progress <= 400) {
+                    txtCity.setText(R.string.more_state);
+
+                } else {
+                    txtCity.setText(R.string.all_country);
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+        alert.setTitle(R.string.titleSettings);
+        alert.setView(alertLayout);
+        alert.setCancelable(false);
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                _distance = seekBar.getProgress();
+                setAnunciosVisibleImage();
+                _noRepeatTimes = 0;
+                getData();
+                Toast.makeText(activity, ""+_distance, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+
+
+    private void getData() {
+        requestQueue.add(getDataFromServer(_getLatitude, _getLongitude, _distance));
+    }
+
+
+    private JsonArrayRequest getDataFromServer(String latitude, String longitude, long distance) {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.VISIBLE);
         setProgressBarIndeterminateVisibility(true);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(BuscaRapidaUtils.DATA_GPS_URL + latitude + "&LON=" + longitude,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(UrlUtils.LOCALIZACAO_URL+latitude+"&LON="+longitude+"&DISTANCE="+String.valueOf(distance),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -294,11 +414,12 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(BuscaRapidaActivity.this, "Sem conexao com o servidor", Toast.LENGTH_LONG).show();
+                        _noRepeatTimes++;
                     }
                 });
         return jsonArrayRequest;
     }
+
 
 
     private void parseData(JSONArray array) {
@@ -308,15 +429,15 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             JSONObject json = null;
             try {
                 json = array.getJSONObject(i);
-                buscaRapida.setId(json.getString(BuscaRapidaUtils.TAG_ID));
-                buscaRapida.setCodigo(json.getString(BuscaRapidaUtils.TAG_COD));
-                buscaRapida.setRaca(json.getString(BuscaRapidaUtils.TAG_RACA));
-                buscaRapida.setCategoria(json.getString(BuscaRapidaUtils.TAG_CATEGORIA));
-                buscaRapida.setDescricao(json.getString(BuscaRapidaUtils.TAG_DESCRICAO));
-                buscaRapida.setIdade(json.getString(BuscaRapidaUtils.TAG_IDADE));
-                buscaRapida.setTipoVenda(json.getString(BuscaRapidaUtils.TAG_VALOR));
-                buscaRapida.setDono(json.getString(BuscaRapidaUtils.TAG_DONO));
-                buscaRapida.setImgid(json.getString(BuscaRapidaUtils.TAG_IMAGEMPATCH));
+                buscaRapida.setId(json.getString(TagUtils.TAG_ID));
+                buscaRapida.setCodigo(json.getString(TagUtils.TAG_COD));
+                buscaRapida.setRaca(json.getString(TagUtils.TAG_RACA));
+                buscaRapida.setCategoria(json.getString(TagUtils.TAG_CATEGORIA));
+                buscaRapida.setDescricao(json.getString(TagUtils.TAG_DESCRICAO));
+                buscaRapida.setIdade(json.getString(TagUtils.TAG_IDADE));
+                buscaRapida.setTipoVenda(json.getString(TagUtils.TAG_VALOR));
+                buscaRapida.setDono(json.getString(TagUtils.TAG_DONO));
+                buscaRapida.setImgid(json.getString(TagUtils.TAG_IMAGEMPATCH));
 
             } catch (JSONException e) {
                 Toast.makeText(BuscaRapidaActivity.this, "Error ao consultar o banco de dados" + e, Toast.LENGTH_SHORT).show();
@@ -367,6 +488,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     public void onActionDownPerform() {
         Log.e("action", "bingo");
     }
+
 
 
     /**

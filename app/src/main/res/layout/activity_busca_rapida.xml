@@ -1,86 +1,111 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <!-- activity view -->
-    <FrameLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="2">
+        android:layout_above="@+id/rodape">
 
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:padding="15dp">
-
-            <ImageView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="top"
-                android:padding="8dp"
-                android:src="@drawable/nosearchpet"
-                android:id="@+id/pets"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="25dp"
-                android:text="@string/oops"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:id="@+id/txtViewOops"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:paddingBottom="8dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="8dp"
-                android:text="@string/nas_configuracoes"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:id="@+id/txtViewConfings"/>
-
-        </LinearLayout>
-
-
-        <pet.com.br.pet.tindercard.SwipeFlingAdapterView
-            android:id="@+id/frame"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:rotation_degrees="15.5" />
+            android:alpha="2">
 
-        <ProgressBar
-            android:id="@+id/progressBar2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <ImageView
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="top"
+                    android:padding="8dp"
+                    android:src="@drawable/nosearchpet"
+                    android:id="@+id/pets"/>
+
+                <TextView
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="25dp"
+                    android:text="@string/oops"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:id="@+id/txtViewOops"/>
+
+                <TextView
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/nas_configuracoes"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:id="@+id/txtViewConfings"/>
+
+            </LinearLayout>
+
+
+            <pet.com.br.pet.tindercard.SwipeFlingAdapterView
+                android:id="@+id/frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:rotation_degrees="15.5" />
+
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rodape"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:padding="20dp">
 
         <ImageButton
             android:layout_marginBottom="30dp"
-            android:layout_marginLeft="30dp"
             android:layout_width="96dp"
             android:layout_height="91dp"
             android:scaleType="fitCenter"
             android:padding="10dp"
             android:src="@drawable/no"
             android:id="@+id/btnNext"
-            android:layout_gravity="left|bottom"
+            android:layout_gravity="start"
+            android:layout_alignParentLeft="true"
             android:background="@drawable/button_circle"/>
+
+        <ImageButton
+            android:layout_marginBottom="30dp"
+            android:layout_width="96dp"
+            android:layout_height="91dp"
+            android:src="@drawable/coracao"
+            android:scaleType="fitCenter"
+            android:padding="10dp"
+            android:id="@+id/btnHeart"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_circle" />
 
         <ImageButton
             android:src="@drawable/compartilhar"
@@ -89,25 +114,12 @@
             android:scaleType="fitCenter"
             android:padding="10dp"
             android:id="@+id/btnShare"
-            android:layout_gravity="center_horizontal|bottom"
             android:background="@drawable/button_circle"
-            android:layout_marginBottom="30dp"/>
+            android:layout_alignBottom="@+id/btnNext"
+            android:layout_centerHorizontal="true"/>
 
-        <ImageButton
-            android:layout_width="96dp"
-            android:layout_height="91dp"
-            android:src="@drawable/coracao"
-            android:scaleType="fitCenter"
-            android:padding="15dp"
-            android:id="@+id/btnHeart"
-            android:layout_gravity="right|bottom"
-            android:background="@drawable/button_circle"
-            android:layout_marginBottom="30dp"
-            android:layout_marginRight="30dp"
-            />
+    </RelativeLayout>
 
 
-    </FrameLayout>
 
-
-</LinearLayout>
+</RelativeLayout>

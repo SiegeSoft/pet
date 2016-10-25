@@ -28,7 +28,6 @@ import pet.com.br.pet.R;
 import pet.com.br.pet.adapters.AnunciosAdapter;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Anuncios;
-import pet.com.br.pet.models.Profile;
 import pet.com.br.pet.utils.AnunciosUtils;
 
 
@@ -157,14 +156,12 @@ public class AnunciosActivity extends BaseMenu {
     private void getData() {
 
         requestQueue.add(getDataFromServer(AnunciosUtils.DATA_URL+String.valueOf(requestCount)));
-
         requestCount++;
     }
 
     private void getNewData() {
 
         requestQueue.add(getNewDataFromServer(AnunciosUtils.DATA_NEW_URL+String.valueOf(requestCountInit)));
-
         requestCountInit++;
     }
 
