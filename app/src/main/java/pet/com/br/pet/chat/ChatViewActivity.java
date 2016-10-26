@@ -136,6 +136,7 @@ public class ChatViewActivity extends BaseMenu {
             texttitle.setText(""+user);
             getUltimoHorarioVisualisado();
         }else{
+            texttitle.setText(""+user);
             scrolltext.initialScroll();
         }
 

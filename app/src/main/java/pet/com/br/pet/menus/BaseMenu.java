@@ -24,6 +24,7 @@ import pet.com.br.pet.autentica.Login;
 import pet.com.br.pet.autentica.LoginManager;
 import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 import pet.com.br.pet.chat.ChatActivity;
+import pet.com.br.pet.conta.Conta;
 
 
 /**
@@ -153,10 +154,13 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.sub_chat:
                 iniciaOutraActivity(ChatActivity.class);
                 fullLayout.closeDrawer(GravityCompat.START);
+                finish();
                 break;
 
             case R.id.sub_conta:
+                iniciaOutraActivity(Conta.class);
                 fullLayout.closeDrawer(GravityCompat.START);
+                finish();
                 break;
 
             case R.id.sub_sair:

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="text_alterarsenha" type="id"/>
+    <item name="text_senhaantiga" type="id"/>
+    <item name="text_novasenha" type="id"/>
+    <item name="text_botaoconfirmar" type="id"/>
+
+</resources>
