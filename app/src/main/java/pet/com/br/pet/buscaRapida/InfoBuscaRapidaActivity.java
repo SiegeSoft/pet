@@ -24,8 +24,9 @@ import org.json.JSONObject;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.menus.BaseMenu;
-import pet.com.br.pet.models.BuscaRapida;
-import pet.com.br.pet.utils.BuscaRapidaUtils;
+
+import static pet.com.br.pet.utils.TagUtils.TAG_IMAGEMPATCH;
+import static pet.com.br.pet.utils.UrlUtils.ANUNCIO_UNICO_URL;
 
 public class InfoBuscaRapidaActivity extends BaseMenu {
 
@@ -101,7 +102,7 @@ public class InfoBuscaRapidaActivity extends BaseMenu {
         progressBar.setVisibility(View.VISIBLE);
         setProgressBarIndeterminateVisibility(true);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(BuscaRapidaUtils.DATA_IMAGE_URL+codigo,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(ANUNCIO_UNICO_URL+codigo,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -125,7 +126,7 @@ public class InfoBuscaRapidaActivity extends BaseMenu {
         JSONObject json = null;
         try {
             json = array.getJSONObject(0);
-            _imageViewFoto.setImageBitmap(decodeStringImg(json.getString(BuscaRapidaUtils.TAG_IMAGEMPATCH)));
+            _imageViewFoto.setImageBitmap(decodeStringImg(json.getString(TAG_IMAGEMPATCH)));
 
         } catch (JSONException e) {
             Toast.makeText(InfoBuscaRapidaActivity.this, "Sem imagem" + e, Toast.LENGTH_SHORT).show();

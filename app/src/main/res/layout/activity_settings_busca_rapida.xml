@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/distancia"
+            android:layout_gravity="center"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:text="000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/km"
+            android:layout_toLeftOf="@+id/km"
+            android:layout_marginRight="3dp"
+            android:textSize="25sp"
+            android:id="@+id/distance" />
+
+        <TextView
+            android:text="KM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:id="@+id/km"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/distanceBar"
+            android:elevation="40dp"
+            android:max="500"
+            android:progress="10"/>
+
+        <TextView
+            android:text="Seu bairro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/range" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
