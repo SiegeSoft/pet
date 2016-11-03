@@ -3,6 +3,7 @@ package pet.com.br.pet.conta;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -48,6 +49,8 @@ public class Conta extends BaseMenu {
 
         imagem_conta_perfil.setImageDrawable(drawable);
 
+
+        //FRAGMENT TROCA DE SENHA
         TextView textconta = (TextView) findViewById(R.id.text_conta_alterarSenha);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -55,7 +58,6 @@ public class Conta extends BaseMenu {
         fragmentTransaction.add(R.id.fragment_senha, contaProfileConfig);
         fragmentTransaction.commit();
         textconta.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -68,7 +70,6 @@ public class Conta extends BaseMenu {
                 }
             }
         });
-
 
         RelativeLayout relative_conta_fragment_view = (RelativeLayout) findViewById(R.id.relative_conta_fragment_view);
 
@@ -88,9 +89,7 @@ public class Conta extends BaseMenu {
         }
         }
 
-
-
-        public Bitmap createCircleBitmap(Bitmap bitmapimg) {
+       public Bitmap createCircleBitmap(Bitmap bitmapimg) {
         Bitmap output = Bitmap.createBitmap(bitmapimg.getWidth(),
                 bitmapimg.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
@@ -112,5 +111,12 @@ public class Conta extends BaseMenu {
         return output;
     }
 
+    //ALTERAR IMAGEM DE PERFIL.
+    public void OnClickPerfil(View v){
+        if (fadeout_value == 0) {
+            Intent intent = new Intent(this ,ContaStatus.class);
+            startActivity(intent);
+        }
+    }
 
 }

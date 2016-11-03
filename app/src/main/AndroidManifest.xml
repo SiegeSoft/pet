@@ -55,7 +55,9 @@
         <activity android:name=".conta.Conta"
             android:label="Conta"
             android:theme="@style/AppTheme.NoActionBar"/>
-
+        <activity android:name=".conta.ContaStatus"
+            android:label="Perfil"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 

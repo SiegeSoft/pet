@@ -112,7 +112,7 @@ public class ScrollTextView extends TextView {
         if(!(ChatView.getUltimaHorahHorah() == null && ChatView.getUltimaHoram() == null)) {
             setText("Hoje as "+ChatView.getUltimaHorahHorah()+ ":"+ChatView.getUltimaHoram());
         }else{
-
+            setVisibility(GONE);
         }
         //setText("Hoje as 14:30");
         //invalidate();
@@ -122,7 +122,6 @@ public class ScrollTextView extends TextView {
 
     public void initialScroll() {
         setText("Visualisado: Hoje as " + ChatView.getUltimaHorahHorah() + ":" + ChatView.getUltimaHoram());
-
         if (!mPaused)
             return;
 

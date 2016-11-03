@@ -11,6 +11,7 @@
         android:textColor="#ffffff"
         android:maxLines="1"
         android:id="@+id/textview_tittle"
+        android:visibility="visible"
         />
     <pet.com.br.pet.textviewcustom.ScrollTextView
         android:layout_width="200dp"
@@ -21,7 +22,8 @@
         android:layout_below="@+id/textview_tittle"
         android:textColor="#ffffff"
         android:maxLines="1"
-        android:id="@+id/scrolltext">
+        android:id="@+id/scrolltext"
+        android:visibility="visible">
     </pet.com.br.pet.textviewcustom.ScrollTextView>
 
 </RelativeLayout>
