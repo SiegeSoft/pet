@@ -13,17 +13,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.menus.BaseMenu;
+import pet.com.br.pet.models.Profile;
 
 /**
  * Created by iacocesar on 31/10/2016.
  */
 
 public class ContaStatus extends BaseMenu {
+
+    TextView texto_nomeexibicao;
+    EditText edit_nomeexibicao;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,16 @@ public class ContaStatus extends BaseMenu {
         ImageView imgview = (ImageView) findViewById(R.id.image_conta_perfil);
 
         imgview.setImageDrawable(drawable);
+
+
+        //TEXTVIEWS NOMEEXIBICAO
+        texto_nomeexibicao = (TextView) findViewById(R.id.text_conta_usuario_exibicao);
+        edit_nomeexibicao = (EditText) findViewById(R.id.edit_conta_usuario_exibicao);
+
+        texto_nomeexibicao.setText(""+Profile.getNomeExibicao());
+        edit_nomeexibicao.setText(""+Profile.getNomeExibicao());
+
+
     }
 
     public Bitmap createCircleBitmap(Bitmap bitmapimg) {
@@ -84,4 +99,10 @@ public class ContaStatus extends BaseMenu {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void OnClickNomeExibicao(View v){
+        texto_nomeexibicao.setVisibility(View.GONE);
+        edit_nomeexibicao.setVisibility(View.VISIBLE);
+    }
+
 }

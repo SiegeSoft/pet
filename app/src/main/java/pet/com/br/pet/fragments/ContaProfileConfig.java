@@ -10,9 +10,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import pet.com.br.pet.R;
+import pet.com.br.pet.chat.ChatViewActivity;
 import pet.com.br.pet.conta.Conta;
+import pet.com.br.pet.models.Profile;
+import pet.com.br.pet.utils.ChatViewUtils;
+import pet.com.br.pet.utils.ContaUtils;
 
 /**
  * Created by iacocesar on 23/10/2016.
@@ -21,6 +40,8 @@ import pet.com.br.pet.conta.Conta;
 public class ContaProfileConfig extends Fragment {
     private View rootView;
     private RelativeLayout relativeLayout;
+
+    private RequestQueue requestQueue;
 
     //LAYOUT ALTERAR SENHA.
     TextView texto_titulo;
@@ -40,6 +61,7 @@ public class ContaProfileConfig extends Fragment {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             /** Inflating the layout for this fragment **/
             rootView = inflater.inflate(R.layout.fragment_contaprofileconfig, container, false);
+            requestQueue = Volley.newRequestQueue(this.getActivity());
             return rootView;
         }
 
@@ -115,6 +137,13 @@ public class ContaProfileConfig extends Fragment {
             layout_button.addRule(RelativeLayout.CENTER_HORIZONTAL);
             layout_button.setMargins(0, 10, 0, 0);
             button_confirmar.setLayoutParams(layout_button);
+            button_confirmar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    alteraSenha();
+                }
+            });
 
 
             //texto ajustelayout nao modificar!!
@@ -139,6 +168,54 @@ public class ContaProfileConfig extends Fragment {
                 relativeLayout.removeAllViews();
             }
         }
+    }
+
+
+    //ALTERA SENHA
+    public void alteraSenha() {
+        if (texto_senhaantiga.length() >= 6 && texto_novasenha.length() >= 6) {
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, ContaUtils.ALTERASENHA_URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                if (response.trim().equals("success")){
+                                    texto_senhaantiga.setText("");
+                                    texto_novasenha.setText("");
+                                    Toast.makeText(getActivity(), "Senha Alterada Com Sucesso", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity(), "Não foi possivel alterar a sua senha", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(getActivity(), "Senha Antiga Inválida", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getActivity(), "Error ao conectar ao servidor", Toast.LENGTH_SHORT).show();
+                        }
+                    }) {
+
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<String, String>();
+                    String username = Profile.getUsername();
+                    String senhaantiga = texto_senhaantiga.getText().toString();
+                    String novasenha = texto_novasenha.getText().toString();
+                    map.put("USERNAME", username);
+                    map.put("SENHAANTIGA", senhaantiga);
+                    map.put("NOVASENHA", novasenha);
+                    return map;
+                }
+            };
+            RequestQueue requestQueueNew = Volley.newRequestQueue(this.getActivity());
+            requestQueueNew.add(stringRequest);
+        }else{
+            Toast.makeText(getActivity(), "A sua nova senha deverá conter 6 ou mais caracteres.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }

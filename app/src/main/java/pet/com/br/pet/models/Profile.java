@@ -5,6 +5,7 @@ package pet.com.br.pet.models;
  */
 public class Profile {
     static String username;
+    static String nomeexibicao;
 
     public static String getUsername() {
         return username;
@@ -13,4 +14,13 @@ public class Profile {
     public static void setUsername(String username) {
         Profile.username = username;
     }
+
+    public static String getNomeExibicao() {
+        return nomeexibicao;
+    }
+
+    public static void setNomeExibicao(String nomeexibicao) {
+        Profile.nomeexibicao = nomeexibicao;
+    }
+
 }

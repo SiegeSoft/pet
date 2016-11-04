@@ -48,7 +48,8 @@
                 android:paddingTop="10dp"
                 android:text="Nome Exibição"
                 android:textColor="#000000"
-                android:textSize="18dp" />
+                android:textSize="18dp"
+                android:visibility="visible"/>
 
             <EditText
                 android:id="@+id/edit_conta_usuario_exibicao"
@@ -72,6 +73,7 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/ic_edit_black_24dp"
                 android:backgroundTint="#000000"
+                android:onClick="OnClickNomeExibicao"
                 android:textStyle="bold" />
 
         </RelativeLayout>
