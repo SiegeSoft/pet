@@ -66,6 +66,7 @@
                 android:textSize="18dp" />
 
             <Button
+                android:id="@+id/OnClickNomeExibicao1"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
@@ -73,8 +74,22 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/ic_edit_black_24dp"
                 android:backgroundTint="#000000"
-                android:onClick="OnClickNomeExibicao"
-                android:textStyle="bold" />
+                android:onClick="OnClickNomeExibicao1"
+                android:textStyle="bold"
+                android:visibility="visible"/>
+            <Button
+                android:id="@+id/OnClickNomeExibicao2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/ic_create_new_folder_black_24dp"
+                android:backgroundTint="#000000"
+                android:onClick="OnClickNomeExibicao2"
+                android:textStyle="bold"
+                android:visibility="gone"/>
+
 
         </RelativeLayout>
 

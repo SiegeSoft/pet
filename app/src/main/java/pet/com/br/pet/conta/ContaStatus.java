@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +30,12 @@ public class ContaStatus extends BaseMenu {
 
     TextView texto_nomeexibicao;
     EditText edit_nomeexibicao;
+
+    int button_alteranomeexibicaovalue = 0;
+
+    //butonsvisibility
+    Button onclicknomeexibicao1, onclicknomeexibicao2 ;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +69,8 @@ public class ContaStatus extends BaseMenu {
         texto_nomeexibicao.setText(""+Profile.getNomeExibicao());
         edit_nomeexibicao.setText(""+Profile.getNomeExibicao());
 
+        onclicknomeexibicao1 = (Button) findViewById(R.id.OnClickNomeExibicao1);
+        onclicknomeexibicao2 = (Button) findViewById(R.id.OnClickNomeExibicao2);
 
     }
 
@@ -100,9 +109,24 @@ public class ContaStatus extends BaseMenu {
         return super.onOptionsItemSelected(item);
     }
 
-    public void OnClickNomeExibicao(View v){
+    public void OnClickNomeExibicao1(View v){
+        if(button_alteranomeexibicaovalue == 0){
         texto_nomeexibicao.setVisibility(View.GONE);
         edit_nomeexibicao.setVisibility(View.VISIBLE);
+            onclicknomeexibicao2.setVisibility(View.VISIBLE);
+            onclicknomeexibicao1.setVisibility(View.GONE);
+            button_alteranomeexibicaovalue = 1;
+        }
     }
+    public void OnClickNomeExibicao2(View v){
+        if(button_alteranomeexibicaovalue == 1){
+            texto_nomeexibicao.setVisibility(View.VISIBLE);
+            edit_nomeexibicao.setVisibility(View.GONE);
+            onclicknomeexibicao1.setVisibility(View.VISIBLE);
+            onclicknomeexibicao2.setVisibility(View.GONE);
+            button_alteranomeexibicaovalue = 0;
+        }
+    }
+
 
 }

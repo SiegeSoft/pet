@@ -58,7 +58,8 @@
                 android:lines="1"
                 android:textSize="21sp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/login_background"/>
+                android:background="@drawable/login_background"
+                android:inputType="textPassword"/>
 
             <Button
                 android:id="@+id/botao_logar"

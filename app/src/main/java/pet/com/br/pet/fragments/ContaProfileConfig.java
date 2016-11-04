@@ -1,8 +1,10 @@
 package pet.com.br.pet.fragments;
 import android.app.Fragment;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,6 +112,8 @@ public class ContaProfileConfig extends Fragment {
             texto_senhaantiga.setHint("Senha Antiga");
             texto_senhaantiga.setMaxLines(1);
             texto_senhaantiga.setTextSize(18);
+            texto_senhaantiga.setInputType(InputType.TYPE_CLASS_TEXT |
+                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
             texto_senhaantiga.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
             texto_senhaantiga.setBackgroundColor(Color.parseColor("#EEEEEE"));
             texto_senhaantiga.setLayoutParams(layout_text_senhaantiga);
@@ -124,6 +128,8 @@ public class ContaProfileConfig extends Fragment {
             texto_novasenha.setHint("Nova Senha");
             texto_novasenha.setTextSize(18);
             texto_novasenha.setMaxLines(1);
+            texto_novasenha.setInputType(InputType.TYPE_CLASS_TEXT |
+                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
             texto_novasenha.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
             texto_novasenha.setBackgroundColor(Color.parseColor("#EEEEEE"));
             texto_novasenha.setLayoutParams(layout_text_novasenha);
@@ -135,7 +141,9 @@ public class ContaProfileConfig extends Fragment {
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
             layout_button.addRule(RelativeLayout.BELOW, R.id.text_novasenha);
             layout_button.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            layout_button.setMargins(0, 10, 0, 0);
+            layout_button.setMargins(0, 20, 0, 0);
+            button_confirmar.setBackgroundResource(R.drawable.botaologin_background);
+            button_confirmar.setPadding(15,0,15,0);
             button_confirmar.setLayoutParams(layout_button);
             button_confirmar.setOnClickListener(new View.OnClickListener() {
                 @Override
