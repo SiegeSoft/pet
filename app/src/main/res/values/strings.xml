@@ -25,5 +25,24 @@
     <string name="all_country">Pet\'s em seu país</string>
     <string name="more_city">Pet\'s em regiões proximas a sua cidade</string>
 
+    <!-- STRING PAINEL TERMO CONTRATO -->
+    <string name="termos_de_uso_e_privacidade">
+        <b>Termos de Uso e Privacidade</b>\n
+        Condições de uso, política de privacidade e normas de publicação\n
+        1. Definições\n
+        2. Condições de acesso e uso do site\n
+        3. Propriedade intelectual e industrial\n
+        4. Exclusão de garantias e responsabilidade\n
+        5. Política de privacidade\n
+        6. Normas de publicação dos anúncios\n
+        7. Vários\n
+        8. Serviços "Topo", "Topo Semanal" e "Topo Diário"\n
+        9. Serviço "Anúncio da Semana"\n
+        10. Serviço "Galeria"\n
+        11. Serviços "Banner"\n
+        12. Serviço "Contas Premium"\n
+        13. "Pacotes"\n
+        14. "Galeria Premium"\n
+    </string>
 
 </resources>
