@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fillViewport="true"
     android:fitsSystemWindows="true">
 
@@ -75,7 +76,9 @@
                 android:background="@drawable/botaologin_background"/>
 
         </RelativeLayout>
+
             <TextView
+                android:id="@+id/text_registrar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="25dp"
@@ -86,5 +89,35 @@
                 android:textColor="#0084ff"
                 android:clickable="true"
                 android:textSize="20sp" />
+
+    <RelativeLayout
+        android:id="@+id/relative_registro_fadeout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#86000000"
+        android:clickable="true"
+        android:onClick="OnClickFadeOut"
+        android:visibility="gone"></RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative_registro_fragment_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@android:color/transparent"
+        android:clickable="true">
+
+        <fragment
+            android:id="@+id/fragment_registro"
+            class="pet.com.br.pet.fragments.Registro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            tools:layout="@layout/fragment_registro" />
+        </RelativeLayout>
+
         </RelativeLayout>
 </ScrollView>

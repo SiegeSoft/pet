@@ -13,8 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#f5f5f5"
-        android:layout_centerVertical="true"
-        >
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewchatView"
@@ -49,12 +50,14 @@
             android:background="@drawable/edittextbaloon" />
         <Button
             android:id="@+id/botaoenviar"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="➢"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             android:textColor="#e6ffffff"
             android:textSize="38sp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:onClick="botaoenviarmensagem"
             android:background="@drawable/chatviewbuttomcircle"
             android:layout_alignParentBottom="true"

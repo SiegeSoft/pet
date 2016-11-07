@@ -17,14 +17,14 @@
             <item android:left="2dp" android:top="2dp">
                 <shape>
                     <solid android:color="#66797979" />
-                    <corners android:radius="30dip"/>
+                    <corners android:radius="60dip"/>
                 </shape>
             </item>
             <!-- CONTENT LAYER -->
             <item android:bottom="2dp" android:right="2dp">
                 <shape>
                     <solid android:color="#ff9726" />
-                    <corners android:radius="60dip"/>
+                    <corners android:radius="30dip"/>
                 </shape>
             </item>
         </layer-list>

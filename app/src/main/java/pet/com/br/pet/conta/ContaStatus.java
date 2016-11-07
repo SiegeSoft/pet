@@ -34,7 +34,7 @@ public class ContaStatus extends BaseMenu {
     int button_alteranomeexibicaovalue = 0;
 
     //butonsvisibility
-    Button onclicknomeexibicao1, onclicknomeexibicao2 ;
+    Button onclicknomeexibicao1, onclicknomeexibicao2;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class ContaStatus extends BaseMenu {
         ab.setDisplayShowCustomEnabled(true);
 
         //SETA O TITULO
-        TextView texttitle =(TextView) findViewById(R.id.textview_tittle);
+        TextView texttitle = (TextView) findViewById(R.id.textview_tittle);
         texttitle.setText("Perfil");
         Drawable icon = this.getResources().getDrawable(R.drawable.andy);
 
@@ -66,8 +66,8 @@ public class ContaStatus extends BaseMenu {
         texto_nomeexibicao = (TextView) findViewById(R.id.text_conta_usuario_exibicao);
         edit_nomeexibicao = (EditText) findViewById(R.id.edit_conta_usuario_exibicao);
 
-        texto_nomeexibicao.setText(""+Profile.getNomeExibicao());
-        edit_nomeexibicao.setText(""+Profile.getNomeExibicao());
+        texto_nomeexibicao.setText("" + Profile.getNomeExibicao());
+        edit_nomeexibicao.setText("" + Profile.getNomeExibicao());
 
         onclicknomeexibicao1 = (Button) findViewById(R.id.OnClickNomeExibicao1);
         onclicknomeexibicao2 = (Button) findViewById(R.id.OnClickNomeExibicao2);
@@ -109,17 +109,18 @@ public class ContaStatus extends BaseMenu {
         return super.onOptionsItemSelected(item);
     }
 
-    public void OnClickNomeExibicao1(View v){
-        if(button_alteranomeexibicaovalue == 0){
-        texto_nomeexibicao.setVisibility(View.GONE);
-        edit_nomeexibicao.setVisibility(View.VISIBLE);
+    public void OnClickNomeExibicao1(View v) {
+        if (button_alteranomeexibicaovalue == 0) {
+            texto_nomeexibicao.setVisibility(View.GONE);
+            edit_nomeexibicao.setVisibility(View.VISIBLE);
             onclicknomeexibicao2.setVisibility(View.VISIBLE);
             onclicknomeexibicao1.setVisibility(View.GONE);
             button_alteranomeexibicaovalue = 1;
         }
     }
-    public void OnClickNomeExibicao2(View v){
-        if(button_alteranomeexibicaovalue == 1){
+
+    public void OnClickNomeExibicao2(View v) {
+        if (button_alteranomeexibicaovalue == 1) {
             texto_nomeexibicao.setVisibility(View.VISIBLE);
             edit_nomeexibicao.setVisibility(View.GONE);
             onclicknomeexibicao1.setVisibility(View.VISIBLE);

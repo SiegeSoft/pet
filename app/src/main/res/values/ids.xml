@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- FRAGMENT CONTA -->
     <item name="text_alterarsenha" type="id"/>
     <item name="text_senhaantiga" type="id"/>
     <item name="text_novasenha" type="id"/>
     <item name="text_botaoconfirmar" type="id"/>
+
+    <!-- FRAGMENT REGISTRO -->
+    <item name="text_registro" type="id"/>
+    <item name="text_username" type="id"/>
+    <item name="text_password" type="id"/>
+    <item name="text_nomeexibicao" type="id"/>
+    <item name="text_nomecompleto" type="id"/>
+    <item name="text_celular" type="id"/>
+    <item name="text_idade" type="id"/>
+    <item name="text_email" type="id"/>
+    <item name="text_botaoregistrar" type="id"/>
 
 </resources>

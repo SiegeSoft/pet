@@ -1,12 +1,16 @@
 package pet.com.br.pet.autentica;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -27,6 +31,9 @@ import java.util.Map;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
+import pet.com.br.pet.conta.Conta;
+import pet.com.br.pet.fragments.ContaProfileConfig;
+import pet.com.br.pet.fragments.Registro;
 
 /**
  * Created by iaco_ on 15/08/2016.
@@ -50,15 +57,57 @@ public class Login  extends AppCompatActivity {
     private LoginManager _session;
     private String _name, _likes, _dislikes;
 
+    //REGISTRAR
+    public static int fadeout_valueregistro = 0;
+    Registro registro;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        fadeout_valueregistro = 0;
         editTextUsername = (EditText) findViewById(R.id.editText_login);
         editTextPassword = (EditText) findViewById(R.id.editText_senha);
         _session = new LoginManager(getApplicationContext());
+
+        //FRAGMENT REGISTRO
+        TextView textregistro = (TextView) findViewById(R.id.text_registrar);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        registro = new Registro();
+        fragmentTransaction.add(R.id.fragment_registro, registro);
+        fragmentTransaction.commit();
+        textregistro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if (fadeout_valueregistro == 0) {
+                    RelativeLayout relative_fadeout = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
+                    relative_fadeout.setVisibility(View.VISIBLE);
+                    // Creating a new RelativeLayout
+                    fadeout_valueregistro = 1;
+                    registro.addPlaces();
+                }
+            }
+        });
+
+        RelativeLayout relative_registro_fragment_view = (RelativeLayout) findViewById(R.id.relative_registro_fragment_view);
+
+        if (!relative_registro_fragment_view.hasOnClickListeners()) {
+            RelativeLayout relative_fadeout = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
+            relative_fadeout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (fadeout_valueregistro == 1) {
+                        RelativeLayout relative_fade = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
+                        relative_fade.setVisibility(View.GONE);
+                        fadeout_valueregistro = 0;
+                        registro.addPlaces();
+                    }
+                }
+            });
+        }
 
     }
 
