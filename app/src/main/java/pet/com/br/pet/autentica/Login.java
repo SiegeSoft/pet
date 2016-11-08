@@ -59,8 +59,9 @@ public class Login  extends AppCompatActivity {
 
     //REGISTRAR
     public static int fadeout_valueregistro = 0;
+    int termo_uso_value = 0;
     Registro registro;
-
+    RelativeLayout relative_termo_contrato;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,9 @@ public class Login  extends AppCompatActivity {
         editTextPassword = (EditText) findViewById(R.id.editText_senha);
         _session = new LoginManager(getApplicationContext());
 
+
         //FRAGMENT REGISTRO
+        relative_termo_contrato = (RelativeLayout) findViewById(R.id.relative_termo_contrato);
         TextView textregistro = (TextView) findViewById(R.id.text_registrar);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -215,5 +218,17 @@ public class Login  extends AppCompatActivity {
     public void login(View v) {
         solicitaLogin();
     }
+
+
+    public void OnClick_Termo_Contrato(View v){
+        if(termo_uso_value == 0) {
+            relative_termo_contrato.setVisibility(View.VISIBLE);
+            termo_uso_value = 1;
+        }else{
+            relative_termo_contrato.setVisibility(View.GONE);
+            termo_uso_value = 0;
+        }
+    }
+
 }
 

@@ -217,6 +217,8 @@ public class Registro extends Fragment {
             relativeLayout.addView(texto_cadastra_nomeexibicao);
             relativeLayout.addView(texto_cadastra_username);
             relativeLayout.addView(texto_cadastra_senha);
+            relativeLayout.addView(texto_cadastra_email);
+
         }else{
             if(Login.fadeout_valueregistro == 0) {
                 relativeLayout.removeAllViews();

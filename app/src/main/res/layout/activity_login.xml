@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fillViewport="true"
-    android:fitsSystemWindows="true">
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:background="@drawable/logindegrade_background">
+
 
         <RelativeLayout
             android:id="@+id/relative_camada"
@@ -24,6 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
                 android:text="PETTRADING"
                 android:textColor="#ff9726"
                 android:textSize="40sp"
@@ -42,7 +42,6 @@
                 android:maxLength="25"
                 android:textAlignment="center"
                 android:textSize="21sp" />
-
 
             <EditText
                 android:id="@+id/editText_senha"
@@ -65,6 +64,7 @@
                 android:layout_height="60dp"
                 android:layout_below="@+id/editText_senha"
                 android:layout_centerInParent="true"
+                android:layout_marginBottom="25dp"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/botaologin_background"
                 android:onClick="login"
@@ -74,18 +74,26 @@
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/text_registrar"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="25dp"
-            android:clickable="true"
-            android:onClick="registrar"
-            android:text="Não possui uma conta?"
-            android:textColor="#0084ff"
-            android:textSize="20sp" />
+            android:layout_below="@+id/relative_camada"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="25dp">
+
+            <TextView
+                android:id="@+id/text_registrar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="25dp"
+                android:clickable="true"
+                android:onClick="registrar"
+                android:text="Não possui uma conta?"
+                android:textColor="#0084ff"
+                android:textSize="20sp" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/relative_registro_fadeout"
@@ -98,7 +106,7 @@
 
         <RelativeLayout
             android:id="@+id/relative_registro_fragment_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginBottom="15dp"
@@ -114,6 +122,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 tools:layout="@layout/fragment_registro" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -125,6 +134,7 @@
             android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/login_background"
+            android:onClick="OnClick_Termo_Contrato"
             android:visibility="gone">
 
             <TextView
@@ -135,7 +145,7 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/termos_de_uso_e_privacidade"
                 android:textColor="#000000"
-                android:textSize="16dp"/>
+                android:textSize="16dp" />
 
             <Button
                 android:id="@+id/botao_contrato_aceitar"
@@ -143,10 +153,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="15dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
                 android:background="@drawable/botaologin_background"
                 android:text="Aceitar" />
 
@@ -155,15 +165,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_marginBottom="15dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
                 android:layout_toLeftOf="@id/botao_contrato_aceitar"
                 android:background="@drawable/botaologin_background"
                 android:text="Rejeitar" />
 
         </RelativeLayout>
 
+
+
     </RelativeLayout>
+
 </ScrollView>

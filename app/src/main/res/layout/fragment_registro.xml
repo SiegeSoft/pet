@@ -1,10 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:background="@android:color/transparent">
 
     <!--CONTA CONFIG PERFIL SIMPLES-->
     <RelativeLayout
