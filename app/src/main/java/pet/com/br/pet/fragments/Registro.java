@@ -147,12 +147,30 @@ public class Registro extends Fragment {
             texto_cadastra_username.setBackgroundColor(Color.parseColor("#EEEEEE"));
             texto_cadastra_username.setLayoutParams(layout_texto_cadastra_username);
 
-            //texto senha_novasenha
+            //texto user
+            RelativeLayout.LayoutParams layout_texto_cadastra_email = new RelativeLayout.LayoutParams(
+                    240,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            layout_texto_cadastra_email.setMargins(0, 10, 0, 0);
+            layout_texto_cadastra_email.addRule(RelativeLayout.BELOW, R.id.text_username);
+            layout_texto_cadastra_email.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+            texto_cadastra_email.setHint("Email");
+            texto_cadastra_email.setMaxLines(1);
+            texto_cadastra_email.setTextSize(18);
+            texto_cadastra_email.setInputType(InputType.TYPE_CLASS_TEXT |
+                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            texto_cadastra_email.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+            texto_cadastra_email.setBackgroundColor(Color.parseColor("#EEEEEE"));
+            texto_cadastra_email.setLayoutParams(layout_texto_cadastra_email);
+
+
+            //texto CADASTRAR SENHA
             RelativeLayout.LayoutParams layout_texto_cadastra_senha = new RelativeLayout.LayoutParams(
                     240,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
             layout_texto_cadastra_senha.setMargins(0, 10, 0, 0);
-            layout_texto_cadastra_senha.addRule(RelativeLayout.BELOW, R.id.text_username);
+            layout_texto_cadastra_senha.addRule(RelativeLayout.BELOW, R.id.text_email);
             layout_texto_cadastra_senha.addRule(RelativeLayout.CENTER_HORIZONTAL);
             texto_cadastra_senha.setHint("Senha");
             texto_cadastra_senha.setTextSize(18);
@@ -199,6 +217,8 @@ public class Registro extends Fragment {
             relativeLayout.addView(texto_cadastra_nomeexibicao);
             relativeLayout.addView(texto_cadastra_username);
             relativeLayout.addView(texto_cadastra_senha);
+            relativeLayout.addView(texto_cadastra_email);
+
         }else{
             if(Login.fadeout_valueregistro == 0) {
                 relativeLayout.removeAllViews();
