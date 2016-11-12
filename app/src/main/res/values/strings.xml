@@ -18,12 +18,12 @@
     <string name="Ok">Ok</string>
     <string name="distancia">Distancia</string>
 
-    <string name="neighborhood">Pet\'s em seu bairro</string>
-    <string name="city">Pet\'s em sua cidade</string>
-    <string name="state">Pet\'s em seu estado</string>
-    <string name="more_state">Pet\'s em regiões proximas a seu estado</string>
-    <string name="all_country">Pet\'s em seu país</string>
-    <string name="more_city">Pet\'s em regiões proximas a sua cidade</string>
+    <string name="neighborhood">Pet's em seu bairro</string>
+    <string name="city">Pet's em sua cidade</string>
+    <string name="state">Pet's em seu estado</string>
+    <string name="more_state">Pet's em regiões proximas a seu estado</string>
+    <string name="all_country">Pet's em seu país</string>
+    <string name="more_city">Pet's em regiões proximas a sua cidade</string>
 
 
 </resources>

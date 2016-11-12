@@ -13,16 +13,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,7 +43,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,15 +75,12 @@ import pet.com.br.pet.utils.UrlUtils;
 
 public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.ActionDownInterface {
 
-    static final Integer LOCATION = 0x1;
-    static final Integer WRITE_EXST = 0x2;
-    static final Integer READ_EXST = 0x3;
-    static final Integer GPS_SETTINGS = 0x7;
 
     public static MyAppAdapter _myAppAdapter;
+    public static ViewHolder _viewHolder;
+
     private String _getLatitude, _getLongitude;
     private RequestQueue requestQueue;
-    public static ViewHolder _viewHolder;
     private SwipeFlingAdapterView _flingContainer;
     private List<BuscaRapida> _buscaRapidaLista;
     private Context _context;
@@ -393,7 +386,11 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
 
     private void getData() {
-        requestQueue.add(getDataFromServer(_getLatitude, _getLongitude, _distance));
+        try {
+            requestQueue.add(getDataFromServer(_getLatitude, _getLongitude, _distance));
+        }catch(NullPointerException error){
+            setPetsVisibleImage();
+        }
     }
 
 
@@ -488,8 +485,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     public void onActionDownPerform() {
         Log.e("action", "bingo");
     }
-
-
 
     /**
      * Adapter

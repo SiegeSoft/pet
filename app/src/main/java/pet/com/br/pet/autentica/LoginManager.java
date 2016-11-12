@@ -28,6 +28,7 @@ public class LoginManager {
     public static final String KEY_NAME = "username";
     public static final String KEY_LIKE = "like";
     public static final String KEY_DISLIKE = "dislike";
+    public static final String KEY_NOME_EXIBICAO = "";
 
 
     public LoginManager(Context _context) {
