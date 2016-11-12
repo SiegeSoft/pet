@@ -28,7 +28,7 @@ public class LoginManager {
     public static final String KEY_NAME = "username";
     public static final String KEY_LIKE = "like";
     public static final String KEY_DISLIKE = "dislike";
-    public static final String KEY_NOME_EXIBICAO = "";
+    public static final String KEY_NOME_EXIBICAO = "NOMEEXIBICAO";
 
 
     public LoginManager(Context _context) {
@@ -41,15 +41,12 @@ public class LoginManager {
     /**
      * Login session
      */
-    public void createLoginSession(String name, String like, String dislike){
+    public void createLoginSession(String name, String nomeExibicao, String like, String dislike){
          _editor.putBoolean(IS_LOGIN, true);
-
-
         _editor.putString(KEY_NAME, name);
+        _editor.putString(KEY_NOME_EXIBICAO, nomeExibicao);
         _editor.putString(KEY_LIKE, like);
         _editor.putString(KEY_DISLIKE, dislike);
-
-
         _editor.commit();
     }
 
@@ -77,6 +74,7 @@ public class LoginManager {
         HashMap<String, String> user = new HashMap<String, String>();
 
         user.put(KEY_NAME, _sharedPreferences.getString(KEY_NAME, null));
+        user.put(KEY_NOME_EXIBICAO, _sharedPreferences.getString(KEY_NOME_EXIBICAO, null));
         user.put(KEY_LIKE, _sharedPreferences.getString(KEY_LIKE, null));
         user.put(KEY_DISLIKE, _sharedPreferences.getString(KEY_DISLIKE, null));
 

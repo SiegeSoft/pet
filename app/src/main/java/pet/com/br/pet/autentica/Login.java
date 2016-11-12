@@ -44,6 +44,7 @@ public class Login  extends AppCompatActivity {
     private static final String USER_DETAIL_URL = "http://kahvitech.com/pet/informacoesCurtidas.php?user=";
 
     private static final String KEY_USERNAME="USERNAME";
+    private static final String KEY_NOME_EXIBICAO ="NOMEEXIBICAO";
     private static final String KEY_PASSWORD="PASSWORD";
     private static final String KEY_LIKES="LIKES";
     private static final String KEY_DISLIKE="DISLIKE";
@@ -55,7 +56,7 @@ public class Login  extends AppCompatActivity {
     private ProgressDialog loading;
 
     private LoginManager _session;
-    private String _name, _likes, _dislikes;
+    private String _name, _nomeExibicao, _likes, _dislikes;
 
     //REGISTRAR
     public static int fadeout_valueregistro = 0;
@@ -183,9 +184,10 @@ public class Login  extends AppCompatActivity {
                             try {
                                 JSONObject json = response.getJSONObject(i);
                                 _name = ""+json.getString(KEY_USERNAME);
+                                _nomeExibicao = ""+json.getString(KEY_NOME_EXIBICAO);
                                 _likes = ""+json.getString(KEY_LIKES);
                                 _dislikes =""+json.getString(KEY_DISLIKE);
-                                _session.createLoginSession(_name,_likes,_dislikes);
+                                _session.createLoginSession(_name, _nomeExibicao, _likes,_dislikes);
                                 abrirConta();
                             } catch (JSONException e) {
                                 e.printStackTrace();

@@ -125,6 +125,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             _userDetails = _loginManager.getUserDetails();
             Usuario.setUserName(_userDetails.get(LoginManager.KEY_NAME));
             Usuario.setLikes(_userDetails.get(LoginManager.KEY_LIKE));
+            Profile.setNomeExibicao(_userDetails.get(LoginManager.KEY_NOME_EXIBICAO));
             Usuario.setDislikes(_userDetails.get(LoginManager.KEY_DISLIKE));
             Profile.setUsername(_userDetails.get(LoginManager.KEY_NAME));
             _arrayLikes.addAll(Usuario.getLikes());
