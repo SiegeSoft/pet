@@ -14,19 +14,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
-
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
@@ -55,12 +51,13 @@ import java.util.List;
 import pet.com.br.pet.R;
 import pet.com.br.pet.autentica.Login;
 import pet.com.br.pet.autentica.LoginManager;
+import pet.com.br.pet.gps.LocationDirector;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.BuscaRapida;
 import pet.com.br.pet.models.Profile;
+import pet.com.br.pet.models.Usuario;
 import pet.com.br.pet.tindercard.FlingCardListener;
 import pet.com.br.pet.tindercard.SwipeFlingAdapterView;
-import pet.com.br.pet.models.Usuario;
 import pet.com.br.pet.utils.TagUtils;
 import pet.com.br.pet.utils.UrlUtils;
 
@@ -79,7 +76,9 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     public static MyAppAdapter _myAppAdapter;
     public static ViewHolder _viewHolder;
 
+    //envia para o servidor a latitude e longitude
     private String _getLatitude, _getLongitude;
+
     private RequestQueue requestQueue;
     private SwipeFlingAdapterView _flingContainer;
     private List<BuscaRapida> _buscaRapidaLista;
@@ -158,19 +157,20 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             return;
         }
 
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();
-        _getLatitude = "" + latitude;
-        _getLongitude = "" + longitude;
-
-
+        LocationDirector myloc = new LocationDirector(this);
+        if (myloc.canGetLocation) {
+            double longitude = myloc.getLatitude();
+            double latitude = myloc.getLongitude();
+            _getLatitude = "" + latitude;
+            _getLongitude = "" + longitude;
+            Profile.setLatitude(""+latitude);
+            Profile.setLongitude(""+longitude);
+        }
 
         requestQueue = Volley.newRequestQueue(this);
 
         _myAppAdapter = new MyAppAdapter(_buscaRapidaLista, BuscaRapidaActivity.this);
         _flingContainer.setAdapter(_myAppAdapter);
-
 
         _flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
 
