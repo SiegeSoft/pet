@@ -144,7 +144,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             _arrayDislikes.addAll(Usuario.getDislikes());
         }
 
-        statusCheck();
+        askForPermission(Manifest.permission.ACCESS_FINE_LOCATION,LOCATION);
 
         _pets = (ImageView) findViewById(R.id.pets);
         _textOops = (TextView) findViewById(R.id.txtViewOops);
@@ -595,10 +595,10 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                 if (myloc.canGetLocation) {
                     double latitude = myloc.getLatitude();
                     double longitude = myloc.getLongitude();
-                    _getLatitude = "" + latitude;
-                    _getLongitude = "" + longitude;
-                    Profile.setLatitude("" + latitude);
-                    Profile.setLongitude("" + longitude);
+                    _getLatitude = Double.toString(latitude);
+                    _getLongitude = Double.toString(longitude);
+                    Profile.setLatitude(Double.toString(latitude));
+                    Profile.setLongitude(Double.toString(longitude));
 
                     Log.v("get location values", Double.toString(latitude)
                             + "     " + Double.toString(longitude));
@@ -654,8 +654,8 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                     myLat = myloc.getLatitude();
                     myLong = myloc.getLongitude();
 
-                    Profile.setLatitude(""+myLat);
-                    Profile.setLongitude(""+myLong);
+                    Profile.setLatitude(Double.toString(myLat));
+                    Profile.setLongitude(Double.toString(myLong));
 
                     Log.v("get location values", Double.toString(myLat)
                             + "     " + Double.toString(myLong));

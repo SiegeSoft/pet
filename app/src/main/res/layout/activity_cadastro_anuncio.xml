@@ -205,6 +205,16 @@
                         android:background="@android:color/black"
                         android:onClick="inicia_img1"
                         android:layout_marginTop="20dp"
+                        android:layout_marginRight="15dp"
+                        />
+                    <ImageView
+                        android:id="@+id/imageAnuncio2"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_toRightOf="@+id/imageAnuncio"
+                        android:background="@android:color/black"
+                        android:onClick="inicia_img2"
+                        android:layout_marginTop="20dp"
                         />
                 </RelativeLayout>
 
