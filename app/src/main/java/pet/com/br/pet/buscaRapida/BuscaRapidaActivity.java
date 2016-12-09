@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -100,6 +101,18 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
     private long _distance = 10;
 
+    //PERMISSION
+    private static final int GPS_ENABLE_REQUEST = 0x1001;
+    private static final int WIFI_ENABLE_REQUEST = 0x1002;
+    private static final int ROAMING_ENABLE_REQUEST = 0x1003;
+
+    //LOCATION
+    static final Integer LOCATION = 0x1;
+
+    //ALERT DIALOG
+    private AlertDialog mGPSDialog;
+
+
     public static void removeBackground() {
         _viewHolder._background.setVisibility(View.GONE);
         _myAppAdapter.notifyDataSetChanged();
@@ -131,6 +144,8 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             _arrayDislikes.addAll(Usuario.getDislikes());
         }
 
+        statusCheck();
+
         _pets = (ImageView) findViewById(R.id.pets);
         _textOops = (TextView) findViewById(R.id.txtViewOops);
         _textConfings = (TextView) findViewById(R.id.txtViewConfings);
@@ -144,28 +159,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         _buscaRapidaLista = new ArrayList<BuscaRapida>();
 
-
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-        LocationDirector myloc = new LocationDirector(this);
-        if (myloc.canGetLocation) {
-            double longitude = myloc.getLatitude();
-            double latitude = myloc.getLongitude();
-            _getLatitude = "" + latitude;
-            _getLongitude = "" + longitude;
-            Profile.setLatitude(""+latitude);
-            Profile.setLongitude(""+longitude);
-        }
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -547,6 +540,137 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             return rowView;
         }
     }
+
+
+    //PERMISSÃO HABILITAR GPS
+
+    private void askForPermission(String permission, Integer requestCode) {
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+
+                //This is called if user has denied the permission before
+                //In this case I am just asking the permission again
+                ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+
+            } else {
+
+                ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+            }
+        } else {
+            Toast.makeText(this, "" + permission + " permissão já garantida.", Toast.LENGTH_SHORT).show();
+            statusCheck();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED) {
+            switch (requestCode) {
+                //Location
+                case 1:
+                    try {
+                        statusCheck();
+                    }catch(Exception e){
+                        statusCheck();
+                    }
+                    break;
+            }
+        }
+    }
+
+    public void statusCheck() {
+
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        try{
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showGPSDiabledDialog();
+            }
+            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                LocationDirector myloc = new LocationDirector(this);
+
+                if (myloc.canGetLocation) {
+                    double latitude = myloc.getLatitude();
+                    double longitude = myloc.getLongitude();
+                    _getLatitude = "" + latitude;
+                    _getLongitude = "" + longitude;
+                    Profile.setLatitude("" + latitude);
+                    Profile.setLongitude("" + longitude);
+
+                    Log.v("get location values", Double.toString(latitude)
+                            + "     " + Double.toString(longitude));
+                }
+                //checkInternetConnection();
+                //Intent i = new Intent(SettingsConfiguration.this, MainActivity.class);
+                //startActivity(i);
+                //finish();
+            }
+
+        }catch (Exception e){
+            //statusCheck();
+            askForPermission(Manifest.permission.ACCESS_FINE_LOCATION,LOCATION);
+        }
+    }
+
+    //VERIFICA SE O GPS ESTÁ DESATIVADO.
+    private void showGPSDiabledDialog() {
+        try{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("OoOps GPS Desativado!");
+            builder.setMessage("Ative o seu GPS para utilizar o aplicativo");
+            builder.setPositiveButton("Ativar GPS", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), GPS_ENABLE_REQUEST);
+                }
+            });
+                /*.setNegativeButton("Sair", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        //dialog.cancel();
+                        finish();
+                    }
+                });*/
+            mGPSDialog = builder.create();
+            mGPSDialog.show();
+        }catch (Exception e){
+            showGPSDiabledDialog();
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        LocationDirector myloc = new LocationDirector(this);
+        try {
+            if (requestCode == GPS_ENABLE_REQUEST) {
+
+                if (myloc.canGetLocation) {
+                    double myLat = 0;
+                    double myLong = 0;
+
+                    myLat = myloc.getLatitude();
+                    myLong = myloc.getLongitude();
+
+                    Profile.setLatitude(""+myLat);
+                    Profile.setLongitude(""+myLong);
+
+                    Log.v("get location values", Double.toString(myLat)
+                            + "     " + Double.toString(myLong));
+                }
+                statusCheck();
+            }
+            //else {
+            //  super.onActivityResult(requestCode, resultCode, data);
+            //}
+        }catch (Exception e){
+            Log.e("ALERTA DE ERROR A.R:", "REFAZNEDO LOGICA... ");
+            statusCheck();
+        }
+    }
+
 
 
 }
