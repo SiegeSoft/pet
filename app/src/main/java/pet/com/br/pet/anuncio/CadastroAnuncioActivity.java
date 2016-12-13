@@ -249,8 +249,9 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
     private void openProfile(){
         AlertDialog.Builder builder = new AlertDialog.Builder(CadastroAnuncioActivity.this);
+        builder.setCancelable(false);
         builder.setMessage("Anuncio Cadastrado com sucesso")
-                .setNegativeButton("Prosseguir", new DialogInterface.OnClickListener(){
+                .setNegativeButton("Finalizar", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent refresh = new Intent(CadastroAnuncioActivity.this, CadastroAnuncioActivity.class);
@@ -349,6 +350,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
     private void showGPSDiabledDialog() {
         try{
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setCancelable(false);
             builder.setTitle("OoOps GPS Desativado!");
             builder.setMessage("Ative o seu GPS para utilizar o aplicativo");
             builder.setPositiveButton("Ativar GPS", new DialogInterface.OnClickListener() {

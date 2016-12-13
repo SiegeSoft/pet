@@ -619,6 +619,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     private void showGPSDiabledDialog() {
         try{
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false);
             builder.setTitle("OoOps GPS Desativado!");
             builder.setMessage("Ative o seu GPS para utilizar o aplicativo");
             builder.setPositiveButton("Ativar GPS", new DialogInterface.OnClickListener() {
