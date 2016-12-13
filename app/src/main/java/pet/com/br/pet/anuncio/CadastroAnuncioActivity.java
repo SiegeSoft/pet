@@ -397,7 +397,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 image_name = "pic2.jpg";
                 Uri selectedImage = data.getData();
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                ImageView my_img_view = (ImageView) findViewById (R.id.imageAnuncio2);
+                ImageView my_img_view = (ImageView) findViewById (R.id.image_list_Anuncio2);
                 Bitmap bitajustado = Bitmap.createScaledBitmap(bitmap,300, 300, true);
                 my_img_view.setImageBitmap(bitajustado);
                 encodeTobase64(bitajustado);
