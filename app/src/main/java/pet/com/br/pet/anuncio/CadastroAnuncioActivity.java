@@ -86,9 +86,9 @@ public class CadastroAnuncioActivity extends BaseMenu {
     Uri selectedImage;
     Uri selectedImage2;
 
-    static String encoded_string;
-    private String image_name;
-    private Bitmap bitmap;
+    static String encoded_string, encoded_string2;
+    private String image_name, image_name2;
+    private Bitmap bitmap, bitmap2;
     private File file;
     private Uri file_uri;
 
@@ -103,7 +103,9 @@ public class CadastroAnuncioActivity extends BaseMenu {
     //ALERT DIALOG
     private android.support.v7.app.AlertDialog mGPSDialog;
 
-
+    //IMAGESVIEWS
+    ImageView my_img_view, my_img_view2;
+    static int valor_img_view = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +119,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
         editTextvalor = (EditText) findViewById(R.id.editText_valor);
         editTextdescricao = (EditText) findViewById(R.id.editText_descricao);
 
+        valor_img_view = 0;
     }
 
     private String criarCodigo(){
@@ -205,38 +208,58 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
     public void inicia_img1(View v) {
         // TODO Auto-generated method stub
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(intent, SELECT_PICTURE);
-    }
-    public void inicia_img2(View v) {
-        // TODO Auto-generated method stub
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(intent, SELECT_PICTURE2);
-    }
+        if(valor_img_view == 0) {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(intent, SELECT_PICTURE);
+        }else if(valor_img_view == 1) {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(intent, SELECT_PICTURE2);
+            valor_img_view = 2;
+        }
+        }
 
     public static String encodeTobase64(Bitmap image) {
+        String imageEncoded = null;
         Bitmap immagex = image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String imageEncoded=null;
-        try {
-            imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-
-            encoded_string = imageEncoded;
-            Log.e("LOOK", imageEncoded);
-        } catch (Exception e){
-            e.printStackTrace();
-        }catch(OutOfMemoryError e){
-        baos=new  ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG,50, baos);
-        b=baos.toByteArray();
-            imageEncoded=Base64.encodeToString(b, Base64.DEFAULT);
-        Log.e("EWN", "Out of memory error catched");
-    }
-            return imageEncoded;
+        if(valor_img_view == 0) {
+            immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] b = baos.toByteArray();
+            try {
+                imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+                encoded_string = imageEncoded;
+                Log.e("LOOK", imageEncoded);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } catch (OutOfMemoryError e) {
+                baos = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+                b = baos.toByteArray();
+                imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+                Log.e("EWN", "Out of memory error catched");
+            }
+            valor_img_view = 1;
+        }else if (valor_img_view == 1){
+            immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] b = baos.toByteArray();
+            try {
+                imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+                encoded_string2 = imageEncoded;
+                Log.e("LOOK", imageEncoded);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } catch (OutOfMemoryError e) {
+                baos = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+                b = baos.toByteArray();
+                imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+                Log.e("EWN", "Out of memory error catched");
+            }
+            valor_img_view = 2;
+        }
+        return imageEncoded;
     }
 
 
@@ -383,7 +406,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
                     image_name = "pic1.jpg";
                     Uri selectedImage = data.getData();
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                    ImageView my_img_view = (ImageView) findViewById (R.id.imageAnuncio);
+                    my_img_view = (ImageView) findViewById (R.id.image_list_Anuncio2);
                     Bitmap bitajustado = Bitmap.createScaledBitmap(bitmap,300, 300, true);
                     my_img_view.setImageBitmap(bitajustado);
                     encodeTobase64(bitajustado);
@@ -396,13 +419,13 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
         if (requestCode == SELECT_PICTURE2 && resultCode == RESULT_OK) {
             try {
-                image_name = "pic2.jpg";
+                image_name2 = "pic2.jpg";
                 Uri selectedImage = data.getData();
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                ImageView my_img_view = (ImageView) findViewById (R.id.image_list_Anuncio2);
-                Bitmap bitajustado = Bitmap.createScaledBitmap(bitmap,300, 300, true);
-                my_img_view.setImageBitmap(bitajustado);
-                encodeTobase64(bitajustado);
+                bitmap2 = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                my_img_view2 = (ImageView) findViewById (R.id.image_list_Anuncio3);
+                Bitmap bitajustado2 = Bitmap.createScaledBitmap(bitmap2,300, 300, true);
+                my_img_view2.setImageBitmap(bitajustado2);
+                encodeTobase64(bitajustado2);
             } catch (Exception e) {
                 Log.e("Error na captura","CODE: "+e);
             }catch(OutOfMemoryError e){
