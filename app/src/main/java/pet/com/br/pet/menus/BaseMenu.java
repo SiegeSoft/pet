@@ -1,6 +1,15 @@
 package pet.com.br.pet.menus;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -25,6 +35,7 @@ import pet.com.br.pet.autentica.LoginManager;
 import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 import pet.com.br.pet.chat.ChatActivity;
 import pet.com.br.pet.conta.Conta;
+import pet.com.br.pet.models.Profile;
 
 
 /**
@@ -42,6 +53,8 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
     private HashMap<String, String> _userDetails;
 
     private TextView _nomeDoUsuario;
+
+    public static ImageView drawable_image_usericon;
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -79,8 +92,36 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
         } else {
             toolbar.setVisibility(View.GONE);
         }
+        Profile.setIcon(this.getResources().getDrawable(R.drawable.andy));
+
+        drawable_image_usericon = (ImageView) findViewById(R.id.image_usericon);
+        Bitmap bitmap = ((BitmapDrawable) Profile.getIcon()).getBitmap();
+        Drawable drawable = new BitmapDrawable(getResources(), createCircleBitmap(bitmap));
+        drawable_image_usericon.setImageDrawable(drawable);
 
         setUpNavView();
+    }
+
+    public Bitmap createCircleBitmap(Bitmap bitmapimg) {
+        Bitmap output = Bitmap.createBitmap(bitmapimg.getWidth(),
+                bitmapimg.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = Color.parseColor("#AB47BC");
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmapimg.getWidth(),
+                bitmapimg.getHeight());
+
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setStrokeWidth((float) 1);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(bitmapimg.getWidth() / 2,
+                bitmapimg.getHeight() / 2, bitmapimg.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmapimg, rect, rect, paint);
+        return output;
     }
 
     protected boolean useToolbar() {
@@ -90,6 +131,8 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
     protected boolean useDrawerToggle() {
         return true;
     }
+
+
 
 
     protected void setUpNavView() {
