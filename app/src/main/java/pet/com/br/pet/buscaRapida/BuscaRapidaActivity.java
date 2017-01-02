@@ -68,7 +68,9 @@ import pet.com.br.pet.utils.UrlUtils;
  */
 
 /**
+ *
  * Edit by rafael on 30/08/2016.
+ *
  */
 
 public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.ActionDownInterface {
@@ -100,6 +102,8 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     private float _noRepeatTimes = 0;
 
     private long _distance = 10;
+
+    private boolean _enviaLikesDislikes = false;
 
     //PERMISSION
     private static final int GPS_ENABLE_REQUEST = 0x1001;
@@ -195,12 +199,18 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
+                Log.e("No repeat times", ""+_noRepeatTimes);
                 if (_noRepeatTimes <= 3) {
                     if (itemsInAdapter == 0) {
                         getData();
+                        _noRepeatTimes++;
                     }
                 } else{
                     setPetsVisibleImage();
+                    if(_enviaLikesDislikes){
+                        _enviaLikesDislikes = false;
+
+                    }
                 }
             }
 
@@ -243,8 +253,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _rodape.setVisibility(View.VISIBLE);
     }
 
-
-
     private void setLike(String id) {
         if (_arrayLikes.size() == 1) {
             if (_arrayLikes.get(0).equals("")) {
@@ -253,10 +261,8 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         }
         _arrayLikes.add(id);
         _arrayIds.add(id);
-        for (int a = 0; a < _arrayLikes.size(); a++) {
-            Log.v("Likes", _arrayLikes.get(a));
-            Log.v("Array Ids", _arrayIds.get(a));
-        }
+        _enviaLikesDislikes = true;
+
     }
 
     private void setDislike(String id) {
@@ -267,6 +273,8 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         }
         _arrayDislikes.add(id);
         _arrayIds.add(id);
+        _enviaLikesDislikes = true;
+
         for (int a = 0; a < _arrayDislikes.size(); a++) {
             Log.v("DisLikes", _arrayDislikes.get(a));
             Log.v("Array Ids", _arrayIds.get(a));
@@ -370,8 +378,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                 setAnunciosVisibleImage();
                 _noRepeatTimes = 0;
                 getData();
-                Toast.makeText(activity, ""+_distance, Toast.LENGTH_SHORT).show();
-
+                //Toast.makeText(activity, ""+_distance, Toast.LENGTH_SHORT).show();
             }
         });
         AlertDialog dialog = alert.create();
@@ -411,8 +418,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         return jsonArrayRequest;
     }
 
-
-
     private void parseData(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
             BuscaRapida buscaRapida = new BuscaRapida();
@@ -433,6 +438,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             } catch (JSONException e) {
                 Toast.makeText(BuscaRapidaActivity.this, "Error ao consultar o banco de dados" + e, Toast.LENGTH_SHORT).show();
             }
+
             if (!buscaRapida.getDono().equals(Usuario.getUserName())) {
                 if (_buscaRapidaLista.size() == 0) {
                     isFirstEquals(buscaRapida, equals);
@@ -543,7 +549,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
 
     //PERMISSÃO HABILITAR GPS
-
     private void askForPermission(String permission, Integer requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
 
@@ -559,7 +564,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                 ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
             }
         } else {
-            Toast.makeText(this, "" + permission + " permissão já garantida.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "" + permission + " permissão já garantida.", Toast.LENGTH_SHORT).show();
             statusCheck();
         }
     }
@@ -582,9 +587,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     }
 
     public void statusCheck() {
-
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
         try{
             if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 showGPSDiabledDialog();
@@ -603,14 +606,9 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                     Log.v("get location values", Double.toString(latitude)
                             + "     " + Double.toString(longitude));
                 }
-                //checkInternetConnection();
-                //Intent i = new Intent(SettingsConfiguration.this, MainActivity.class);
-                //startActivity(i);
-                //finish();
             }
 
         }catch (Exception e){
-            //statusCheck();
             askForPermission(Manifest.permission.ACCESS_FINE_LOCATION,LOCATION);
         }
     }
@@ -620,7 +618,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         try{
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
-            builder.setTitle("OoOps GPS Desativado!");
+            builder.setTitle("GPS Desativado!");
             builder.setMessage("Ative o seu GPS para utilizar o aplicativo");
             builder.setPositiveButton("Ativar GPS", new DialogInterface.OnClickListener() {
                 @Override
@@ -628,12 +626,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), GPS_ENABLE_REQUEST);
                 }
             });
-                /*.setNegativeButton("Sair", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        //dialog.cancel();
-                        finish();
-                    }
-                });*/
             mGPSDialog = builder.create();
             mGPSDialog.show();
         }catch (Exception e){
