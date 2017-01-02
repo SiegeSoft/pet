@@ -1,5 +1,7 @@
 package pet.com.br.pet.models;
 
+import android.graphics.drawable.Drawable;
+
 /**
  * Created by iaco_ on 14/09/2016.
  */
@@ -9,6 +11,7 @@ public class Profile {
     static String nomeexibicao;
     static String latitude;
     static String longitude;
+    static Drawable icon;
 
     public static String getUsername() {
         return username;
@@ -31,5 +34,13 @@ public class Profile {
     public static String getLongitude() {return longitude;}
 
     public static void setLongitude(String longitude) {Profile.longitude = longitude;}
+
+    public static Drawable getIcon() {
+        return icon;
+    }
+
+    public static void setIcon(Drawable icon) {
+        Profile.icon = icon;
+    }
 
 }

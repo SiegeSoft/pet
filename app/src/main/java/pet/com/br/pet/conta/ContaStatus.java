@@ -51,9 +51,8 @@ public class ContaStatus extends BaseMenu {
         //SETA O TITULO
         TextView texttitle = (TextView) findViewById(R.id.textview_tittle);
         texttitle.setText("Perfil");
-        Drawable icon = this.getResources().getDrawable(R.drawable.andy);
 
-        Bitmap bitmap = ((BitmapDrawable) icon).getBitmap();
+        Bitmap bitmap = ((BitmapDrawable) Profile.getIcon()).getBitmap();
 
         Drawable drawable = new BitmapDrawable(getResources(), createCircleBitmap(bitmap));
 
@@ -90,7 +89,7 @@ public class ContaStatus extends BaseMenu {
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
         canvas.drawCircle(bitmapimg.getWidth() / 2,
-                bitmapimg.getHeight() / 2, bitmapimg.getWidth() / 2, paint);
+                bitmapimg.getHeight() / 2.5f, bitmapimg.getWidth() / 2.5f, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmapimg, rect, rect, paint);
         return output;
@@ -122,6 +121,7 @@ public class ContaStatus extends BaseMenu {
     public void OnClickNomeExibicao2(View v) {
         if (button_alteranomeexibicaovalue == 1) {
             texto_nomeexibicao.setVisibility(View.VISIBLE);
+            texto_nomeexibicao.setText(edit_nomeexibicao.getText());
             edit_nomeexibicao.setVisibility(View.GONE);
             onclicknomeexibicao1.setVisibility(View.VISIBLE);
             onclicknomeexibicao2.setVisibility(View.GONE);

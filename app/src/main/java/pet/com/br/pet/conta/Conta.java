@@ -1,6 +1,5 @@
 package pet.com.br.pet.conta;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -14,16 +13,16 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.ImageView;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.fragments.ContaProfileConfig;
 import pet.com.br.pet.menus.BaseMenu;
+import pet.com.br.pet.models.Profile;
 
 /**
  * Created by iacocesar on 22/10/2016.
@@ -40,10 +39,11 @@ public class Conta extends BaseMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conta);
         imagem_conta_perfil = (ImageView) findViewById(R.id.image_conta_perfil);
-        Drawable icon = this.getResources().getDrawable(R.drawable.andy);
+
+        Profile.setIcon(this.getResources().getDrawable(R.drawable.andy));
         Conta.fadeout_value = 0;
 
-        Bitmap bitmap = ((BitmapDrawable) icon).getBitmap();
+        Bitmap bitmap = ((BitmapDrawable) Profile.getIcon()).getBitmap();
 
         Drawable drawable = new BitmapDrawable(getResources(), createCircleBitmap(bitmap));
 

@@ -301,7 +301,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -311,7 +310,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     private void dialogSettings(final Activity activity){
         LayoutInflater inflater = getLayoutInflater();
