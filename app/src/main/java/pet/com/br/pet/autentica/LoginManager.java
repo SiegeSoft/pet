@@ -29,6 +29,10 @@ public class LoginManager {
     public static final String KEY_LIKE = "like";
     public static final String KEY_DISLIKE = "dislike";
     public static final String KEY_NOME_EXIBICAO = "NOMEEXIBICAO";
+    public static final String KEY_DOG_COIN = "DOGCOIN";
+    public static final String KEY_TERMO_CONTRATO = "TERMODECONTRATO";
+    public static final String KEY_MEDAL = "MEDAL";
+    public static final String KEY_PROFILE = "PROFILEIMG";
 
 
     public LoginManager(Context _context) {
@@ -41,12 +45,16 @@ public class LoginManager {
     /**
      * Login session
      */
-    public void createLoginSession(String name, String nomeExibicao, String like, String dislike){
+    public void createLoginSession(String name, String nomeExibicao, String like, String dislike, String dogCoint, String termoContrato, String medal, String profileImg){
          _editor.putBoolean(IS_LOGIN, true);
         _editor.putString(KEY_NAME, name);
         _editor.putString(KEY_NOME_EXIBICAO, nomeExibicao);
         _editor.putString(KEY_LIKE, like);
         _editor.putString(KEY_DISLIKE, dislike);
+        _editor.putString(KEY_DOG_COIN, dogCoint);
+        _editor.putString(KEY_TERMO_CONTRATO, termoContrato);
+        _editor.putString(KEY_MEDAL, medal);
+        _editor.putString(KEY_PROFILE, profileImg);
         _editor.commit();
     }
 
@@ -77,6 +85,10 @@ public class LoginManager {
         user.put(KEY_NOME_EXIBICAO, _sharedPreferences.getString(KEY_NOME_EXIBICAO, null));
         user.put(KEY_LIKE, _sharedPreferences.getString(KEY_LIKE, null));
         user.put(KEY_DISLIKE, _sharedPreferences.getString(KEY_DISLIKE, null));
+        user.put(KEY_DOG_COIN, _sharedPreferences.getString(KEY_DOG_COIN, null));
+        user.put(KEY_TERMO_CONTRATO, _sharedPreferences.getString(KEY_TERMO_CONTRATO, null));
+        user.put(KEY_MEDAL, _sharedPreferences.getString(KEY_MEDAL, null));
+        user.put(KEY_PROFILE, _sharedPreferences.getString(KEY_PROFILE, null));
 
         return user;
     }

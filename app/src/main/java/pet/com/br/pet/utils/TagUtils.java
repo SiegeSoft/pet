@@ -19,6 +19,7 @@ public class TagUtils {
     public static final String TAG_VALOR = "VALOR";
     public static final String TAG_DONO = "DONO";
 
+
     public static final String KEY_USERNAME="USERNAME";
     public static final String KEY_PASSWORD="PASSWORD";
     public static final String KEY_LIKES="LIKES";

@@ -19,7 +19,12 @@ public class BuscaRapida {
     private String descricao;
     private String categoria;
     private String stringImg;
+    private String username;
 
+
+    public String getUsername() {return username;}
+
+    public void setUsername(String username) {this.username = username;}
 
     public String getId() {
         return id;

@@ -12,6 +12,10 @@ public class Profile {
     static String latitude;
     static String longitude;
     static Drawable icon;
+    static String dogCoin;
+    static String medal;
+    static String termoDeContrato;
+    static String profileImage;
 
     public static String getUsername() {
         return username;
@@ -43,4 +47,36 @@ public class Profile {
         Profile.icon = icon;
     }
 
+
+    public static String getDogCoin() {
+        return dogCoin;
+    }
+
+    public static void setDogCoin(String dogCoin) {
+        Profile.dogCoin = dogCoin;
+    }
+
+    public static String getMedal() {
+        return medal;
+    }
+
+    public static void setMedal(String medal) {
+        Profile.medal = medal;
+    }
+
+    public static String getTermoDeContrato() {
+        return termoDeContrato;
+    }
+
+    public static void setTermoDeContrato(String termoDeContrato) {
+        Profile.termoDeContrato = termoDeContrato;
+    }
+
+    public static String getProfileImage() {
+        return profileImage;
+    }
+
+    public static void setProfileImage(String profileImage) {
+        Profile.profileImage = profileImage;
+    }
 }

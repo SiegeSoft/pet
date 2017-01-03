@@ -48,6 +48,11 @@ public class Login  extends AppCompatActivity {
     private static final String KEY_PASSWORD="PASSWORD";
     private static final String KEY_LIKES="LIKES";
     private static final String KEY_DISLIKE="DISLIKE";
+    private static final String KEY_DOG_COIN = "DOGCOIN";
+    private static final String KEY_TERMO_CONTRATO = "TERMODECONTRATO";
+    private static final String KEY_MEDAL = "MEDAL";
+    private static final String KEY_PROFILE = "PROFILEIMG";
+
     private EditText editTextUsername;
     private EditText editTextPassword;
 
@@ -56,7 +61,7 @@ public class Login  extends AppCompatActivity {
     private ProgressDialog loading;
 
     private LoginManager _session;
-    private String _name, _nomeExibicao, _likes, _dislikes;
+    private String _name, _nomeExibicao, _likes, _dislikes, _medal, _dogCoin, _termoContrato, _profileImg ;
 
     //REGISTRAR
     public static int fadeout_valueregistro = 0;
@@ -187,7 +192,12 @@ public class Login  extends AppCompatActivity {
                                 _nomeExibicao = ""+json.getString(KEY_NOME_EXIBICAO);
                                 _likes = ""+json.getString(KEY_LIKES);
                                 _dislikes =""+json.getString(KEY_DISLIKE);
-                                _session.createLoginSession(_name, _nomeExibicao, _likes,_dislikes);
+                                _medal = ""+json.getString(KEY_MEDAL);
+                                _dogCoin = ""+json.getString(KEY_DOG_COIN);
+                                _profileImg = ""+json.getString(KEY_PROFILE);
+                                _termoContrato = ""+json.getString(KEY_TERMO_CONTRATO);
+
+                                _session.createLoginSession(_name, _nomeExibicao, _likes,_dislikes, _dogCoin, _termoContrato, _medal, _profileImg);
                                 abrirConta();
                             } catch (JSONException e) {
                                 e.printStackTrace();

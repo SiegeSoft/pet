@@ -16,6 +16,7 @@ public class UrlUtils {
 
     //URLS
     public static final String ANUNCIO_URL = "http://kahvitech.com/pet/anuncios.php?page=";
+    public static final String ATUALIZA_CURTIDA = "http://kahvitech.com/pet/atualizaCurtidas.php?LIKES=";
     public static final String ANUNCIO_ATUALIZA_URL = "http://kahvitech.com/pet/atualizaAnuncio.php?page=";
     public static final String CHAT_URL = "http://kahvitech.com/pet/chat.php?";
     public static final String CHAT_USUARIO_DESTINO_URL = "http://kahvitech.com/pet/chatUsuarioDestino.php?";

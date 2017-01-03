@@ -37,12 +37,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.gps.LocationDirector;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Profile;
+import pet.com.br.pet.models.Usuario;
+
+import static pet.com.br.pet.utils.TagUtils.KEY_USERNAME;
 //endregion
 
 public class CadastroAnuncioActivity extends BaseMenu {
@@ -55,7 +59,12 @@ public class CadastroAnuncioActivity extends BaseMenu {
     private static final String KEY_DESCRICAO="DESCRICAO";
     private static final String KEY_LAT="LAT";
     private static final String KEY_LON="LON";
+    private static final String KEY_HORARIO="HORARIO";
+    private static final String KEY_CATEOGRIA="CATEGORIA";
+    private static final String KEY_DONO="DONO";
 
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+    private Date date = new Date();
 
     private TextView txtcodigo;
     private EditText editTextraca;
@@ -138,7 +147,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
         strcodigo = _codigo.trim();
         strraca = editTextraca.getText().toString().trim();
         stridade = editTextidade.getText().toString().trim();
-        strvalor = editTextvalor.getText().toString().trim();
+        //strvalor = editTextvalor.getText().toString().trim();
         strdescricao = editTextdescricao.getText().toString().trim();
         loading = ProgressDialog.show(this, "Aguarde...", "Carregando...", false, false);
 
@@ -191,10 +200,14 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 map.put(KEY_CODIGO,strcodigo);
                 map.put(KEY_RACA,strraca);
                 map.put(KEY_IDADE,stridade);
-                map.put(KEY_VALOR,strvalor);
+                map.put(KEY_VALOR,"Doação");
                 map.put(KEY_DESCRICAO,strdescricao);
                 map.put(KEY_LAT,getLatitude);
                 map.put(KEY_LON,getLongitude);
+                map.put(KEY_DONO,Profile.getNomeExibicao());
+                map.put(KEY_USERNAME, Usuario.getUserName());
+                map.put(KEY_CATEOGRIA,"Doação");
+                map.put(KEY_HORARIO, simpleDateFormat.format(date));
                 map.put("IMAGEM",image_name);
                 map.put("IMAGEMPATCH",encoded_string);
                 return map;
@@ -313,7 +326,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
             }
         } else {
-            Toast.makeText(this, "" + permission + " permissão já garantida.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "" + permission + " permissão já garantida.", Toast.LENGTH_SHORT).show();
             statusCheck();
         }
     }
@@ -374,7 +387,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
         try{
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
             builder.setCancelable(false);
-            builder.setTitle("OoOps GPS Desativado!");
+            builder.setTitle("GPS Desativado!");
             builder.setMessage("Ative o seu GPS para utilizar o aplicativo");
             builder.setPositiveButton("Ativar GPS", new DialogInterface.OnClickListener() {
                 @Override

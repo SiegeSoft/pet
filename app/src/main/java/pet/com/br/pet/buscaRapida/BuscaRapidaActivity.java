@@ -35,10 +35,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -48,6 +51,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.autentica.Login;
@@ -144,6 +148,11 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             Profile.setNomeExibicao(_userDetails.get(LoginManager.KEY_NOME_EXIBICAO));
             Usuario.setDislikes(_userDetails.get(LoginManager.KEY_DISLIKE));
             Profile.setUsername(_userDetails.get(LoginManager.KEY_NAME));
+            Profile.setDogCoin(_userDetails.get(LoginManager.KEY_DOG_COIN));
+            Profile.setMedal(_userDetails.get(LoginManager.KEY_MEDAL));
+            Profile.setProfileImage(_userDetails.get(LoginManager.KEY_PROFILE));
+            Profile.setTermoDeContrato(_userDetails.get(LoginManager.KEY_TERMO_CONTRATO));
+
             _arrayLikes.addAll(Usuario.getLikes());
             _arrayDislikes.addAll(Usuario.getDislikes());
         }
@@ -163,6 +172,13 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         _buscaRapidaLista = new ArrayList<BuscaRapida>();
 
+        for(String likerr: _arrayLikes){
+            Log.e("Primeiro", likerr);
+        }
+
+        for(String sil: _arrayDislikes){
+            Log.e("Primeiro dis", sil);
+        }
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -183,6 +199,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                 _myAppAdapter.notifyDataSetChanged();
                 if (_buscaRapidaLista.size() == 0) {
                     getData();
+                    sendLikesAndDislikes();
                 }
             }
 
@@ -193,6 +210,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                 _myAppAdapter.notifyDataSetChanged();
                 if (_buscaRapidaLista.size() == 0) {
                     getData();
+                    sendLikesAndDislikes();
                 }
 
             }
@@ -275,10 +293,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _arrayIds.add(id);
         _enviaLikesDislikes = true;
 
-        for (int a = 0; a < _arrayDislikes.size(); a++) {
-            Log.v("DisLikes", _arrayDislikes.get(a));
-            Log.v("Array Ids", _arrayIds.get(a));
-        }
     }
 
 
@@ -392,6 +406,53 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         }
     }
 
+    private String transformLikes(ArrayList<String> likes){
+        String likesFormatted = "";
+
+        for(String like : likes){
+            likesFormatted = like + "@" + likesFormatted;
+        }
+
+        return likesFormatted;
+    }
+
+
+    private String transformDislikes(ArrayList<String> dislikes){
+        String dislikesFormatted = "";
+
+        for(String dislike : dislikes){
+            dislikesFormatted = dislike + "@" + dislikesFormatted;
+        }
+
+        return dislikesFormatted;
+    }
+
+    private void sendLikesAndDislikes(){
+        requestQueue.add(sendInformationsLikes());
+    }
+
+    private JsonArrayRequest sendInformationsLikes(){
+        final String like = transformLikes(_arrayLikes);
+        final String dislike = transformDislikes(_arrayDislikes);
+        Log.e("likes", like);
+        Log.e("dislike", dislike);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(UrlUtils.ATUALIZA_CURTIDA+like+"&DISLIKE="+dislike+"&USERNAME="+Usuario.getUserName(),
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.e("Success", "Sucesso ao salvar likes e dislikes");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Error", "Erro ao salvar likes e dislikes" + error.getMessage());
+                    }
+                });
+        return jsonArrayRequest;
+    }
+
 
     private JsonArrayRequest getDataFromServer(String latitude, String longitude, long distance) {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
@@ -427,6 +488,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                 buscaRapida.setCodigo(json.getString(TagUtils.TAG_COD));
                 buscaRapida.setRaca(json.getString(TagUtils.TAG_RACA));
                 buscaRapida.setCategoria(json.getString(TagUtils.TAG_CATEGORIA));
+                buscaRapida.setUsername(json.getString(TagUtils.KEY_USERNAME));
                 buscaRapida.setDescricao(json.getString(TagUtils.TAG_DESCRICAO));
                 buscaRapida.setIdade(json.getString(TagUtils.TAG_IDADE));
                 buscaRapida.setTipoVenda(json.getString(TagUtils.TAG_VALOR));
@@ -437,7 +499,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                 Toast.makeText(BuscaRapidaActivity.this, "Error ao consultar o banco de dados" + e, Toast.LENGTH_SHORT).show();
             }
 
-            if (!buscaRapida.getDono().equals(Usuario.getUserName())) {
+            if (!buscaRapida.getUsername().equals(Usuario.getUserName())) {
                 if (_buscaRapidaLista.size() == 0) {
                     isFirstEquals(buscaRapida, equals);
                 } else {
@@ -657,7 +719,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             //  super.onActivityResult(requestCode, resultCode, data);
             //}
         }catch (Exception e){
-            Log.e("ALERTA DE ERROR A.R:", "REFAZNEDO LOGICA... ");
+            Log.e("ALERTA DE ERRO A.R:", "REFAZNEDO LOGICA... ");
             statusCheck();
         }
     }
