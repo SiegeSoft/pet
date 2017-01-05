@@ -1,16 +1,15 @@
 package pet.com.br.pet.autentica;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -31,9 +30,8 @@ import java.util.Map;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
-import pet.com.br.pet.conta.Conta;
-import pet.com.br.pet.fragments.ContaProfileConfig;
 import pet.com.br.pet.fragments.Registro;
+import pet.com.br.pet.models.Profile;
 
 /**
  * Created by iaco_ on 15/08/2016.
@@ -65,44 +63,39 @@ public class Login  extends AppCompatActivity {
 
     //REGISTRAR
     public static int fadeout_valueregistro = 0;
+
     int termo_uso_value = 0;
     Registro registro;
-    RelativeLayout relative_termo_contrato;
+
+    //RELATIVES
+    RelativeLayout relative_termo_contrato, relative_login_form;
+
+    public static RelativeLayout relative_fade;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        termo_uso_value = 0;
         fadeout_valueregistro = 0;
+
+        relative_termo_contrato = (RelativeLayout) findViewById(R.id.relative_termo_contrato);
+        relative_login_form = (RelativeLayout) findViewById(R.id.relative_loginform);
+
+        relative_fade = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
         editTextUsername = (EditText) findViewById(R.id.editText_login);
         editTextPassword = (EditText) findViewById(R.id.editText_senha);
+
+        TelephonyManager mTelephonyMgr;
+        mTelephonyMgr = (TelephonyManager)
+                getSystemService(Context.TELEPHONY_SERVICE);
+        String mPhoneNumber = mTelephonyMgr.getLine1Number();
+        Profile.setPhoneNumber(mPhoneNumber);
+
         _session = new LoginManager(getApplicationContext());
 
-
-        //FRAGMENT REGISTRO
-        relative_termo_contrato = (RelativeLayout) findViewById(R.id.relative_termo_contrato);
-        TextView textregistro = (TextView) findViewById(R.id.text_registrar);
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        registro = new Registro();
-        fragmentTransaction.add(R.id.fragment_registro, registro);
-        fragmentTransaction.commit();
-        textregistro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                if (fadeout_valueregistro == 0) {
-                    RelativeLayout relative_fadeout = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
-                    relative_fadeout.setVisibility(View.VISIBLE);
-                    // Creating a new RelativeLayout
-                    fadeout_valueregistro = 1;
-                    registro.addPlaces();
-                }
-            }
-        });
-
-        RelativeLayout relative_registro_fragment_view = (RelativeLayout) findViewById(R.id.relative_registro_fragment_view);
-
+        RelativeLayout relative_registro_fragment_view = (RelativeLayout) findViewById(R.id.relative_autenticacao_registro);
         if (!relative_registro_fragment_view.hasOnClickListeners()) {
             RelativeLayout relative_fadeout = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
             relative_fadeout.setOnClickListener(new View.OnClickListener() {
@@ -111,13 +104,26 @@ public class Login  extends AppCompatActivity {
                     if (fadeout_valueregistro == 1) {
                         RelativeLayout relative_fade = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
                         relative_fade.setVisibility(View.GONE);
+                        relative_login_form.setVisibility(View.VISIBLE);
                         fadeout_valueregistro = 0;
-                        registro.addPlaces();
                     }
                 }
             });
         }
 
+
+    }
+
+    public void OnClickRegistrar(View v){
+        OpenTermoContrato();
+    }
+
+
+
+    public void OpenTermoContrato(){
+        termo_uso_value = 0;
+        relative_termo_contrato.setVisibility(View.VISIBLE);
+        relative_login_form.setVisibility(View.GONE);
     }
 
     private void solicitaLogin() {
@@ -132,7 +138,7 @@ public class Login  extends AppCompatActivity {
                         try{
                             if(response.trim().equals("success")){
                                 getInfos();
-                                }else{
+                            }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
                                 builder.setMessage("ERRO AO REALIZAR O LOGIN SENHA OU USUARIO INVALIDO")
                                         .setNegativeButton("Tentar novamente", null)
@@ -157,13 +163,13 @@ public class Login  extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                            loading.dismiss();
-                            error.printStackTrace();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
-                            builder.setMessage("Erro na sincronização com servidor: "+error)
-                                    .setNegativeButton("Tentar novamente", null)
-                                    .create()
-                                    .show();
+                        loading.dismiss();
+                        error.printStackTrace();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                        builder.setMessage("Erro na sincronização com servidor: "+error)
+                                .setNegativeButton("Tentar novamente", null)
+                                .create()
+                                .show();
                     }
                 }){
             @Override
@@ -232,11 +238,31 @@ public class Login  extends AppCompatActivity {
     }
 
 
-    public void OnClick_Termo_Contrato(View v){
+    //TERMO DE CONTRATO
+
+    public void AceitarTermoContrato(View v){
         if(termo_uso_value == 0) {
             relative_termo_contrato.setVisibility(View.VISIBLE);
+            if (fadeout_valueregistro == 0) {
+                RelativeLayout relative_fadeout = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
+                relative_fadeout.setVisibility(View.VISIBLE);
+                // Creating a new RelativeLayout
+                fadeout_valueregistro = 1;
+            }
+            relative_login_form.setVisibility(View.GONE);
+            relative_termo_contrato.setVisibility(View.GONE);
             termo_uso_value = 1;
+        }
+    }
+
+    public void RejeitarTermoContrato(View v){
+        if(termo_uso_value == 1) {
+            relative_login_form.setVisibility(View.VISIBLE);
+            relative_termo_contrato.setVisibility(View.GONE);
+            termo_uso_value = 0;
+
         }else{
+            relative_login_form.setVisibility(View.VISIBLE);
             relative_termo_contrato.setVisibility(View.GONE);
             termo_uso_value = 0;
         }

@@ -195,6 +195,17 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginRight="15dp"/>
 
+                    <TextView
+                        android:id="@+id/ImageSize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.00 MB de 1.3 MB"
+                        android:layout_marginTop="10dp"
+                        android:layout_centerInParent="true"
+                        android:layout_below="@+id/imageAnuncio"
+                        android:textColor="#000000"
+                        />
+
                 </RelativeLayout>
 
                     <RelativeLayout

@@ -16,6 +16,7 @@ public class Profile {
     static String medal;
     static String termoDeContrato;
     static String profileImage;
+    static String phonenumber;
 
     public static String getUsername() {
         return username;
@@ -79,4 +80,10 @@ public class Profile {
     public static void setProfileImage(String profileImage) {
         Profile.profileImage = profileImage;
     }
+
+    public static String getPhoneNumber() {return phonenumber;}
+
+    public static void setPhoneNumber(String phonenumber) {Profile.phonenumber = phonenumber;}
+
+
 }
