@@ -14,10 +14,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -123,6 +125,10 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
     boolean showimagewidthvalue = false;
 
+    //image dimens
+    int newWidth = 0;
+    int newHeight = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +142,9 @@ public class CadastroAnuncioActivity extends BaseMenu {
         editTextidade = (EditText) findViewById(R.id.editText_idade);
         editTextvalor = (EditText) findViewById(R.id.editText_valor);
         editTextdescricao = (EditText) findViewById(R.id.editText_descricao);
+        editTextdescricao.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editTextdescricao.setRawInputType(InputType.TYPE_CLASS_TEXT);
+
 
         valor_img_view = 0;
     }
@@ -251,7 +260,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
             builder.setPositiveButton("Usar Ajuste", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Bitmap bitajustado = Bitmap.createScaledBitmap(bitmap, 1360, 768, true);
+                    Bitmap bitajustado = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
                     encodeTobase64(bitajustado);                }
             });
             builder.setNegativeButton("Editarei a imagem", new DialogInterface.OnClickListener() {
@@ -472,19 +481,57 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 image_name = "pic1.jpg";
                 Uri selectedImage = data.getData();
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                if (!(bitmap.getWidth() > 4096 || bitmap.getHeight() > 4096)) {
+                if (!(bitmap.getWidth() > 1000 || bitmap.getHeight() > 1000)) {
                     //my_img_view = (ImageView) findViewById(R.id.image_list_Anuncio2);
                 //Bitmap bitajustado = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
                 encodeTobase64(bitmap);
                 //my_img_view.setImageBitmap(bitmap);
                 //encodeTobase64(bitajustado);
                 }else{
-                    showImageWidthException();
+                    if(bitmap.getWidth()>1000 && bitmap.getHeight() < 1000) {
+                        newWidth = 1000;
+                        newHeight = bitmap.getHeight();
+                        showImageWidthException();
+                    }else if(bitmap.getWidth()<1000 && bitmap.getHeight() > 1000){
+                        newWidth = bitmap.getWidth();
+                        newHeight = 1000;
+                        showImageWidthException();
+                    }else if(bitmap.getWidth()>1000 && bitmap.getHeight() > 1000){
+                        newWidth = 1000;
+                        newHeight = 1000;
+                        showImageWidthException();
+                    }
                 }
             } catch (Exception e) {
                 Log.e("Error na captura", "CODE: " + e);
+                if(bitmap.getWidth()>1000 && bitmap.getHeight() < 1000) {
+                    newWidth = 1000;
+                    newHeight = bitmap.getHeight();
+                    showImageWidthException();
+                }else if(bitmap.getWidth()<1000 && bitmap.getHeight() > 1000){
+                    newWidth = bitmap.getWidth();
+                    newHeight = 1000;
+                    showImageWidthException();
+                }else if(bitmap.getWidth()>1000 && bitmap.getHeight() > 1000){
+                    newWidth = 1000;
+                    newHeight = 1000;
+                    showImageWidthException();
+                }
             } catch (OutOfMemoryError e) {
                 Log.e("Error na captura", "CODE: " + e);
+                if(bitmap.getWidth()>1000 && bitmap.getHeight() < 1000) {
+                    newWidth = 1000;
+                    newHeight = bitmap.getHeight();
+                    showImageWidthException();
+                }else if(bitmap.getWidth()<1000 && bitmap.getHeight() > 1000){
+                    newWidth = bitmap.getWidth();
+                    newHeight = 1000;
+                    showImageWidthException();
+                }else if(bitmap.getWidth()>1000 && bitmap.getHeight() > 1000){
+                    newWidth = 1000;
+                    newHeight = 1000;
+                    showImageWidthException();
+                }
             }
         }
 

@@ -32,15 +32,18 @@
         <activity
             android:name=".anuncio.CadastroAnuncioActivity"
             android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".chat.ChatActivity"
             android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".chat.ChatViewActivity"
             android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".buscaRapida.BuscaRapidaActivity"
             android:label="PETTRADING"
