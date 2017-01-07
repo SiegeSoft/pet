@@ -1,27 +1,41 @@
 package pet.com.br.pet.anuncio;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -115,10 +129,11 @@ public class CadastroAnuncioActivity extends BaseMenu {
     //ALERT DIALOG
     private android.support.v7.app.AlertDialog mGPSDialog;
     private android.support.v7.app.AlertDialog imagedialog;
+    private android.support.v7.app.AlertDialog dogcoindialog;
 
 
     //IMAGESVIEWS
-    ImageView my_img_view, my_img_view2;
+    ImageView my_img_view, my_img_view2, img_view;
     static int valor_img_view = 0;
 
     static TextView tamanhoimagememmega;
@@ -128,6 +143,14 @@ public class CadastroAnuncioActivity extends BaseMenu {
     //image dimens
     int newWidth = 0;
     int newHeight = 0;
+
+    //SPINNERS
+
+    Spinner spinner_categorias;
+
+    //testandoooooo
+    private TextInputLayout inputLayoutRaca, inputLayoutIdade, inputLayoutDescricao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,14 +163,43 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
         editTextraca = (EditText) findViewById(R.id.editText_raca);
         editTextidade = (EditText) findViewById(R.id.editText_idade);
-        editTextvalor = (EditText) findViewById(R.id.editText_valor);
+        //editTextvalor = (EditText) findViewById(R.id.editText_valor);
         editTextdescricao = (EditText) findViewById(R.id.editText_descricao);
         editTextdescricao.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editTextdescricao.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
+        //testandoooo
+
+        editTextraca.addTextChangedListener(new MyTextWatcher(editTextraca));
+        editTextidade.addTextChangedListener(new MyTextWatcher(editTextidade));
+        editTextdescricao.addTextChangedListener(new MyTextWatcher(editTextdescricao));
+
+        inputLayoutRaca = (TextInputLayout) findViewById(R.id.input_layout_raca);
+        inputLayoutIdade = (TextInputLayout) findViewById(R.id.input_layout_idade);
+        inputLayoutDescricao = (TextInputLayout) findViewById(R.id.input_layout_descricao);
+        ///
+        img_view = (ImageView) findViewById(R.id.imageAnuncio);
+
+        spinner_categorias = (Spinner) findViewById(R.id.spinnercategorias);
+        spinner_categorias.setOnTouchListener(new View.OnTouchListener() {
+
+
+
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager in = (InputMethodManager) v.getContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(v.getApplicationWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+                return false;
+            }
+        }) ;
 
         valor_img_view = 0;
     }
+
+
 
     private String criarCodigo() {
         String codigo;
@@ -244,12 +296,37 @@ public class CadastroAnuncioActivity extends BaseMenu {
                     android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
             startActivityForResult(intent, SELECT_PICTURE);
         } else if (valor_img_view == 1) {
-            Intent intent = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            startActivityForResult(intent, SELECT_PICTURE2);
-            valor_img_view = 2;
+            showDogCoinImage();
         }
     }
+
+    public void showDogCoinImage() {
+        try {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setTitle("Adiquirir a segunda imagem?");
+            builder.setMessage("Utilizar DogCoin's para liberar a segunda imagem?");
+            builder.setPositiveButton("Usar DogCoin", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, SELECT_PICTURE2);
+                }
+            });
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(final DialogInterface dialog, final int id) {
+                    dialog.cancel();
+                }
+            });
+            dogcoindialog = builder.create();
+            dogcoindialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     public void showImageWidthException() {
         try {
@@ -260,8 +337,15 @@ public class CadastroAnuncioActivity extends BaseMenu {
             builder.setPositiveButton("Usar Ajuste", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Bitmap bitajustado = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
-                    encodeTobase64(bitajustado);                }
+                    if (valor_img_view == 0) {
+                        Bitmap bitajustado = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+                        encodeTobase64(bitajustado);
+                    }else if (valor_img_view == 1) {
+                        Bitmap bitajustado = Bitmap.createScaledBitmap(bitmap2, newWidth, newHeight, true);
+                        encodeTobase64(bitajustado);
+                    }
+
+                    }
             });
             builder.setNegativeButton("Editarei a imagem", new DialogInterface.OnClickListener() {
                 public void onClick(final DialogInterface dialog, final int id) {
@@ -302,7 +386,17 @@ public class CadastroAnuncioActivity extends BaseMenu {
                     tamanhoimagememmega.setText("" + s.replace(",", "."));
                     my_img_view = (ImageView) findViewById(R.id.image_list_Anuncio2);
                     my_img_view.setImageBitmap(immagex);
+
+                    RotateAnimation rotate = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    rotate.setDuration(1000);
+                    rotate.setInterpolator(new LinearInterpolator());
+                    ObjectAnimator.ofFloat(my_img_view, View.ALPHA, 0.2f, 1.0f).setDuration(2400).start();
+                    my_img_view.startAnimation(rotate);
+
+                    img_view.setImageResource(R.drawable.pegarfotonegative);
+
                     valor_img_view = 1;
+
                 } catch (Exception e) {
 
                     e.printStackTrace();
@@ -316,12 +410,33 @@ public class CadastroAnuncioActivity extends BaseMenu {
                     valor_img_view = 1;
                 }
         } else if (valor_img_view == 1) {
-            immagex.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            immagex.compress(Bitmap.CompressFormat.JPEG, 50, baos);
             byte[] b = baos.toByteArray();
             try {
                 imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
                 encoded_string2 = imageEncoded;
                 Log.e("LOOK", imageEncoded);
+
+                int size = immagex.getByteCount();
+                double final_bitmapmegabytes = size / 1024.0;
+
+                DecimalFormat dec = new DecimalFormat("0.00");
+
+                String s = String.format(dec.format(final_bitmapmegabytes / 1024).concat(" MB de 1.3 MB"));
+                tamanhoimagememmega.setText("" + s.replace(",", "."));
+
+                my_img_view2 = (ImageView) findViewById(R.id.image_list_Anuncio3);
+                my_img_view2.setImageBitmap(immagex);
+
+                RotateAnimation rotate = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotate.setDuration(1000);
+                rotate.setInterpolator(new LinearInterpolator());
+                ObjectAnimator.ofFloat(my_img_view2, View.ALPHA, 0.2f, 1.0f).setDuration(2400).start();
+                my_img_view2.startAnimation(rotate);
+
+                img_view.setImageResource(R.drawable.pegarfotonegative);
+
+                valor_img_view = 2;
             } catch (Exception e) {
                 e.printStackTrace();
             } catch (OutOfMemoryError e) {
@@ -540,14 +655,54 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 image_name2 = "pic2.jpg";
                 Uri selectedImage = data.getData();
                 bitmap2 = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                my_img_view2 = (ImageView) findViewById(R.id.image_list_Anuncio3);
-                //Bitmap bitajustado2 = Bitmap.createScaledBitmap(bitmap2,300, 300, true);
-                my_img_view2.setImageBitmap(bitmap2);
-                encodeTobase64(bitmap2);
+                if (!(bitmap2.getWidth() > 1000 || bitmap2.getHeight() > 1000)) {
+
+                    encodeTobase64(bitmap2);
+                }else{
+                    if(bitmap2.getWidth()>1000 && bitmap2.getHeight() < 1000) {
+                        newWidth = 1000;
+                        newHeight = bitmap.getHeight();
+                        showImageWidthException();
+                    }else if(bitmap2.getWidth()<1000 && bitmap2.getHeight() > 1000){
+                        newWidth = bitmap2.getWidth();
+                        newHeight = 1000;
+                        showImageWidthException();
+                    }else if(bitmap2.getWidth()>1000 && bitmap2.getHeight() > 1000){
+                        newWidth = 1000;
+                        newHeight = 1000;
+                        showImageWidthException();
+                    }
+                }
             } catch (Exception e) {
                 Log.e("Error na captura", "CODE: " + e);
+                if(bitmap2.getWidth()>1000 && bitmap2.getHeight() < 1000) {
+                    newWidth = 1000;
+                    newHeight = bitmap2.getHeight();
+                    showImageWidthException();
+                }else if(bitmap2.getWidth()<1000 && bitmap2.getHeight() > 1000){
+                    newWidth = bitmap2.getWidth();
+                    newHeight = 1000;
+                    showImageWidthException();
+                }else if(bitmap2.getWidth()>1000 && bitmap2.getHeight() > 1000){
+                    newWidth = 1000;
+                    newHeight = 1000;
+                    showImageWidthException();
+                }
             } catch (OutOfMemoryError e) {
                 Log.e("Error na captura", "CODE: " + e);
+                if(bitmap2.getWidth()>1000 && bitmap2.getHeight() < 1000) {
+                    newWidth = 1000;
+                    newHeight = bitmap2.getHeight();
+                    showImageWidthException();
+                }else if(bitmap2.getWidth()<1000 && bitmap2.getHeight() > 1000){
+                    newWidth = bitmap2.getWidth();
+                    newHeight = 1000;
+                    showImageWidthException();
+                }else if(bitmap2.getWidth()>1000 && bitmap2.getHeight() > 1000){
+                    newWidth = 1000;
+                    newHeight = 1000;
+                    showImageWidthException();
+                }
             }
         }
 
@@ -579,5 +734,83 @@ public class CadastroAnuncioActivity extends BaseMenu {
         }
     }
 
+
+    ///EDITTEXTS ANIMATION
+
+    private boolean validateRaca() {
+        if (editTextraca.getText().toString().trim().isEmpty()) {
+            inputLayoutRaca.setError(getString(R.string.err_msg_raca));
+            requestFocus(editTextraca);
+            return false;
+        } else {
+            inputLayoutRaca.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+
+    private boolean validateIdade() {
+        if (editTextidade.getText().toString().trim().isEmpty()) {
+            inputLayoutIdade.setError(getString(R.string.err_msg_idade));
+            requestFocus(editTextidade);
+            return false;
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                editTextidade.setBackgroundTintList( ColorStateList.valueOf(Color.parseColor("#999999")) );
+            }
+            inputLayoutIdade.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    private boolean validateDescricao() {
+        if (editTextdescricao.getText().toString().trim().isEmpty()) {
+            inputLayoutDescricao.setError(getString(R.string.err_msg_descricao));
+            requestFocus(editTextdescricao);
+            return false;
+        } else {
+            inputLayoutDescricao.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+        private class MyTextWatcher implements TextWatcher {
+
+        private View view;
+
+        private MyTextWatcher(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.editText_raca:
+                    validateRaca();
+                    break;
+                case R.id.editText_idade:
+                    validateIdade();
+                    break;
+                case R.id.editText_descricao:
+                    validateDescricao();
+                    break;
+
+            }
+        }
+    }
 
 }

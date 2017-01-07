@@ -27,11 +27,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".anuncio.AnunciosActivity"
-            android:label="PETTRADING"
+            android:label="LISTA DE ANUNCIOS"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".anuncio.CadastroAnuncioActivity"
-            android:label="PETTRADING"
+            android:label="CADASTRAR ANÚNCIOS"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden"/>
         <activity
@@ -46,7 +46,7 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".buscaRapida.BuscaRapidaActivity"
-            android:label="PETTRADING"
+            android:label="BUSCA RÁPIDA"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,10 +61,10 @@
         <activity android:name=".buscaRapida.InfoBuscaRapidaActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".conta.Conta"
-            android:label="Conta"
+            android:label="CONTA"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".conta.ContaStatus"
-            android:label="Perfil"
+            android:label="PERFIL"
             android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>

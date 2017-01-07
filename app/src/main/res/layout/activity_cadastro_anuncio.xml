@@ -3,260 +3,250 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ScrollView01"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent">
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:background="#f5f5f5"
-    android:paddingTop="8dp"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f5f5f5"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:id="@+id/layout_titulo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/text_titulo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="DOE O SEU PET"
+                android:textColor="#000000"
+                android:textSize="19sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/text_titulo"
+                android:gravity="center"
+                android:text="(Preencha todos os campos do formulario)"
+                android:textColor="#000000"
+                android:textSize="13sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_formulario_anuncio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_titulo"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/login_background">
+
+            <TextView
+                android:id="@+id/text_codigo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Codigo:"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <!-- SPINNER -->
+            <RelativeLayout
+                android:id="@+id/formulario_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_codigo"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight=".25"
+                android:background="@drawable/spinner_background"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinnercategorias"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:background="@android:color/transparent"
+                    android:entries="@array/categorias_pet"
+                    android:gravity="center"
+                    android:spinnerMode="dropdown" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/icone_drop" />
+            </RelativeLayout>
+            <!-- SPINNER -->
 
             <RelativeLayout
-                android:id="@+id/layout_titulo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/formulario_spinner"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
-                <TextView
-                    android:id="@+id/text_titulo"
+                <CheckBox android:id="@+id/checkbox_meat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:checked="true"
+                    android:clickable="false"
+                    android:text="Doação"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_raca"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="FALTA POUCO PARA VOCÊ"
-                    android:gravity="center"
-                    android:textSize="18sp"
-                    />
-                <TextView
+                    android:layout_below="@id/checkbox_meat"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/editText_raca"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#999999"
+                        android:hint="@string/hint_raca"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLength="155"
+                        android:textSize="18sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_idade"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="ANUNCIAR O SEU PET "
-                    android:textSize="18sp"
-                    android:layout_below="@+id/text_titulo"
-                    />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/input_layout_raca">
+
+                    <EditText
+                        android:id="@+id/editText_idade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_idade"
+                        android:backgroundTint="#999999"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLength="3"
+                        android:textSize="18sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_descricao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/input_layout_idade">
+                <EditText
+                    android:id="@+id/editText_descricao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:hint="@string/hint_descricao"
+                    android:backgroundTint="#999999"
+                    android:inputType="textMultiLine"
+                    android:maxLength="155"
+                    android:textSize="18sp"/>
+                </android.support.design.widget.TextInputLayout>
+
             </RelativeLayout>
 
-                <RelativeLayout
-                    android:id="@+id/layout_formulario_anuncio"
-                    android:layout_width="match_parent"
-                    android:layout_below="@+id/layout_titulo"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/login_background"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="10dp"
-                        android:text="Codigo:"
-                        android:textSize="18sp"
-                        android:id="@+id/text_codigo"
-                        />
+        </RelativeLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="25dp"
-                        android:layout_below="@+id/text_codigo"
-                        android:text="Categoria:"
-                        android:textSize="18sp"
-                        android:id="@+id/text_categoria"
-                        />
+        <RelativeLayout
+            android:id="@+id/layout_formulario_anuncio_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_formulario_anuncio">
 
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:layout_below="@+id/text_codigo"
-                        android:layout_toRightOf="@id/text_categoria"
-                        android:layout_gravity="right"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="25dp"
-                        android:id="@+id/spinner_categoria"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="Raça:"
-                        android:textSize="18sp"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/text_raca"
-                        android:layout_below="@+id/text_categoria"
-                        />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/editText_raca"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/text_raca"
-                        android:layout_below="@+id/text_categoria"
-                        android:lines="1"
-                        android:textSize="18sp"
-                        android:maxLength="155"
-                        android:inputType="text"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="Idade:"
-                        android:textSize="18sp"
-                        android:id="@+id/text_idade"
-                        android:layout_below="@id/text_raca"
-                        />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/editText_idade"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/text_idade"
-                        android:layout_below="@id/text_raca"
-                        android:lines="1"
-                        android:textSize="18sp"
-                        android:maxLength="155"
-                        android:inputType="text"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="Valor:"
-                        android:textSize="18sp"
-                        android:id="@+id/text_valor"
-                        android:layout_below="@id/text_idade"
-                        android:lines="1"
-                        android:maxLength="155"
-                        />
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/editText_valor"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/text_valor"
-                        android:layout_below="@id/text_idade"
-                        android:inputType="text"
-                        android:textSize="18sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="Descrição:"
-                        android:textSize="18sp"
-                        android:id="@+id/text_descricao"
-                        android:layout_below="@id/text_valor"/>
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/editText_descricao"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_below="@id/text_descricao"
-                        android:textSize="18sp"
-                        android:maxLength="155"
-                        android:inputType="textMultiLine"
-                        android:layout_marginBottom="15dp"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/layout_formulario_anuncio_img"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/layout_formulario_anuncio"
-                    >
-
-                    <ImageView
-                        android:id="@+id/imageAnuncio"
-                        android:src="@drawable/pegarfoto"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:background="#e2e2e2"
-                        android:onClick="inicia_img1"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginRight="15dp"/>
-
-                    <TextView
-                        android:id="@+id/ImageSize"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/imageAnuncio"
-                        android:layout_marginTop="10dp"
-                        android:text="0.00 MB de 5.7 MB"
-                        android:textColor="#000000"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true" />
-
-                </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/layout_formulario_anuncio_img_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/layout_formulario_anuncio_img"
-                        android:layout_marginTop="15dp"
-                        android:background="@drawable/background_anuncio_list"
-                        >
-
-                    <ImageView
-                        android:id="@+id/image_list_Anuncio2"
-                        android:layout_width="40dp"
-                        android:src="@drawable/takephotographi"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="5dp"
-                        android:background="#c1c1c1"/>
-                        <!-- android:onClick="inicia_img2" -->
-
-                        <ImageView
-                        android:id="@+id/image_list_Anuncio3"
-                        android:layout_width="40dp"
-                        android:src="@drawable/takephotographi"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_toRightOf="@+id/image_list_Anuncio2"
-                        android:layout_marginRight="50dp"
-                        android:background="#c1c1c1"/>
-                    </RelativeLayout>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="Anunciar"
-                android:textSize="23sp"
-                android:height="80dp"
+            <ImageView
+                android:id="@+id/imageAnuncio"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/layout_formulario_anuncio_img_list"
-                android:onClick="inicia_anuncio"
-                android:background="@drawable/botaologin_background"/>
+                android:layout_marginRight="15dp"
+                android:background="#e2e2e2"
+                android:onClick="inicia_img1"
+                android:src="@drawable/pegarfoto" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/ImageSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/imageAnuncio"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="0.00 MB de 5.7 MB"
+                android:textColor="#000000" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_formulario_anuncio_img_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_formulario_anuncio_img"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/background_anuncio_list">
+
+            <ImageView
+                android:id="@+id/image_list_Anuncio2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:background="#c1c1c1"
+                android:src="@drawable/takephotographi" />
+            <!-- android:onClick="inicia_img2" -->
+
+            <ImageView
+                android:id="@+id/image_list_Anuncio3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/image_list_Anuncio2"
+                android:background="#c1c1c1"
+                android:src="@drawable/takephotographi" />
+        </RelativeLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_below="@id/layout_formulario_anuncio_img_list"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:height="80dp"
+            android:background="@drawable/botaologin_background"
+            android:onClick="inicia_anuncio"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="Anunciar"
+            android:textSize="23sp" />
+
+    </RelativeLayout>
 
 </ScrollView>
