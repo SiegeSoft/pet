@@ -50,7 +50,7 @@ public class ContaStatus extends BaseMenu {
 
         //SETA O TITULO
         TextView texttitle = (TextView) findViewById(R.id.textview_tittle);
-        texttitle.setText("Perfil");
+        texttitle.setText("PERFIL");
 
         Bitmap bitmap = ((BitmapDrawable) Profile.getIcon()).getBitmap();
 

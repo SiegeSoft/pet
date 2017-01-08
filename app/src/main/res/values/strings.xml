@@ -47,4 +47,25 @@
     <string name="idade">Idade:</string>
 
 
+    <string-array name="categorias_pet">
+        <item>Selecionar Categoria</item>
+        <item>Cães</item>
+        <item>Gatos</item>
+        <item>Tartarugas</item>
+        <item>Roedores</item>
+        <item>Répteis</item>
+        <item>Outros</item>
+    </string-array>
+
+
+    <string name="hint_raca">Raça ou Nome do Pet</string>
+    <string name="hint_idade">Idade do Pet</string>
+    <string name="hint_valor">Valor do Pet</string>
+    <string name="hint_descricao">Descricao</string>
+    <string name="err_msg_raca">Preencha o campo Corretamente</string>
+    <string name="err_msg_idade">Preencha o campo Corretamente</string>
+    <string name="err_msg_valor">Preencha o campo Corretamente</string>
+    <string name="err_msg_descricao">Preencha o campo Corretamente</string>
+
+
 </resources>

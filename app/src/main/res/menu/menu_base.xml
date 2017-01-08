@@ -12,11 +12,11 @@
             <group android:checkableBehavior="single" android:visible="false">
 
                 <item android:id="@+id/sub_pesq_anuncio" android:icon="@android:drawable/ic_menu_search"
-                    android:title="Pesquisar Anuncios"
+                    android:title="Lista de Anuncios"
                     android:visible="false"/>
 
                 <item android:id="@+id/sub_ins_anuncio" android:icon="@android:drawable/ic_menu_set_as"
-                    android:title="Inserir Anuncios"
+                    android:title="Cadastrar Anuncios"
                     android:visible="false"/>
 
                 <item android:id="@+id/sub_buscarapida" android:icon="@android:drawable/ic_menu_gallery"
