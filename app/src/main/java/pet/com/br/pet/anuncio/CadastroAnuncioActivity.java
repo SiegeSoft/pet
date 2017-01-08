@@ -329,10 +329,25 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
 
     public void showImageWidthException() {
+        if(valor_img_view == 0){
+            int size = bitmap.getByteCount();
+            double final_bitmapmegabytes = size / 1024.0;
+            DecimalFormat dec = new DecimalFormat("0.00");
+            String s = String.format(dec.format(final_bitmapmegabytes / 1024).concat(" MB de 5.7 MB"));
+            tamanhoimagememmega.setTextColor(Color.parseColor("#FFFF0000"));
+            tamanhoimagememmega.setText("" + s.replace(",", "."));
+        }else if(valor_img_view == 1){
+            int size = bitmap2.getByteCount();
+            double final_bitmapmegabytes = size / 1024.0;
+            DecimalFormat dec = new DecimalFormat("0.00");
+            String s = String.format(dec.format(final_bitmapmegabytes / 1024).concat(" MB de 5.7 MB"));
+            tamanhoimagememmega.setTextColor(Color.parseColor("#FFFF0000"));
+            tamanhoimagememmega.setText("" + s.replace(",", "."));
+        }
         try {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
             builder.setCancelable(false);
-            builder.setTitle("Oops Tamanho da imagem excedeu 1.13 MB!");
+            builder.setTitle("Oops Tamanho da imagem excedeu 5.7 MB!");
             builder.setMessage("Deseja utilizar o nosso ajuste rápido?");
             builder.setPositiveButton("Usar Ajuste", new DialogInterface.OnClickListener() {
                 @Override
@@ -349,9 +364,11 @@ public class CadastroAnuncioActivity extends BaseMenu {
             });
             builder.setNegativeButton("Editarei a imagem", new DialogInterface.OnClickListener() {
                 public void onClick(final DialogInterface dialog, final int id) {
-                    //dialog.cancel();
-                    finish();
-                    startActivity(getIntent());
+                    tamanhoimagememmega.setTextColor(Color.parseColor("#000000"));
+                    tamanhoimagememmega.setText("0.0 MB de 5.7 MB");
+                    dialog.cancel();
+                    //finish();
+                    //startActivity(getIntent());
                 }
             });
             imagedialog = builder.create();
@@ -382,7 +399,8 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
                     DecimalFormat dec = new DecimalFormat("0.00");
 
-                    String s = String.format(dec.format(final_bitmapmegabytes / 1024).concat(" MB de 1.3 MB"));
+                    String s = String.format(dec.format(final_bitmapmegabytes / 1024).concat(" MB de 5.7 MB"));
+                    tamanhoimagememmega.setTextColor(Color.parseColor("#000000"));
                     tamanhoimagememmega.setText("" + s.replace(",", "."));
                     my_img_view = (ImageView) findViewById(R.id.image_list_Anuncio2);
                     my_img_view.setImageBitmap(immagex);
@@ -423,6 +441,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 DecimalFormat dec = new DecimalFormat("0.00");
 
                 String s = String.format(dec.format(final_bitmapmegabytes / 1024).concat(" MB de 1.3 MB"));
+                tamanhoimagememmega.setTextColor(Color.parseColor("#000000"));
                 tamanhoimagememmega.setText("" + s.replace(",", "."));
 
                 my_img_view2 = (ImageView) findViewById(R.id.image_list_Anuncio3);
@@ -656,12 +675,11 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 Uri selectedImage = data.getData();
                 bitmap2 = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 if (!(bitmap2.getWidth() > 1000 || bitmap2.getHeight() > 1000)) {
-
                     encodeTobase64(bitmap2);
                 }else{
                     if(bitmap2.getWidth()>1000 && bitmap2.getHeight() < 1000) {
                         newWidth = 1000;
-                        newHeight = bitmap.getHeight();
+                        newHeight = bitmap2.getHeight();
                         showImageWidthException();
                     }else if(bitmap2.getWidth()<1000 && bitmap2.getHeight() > 1000){
                         newWidth = bitmap2.getWidth();
