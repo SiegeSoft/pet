@@ -31,33 +31,17 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".anuncio.AnunciosActivity"
-<<<<<<< HEAD
+
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".anuncio.CadastroAnuncioActivity"
-            android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".chat.ChatActivity"
-            android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".chat.ChatViewActivity"
-            android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".buscaRapida.BuscaRapidaActivity"
-            android:label="PETTRADING"
-            android:theme="@style/AppTheme.NoActionBar">
-=======
-            android:label="LISTA DE ANUNCIOS"
-            android:theme="@style/AppTheme.NoActionBar"/>
+
+
         <activity
             android:name=".anuncio.CadastroAnuncioActivity"
             android:label="CADASTRAR ANÚNCIOS"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden"/>
+
         <activity
             android:name=".chat.ChatActivity"
             android:label="PETTRADING"
@@ -72,7 +56,7 @@
             android:name=".buscaRapida.BuscaRapidaActivity"
             android:label="BUSCA RÁPIDA"
             android:theme="@style/AppTheme.NoActionBar" >
->>>>>>> be32f34d836ac60a4ce382de14307b1598ef4b32
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,7 +66,7 @@
         <activity
             android:name=".autentica.Login"
             android:label="PETTRADING"
-<<<<<<< HEAD
+
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -98,18 +82,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".anuncio.InfoAnunciosActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-=======
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".buscaRapida.InfoBuscaRapidaActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".conta.Conta"
-            android:label="CONTA"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".conta.ContaStatus"
-            android:label="PERFIL"
-            android:theme="@style/AppTheme.NoActionBar"/>
 
->>>>>>> be32f34d836ac60a4ce382de14307b1598ef4b32
+
     </application>
 
 </manifest><!--
