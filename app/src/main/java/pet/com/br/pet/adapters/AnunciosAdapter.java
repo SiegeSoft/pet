@@ -1,6 +1,7 @@
 package pet.com.br.pet.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import pet.com.br.pet.R;
+import pet.com.br.pet.anuncio.InfoAnunciosActivity;
+import pet.com.br.pet.buscaRapida.InfoBuscaRapidaActivity;
 import pet.com.br.pet.models.Anuncios;
 
 /**
@@ -39,7 +42,7 @@ public class AnunciosAdapter extends RecyclerView.Adapter<AnunciosAdapter.ViewHo
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         Anuncios anuncio = anuncios.get(position);
 
         holder.txtRaca.setText(anuncio.getRaca());
@@ -55,6 +58,22 @@ public class AnunciosAdapter extends RecyclerView.Adapter<AnunciosAdapter.ViewHo
         holder.txtIdade.setText("Idade: " + anuncio.getIdade());
         holder.txtTipoVenda.setText("Venda/Doação: " + anuncio.getTipoVenda());
         holder.txtHora.setText(anuncio.getHora());
+
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, InfoAnunciosActivity.class);
+                intent.putExtra("codigo", anuncios.get(position).getCodigo());
+                intent.putExtra("raca", anuncios.get(position).getRaca());
+                intent.putExtra("idade", anuncios.get(position).getIdade());
+                intent.putExtra("descricao", anuncios.get(position).getDescricao());
+                intent.putExtra("categoria", anuncios.get(position).getCategoria());
+                intent.putExtra("vendaoudoa", anuncios.get(position).getTipoVenda());
+                intent.putExtra("dono", anuncios.get(position).getDono());
+                context.startActivity(intent);
+            }
+        });
 
     }
 
@@ -72,6 +91,7 @@ public class AnunciosAdapter extends RecyclerView.Adapter<AnunciosAdapter.ViewHo
         TextView txtIdade;
         TextView txtTipoVenda;
         TextView txtHora;
+
 
         public ViewHolder(View itemView) {
             super(itemView);

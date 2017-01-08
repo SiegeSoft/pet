@@ -48,12 +48,14 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/cardImage"
                 android:layout_width="match_parent"
                 android:layout_height="227dp"
                 android:padding="4dp"
-                android:scaleType="centerInside" />
+                android:scaleType="centerInside"/>
+
         </FrameLayout>
 
         <LinearLayout

@@ -1,5 +1,7 @@
 package pet.com.br.pet.anuncio;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import java.util.List;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.adapters.AnunciosAdapter;
+import pet.com.br.pet.buscaRapida.InfoBuscaRapidaActivity;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Anuncios;
 import pet.com.br.pet.utils.AnunciosUtils;
@@ -40,6 +43,7 @@ public class AnunciosActivity extends BaseMenu {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
+    private Context _context;
 
     private RequestQueue requestQueue;
     private int requestCount = 1, requestCountInit = 2;
@@ -50,6 +54,7 @@ public class AnunciosActivity extends BaseMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anuncios);
+        _context = this;
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);

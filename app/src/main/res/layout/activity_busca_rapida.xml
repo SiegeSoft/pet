@@ -84,40 +84,6 @@
         android:gravity="center"
         android:padding="20dp">
 
-        <ImageButton
-            android:layout_marginBottom="30dp"
-            android:layout_width="96dp"
-            android:layout_height="91dp"
-            android:scaleType="fitCenter"
-            android:padding="10dp"
-            android:src="@drawable/no"
-            android:id="@+id/btnNext"
-            android:layout_gravity="start"
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/button_circle"/>
-
-        <ImageButton
-            android:layout_marginBottom="30dp"
-            android:layout_width="96dp"
-            android:layout_height="91dp"
-            android:src="@drawable/coracao"
-            android:scaleType="fitCenter"
-            android:padding="10dp"
-            android:id="@+id/btnHeart"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/button_circle" />
-
-        <ImageButton
-            android:src="@drawable/compartilhar"
-            android:layout_width="69dp"
-            android:layout_height="68dp"
-            android:scaleType="fitCenter"
-            android:padding="10dp"
-            android:id="@+id/btnShare"
-            android:background="@drawable/button_circle"
-            android:layout_alignBottom="@+id/btnNext"
-            android:layout_centerHorizontal="true"/>
-
     </RelativeLayout>
 
 

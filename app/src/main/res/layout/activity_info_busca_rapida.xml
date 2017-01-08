@@ -66,12 +66,23 @@
                             android:text="New Text"
                             android:textSize="28sp"
                             android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                        <TextView
+                            android:text="@string/idade"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView2"
+                            android:paddingRight="15dp"/>
 
                         <TextView
                             android:id="@+id/idade"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="New Text" />
+                        </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
