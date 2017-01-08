@@ -379,7 +379,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
     }
 
 
-    public String encodeTobase64(Bitmap image) {
+        public String encodeTobase64(Bitmap image) {
 
         String imageEncoded = null;
             Bitmap immagex = image;
@@ -498,10 +498,34 @@ public class CadastroAnuncioActivity extends BaseMenu {
     public void inicia_anuncio(View v) {
         askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION);
         if (!(Profile.getLatitude() == null && Profile.getLongitude() == null)) {
-            iniciaAnuncio();
+            submitForm();
         } else {
             askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION);
             Toast.makeText(this, "Reenvie novamente o seu anuncio", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void submitForm() {
+        if (!validateRaca()) {
+            return;
+        }
+
+        if (!validateIdade()) {
+            return;
+        }
+
+        if (!validateDescricao()) {
+            return;
+        }
+
+        if(!spinner_categorias.getSelectedItem().toString().equals("Selecionar Categoria") && valor_img_view != 0){
+            iniciaAnuncio();
+        }else if(spinner_categorias.getSelectedItem().toString().equals("Selecionar Categoria") && valor_img_view != 0){
+            Toast.makeText(this, "Você deve selecionar uma categoria", Toast.LENGTH_SHORT).show();
+        }else if(spinner_categorias.getSelectedItem().toString().equals("Selecionar Categoria") && valor_img_view == 0){
+            Toast.makeText(this, "Insira uma imagem e selecione uma Categoria", Toast.LENGTH_SHORT).show();
+        }else if(!spinner_categorias.getSelectedItem().toString().equals("Selecionar Categoria") && valor_img_view == 0){
+            Toast.makeText(this, "Insira uma Imagem", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -761,6 +785,9 @@ public class CadastroAnuncioActivity extends BaseMenu {
             requestFocus(editTextraca);
             return false;
         } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                editTextraca.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#999999")));
+            }
             inputLayoutRaca.setErrorEnabled(false);
         }
 
@@ -789,6 +816,10 @@ public class CadastroAnuncioActivity extends BaseMenu {
             requestFocus(editTextdescricao);
             return false;
         } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                editTextdescricao.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#999999")));
+                editTextdescricao.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#999999")));
+            }
             inputLayoutDescricao.setErrorEnabled(false);
         }
 
