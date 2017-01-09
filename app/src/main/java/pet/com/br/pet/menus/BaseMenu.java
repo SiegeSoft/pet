@@ -53,7 +53,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
     private HashMap<String, String> _userDetails;
 
     private TextView _nomeDoUsuario;
-
+    public static TextView _menudogCoin;
     public static ImageView drawable_image_usericon;
 
     @Override
@@ -78,7 +78,6 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
         _loginManager = new LoginManager(this);
         _userDetails = _loginManager.getUserDetails();
         _nomeDoUsuario.setText(_userDetails.get(LoginManager.KEY_NAME));
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         Menu nav_menu = navigationView.getMenu();
@@ -94,11 +93,13 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
         }
         Profile.setIcon(this.getResources().getDrawable(R.drawable.andy));
 
+        _menudogCoin = (TextView) findViewById(R.id.text_dogcoin);
+
         drawable_image_usericon = (ImageView) findViewById(R.id.image_usericon);
         Bitmap bitmap = ((BitmapDrawable) Profile.getIcon()).getBitmap();
         Drawable drawable = new BitmapDrawable(getResources(), createCircleBitmap(bitmap));
         drawable_image_usericon.setImageDrawable(drawable);
-
+        _menudogCoin.setText(Profile.getDogCoin());
         setUpNavView();
     }
 
