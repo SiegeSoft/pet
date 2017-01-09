@@ -1,14 +1,9 @@
 package pet.com.br.pet.autentica;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 
 import java.util.HashMap;
-
-import pet.com.br.pet.anuncio.AnunciosActivity;
-import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
-import pet.com.br.pet.models.BuscaRapida;
 
 /**
  * Created by rafae on 15/09/2016.
@@ -57,6 +52,19 @@ public class LoginManager {
         _editor.putString(KEY_PROFILE, profileImg);
         _editor.commit();
     }
+
+
+    /**
+     * DOGCOIN SESSION
+     * */
+    public void dogCoinSession(String dogCoin){
+        _editor.putString(KEY_DOG_COIN, dogCoin);
+        _editor.apply();
+    }
+
+
+
+
 
 
     /**

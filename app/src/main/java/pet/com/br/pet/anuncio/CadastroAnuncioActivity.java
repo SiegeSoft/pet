@@ -58,6 +58,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import pet.com.br.pet.R;
+import pet.com.br.pet.autentica.LoginManager;
 import pet.com.br.pet.gps.LocationDirector;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Profile;
@@ -94,6 +95,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
     private String stridade;
     private String strvalor;
     private String strdescricao;
+    private String strdogcoin;
 
 
     private String getLatitude;
@@ -151,11 +153,21 @@ public class CadastroAnuncioActivity extends BaseMenu {
     //testandoooooo
     private TextInputLayout inputLayoutRaca, inputLayoutIdade, inputLayoutDescricao;
 
+    //dogcoindiscount
+
+    public int dogcondiscount = 0;
+
+    //loginsession cache
+    private LoginManager _session;
+    private HashMap<String, String> _userDetails;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_anuncio);
+        _session = new LoginManager(getApplicationContext());
+        _userDetails = _session.getUserDetails();
 
         txtcodigo = (TextView) findViewById(R.id.text_codigo);
         txtcodigo.setText("Codigo: " + criarCodigo());
@@ -182,9 +194,6 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
         spinner_categorias = (Spinner) findViewById(R.id.spinnercategorias);
         spinner_categorias.setOnTouchListener(new View.OnTouchListener() {
-
-
-
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -214,6 +223,14 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
 
     private void iniciaAnuncio() {
+        dogcondiscount = Integer.parseInt(Profile.getDogCoin()) - 90;
+        if(valor_img_view == 2) {
+            dogcondiscount = Integer.parseInt(Profile.getDogCoin()) - 90;
+            _session.dogCoinSession(String.valueOf(dogcondiscount));
+            Profile.setDogCoin(_userDetails.get(LoginManager.KEY_DOG_COIN));
+            Log.e("DOGCOINVALUE",""+dogcondiscount);
+        }
+
         strcodigo = _codigo.trim();
         strraca = editTextraca.getText().toString().trim();
         stridade = editTextidade.getText().toString().trim();
@@ -228,7 +245,12 @@ public class CadastroAnuncioActivity extends BaseMenu {
                         try {
                             if (response.trim().equals("success")) {
                                 loading.dismiss();
-                                openProfile();
+                                if(valor_img_view == 2) {
+                                    _session.dogCoinSession(String.valueOf(dogcondiscount));
+                                    Profile.setDogCoin(_userDetails.get(LoginManager.KEY_DOG_COIN));
+                                    Log.e("DOGCOINVALUE",""+dogcondiscount);
+                                    openProfile();
+                                }
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(CadastroAnuncioActivity.this);
                                 builder.setMessage("ERRO AO CADASTRAR O ANUNCIO")
@@ -276,10 +298,11 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 map.put(KEY_LON, getLongitude);
                 map.put(KEY_DONO, Profile.getNomeExibicao());
                 map.put(KEY_USERNAME, Usuario.getUserName());
-                map.put(KEY_CATEOGRIA, "Doação");
+                map.put(KEY_CATEOGRIA, spinner_categorias.getSelectedItem().toString());
                 map.put(KEY_HORARIO, simpleDateFormat.format(date));
                 map.put("IMAGEM", image_name);
                 map.put("IMAGEMPATCH", encoded_string);
+                map.put("DOGCOIN", String.valueOf(dogcondiscount));
                 return map;
             }
         };
@@ -295,7 +318,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
             Intent intent = new Intent(Intent.ACTION_PICK,
                     android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
             startActivityForResult(intent, SELECT_PICTURE);
-        } else if (valor_img_view == 1) {
+        } else if (valor_img_view == 1 && Integer.parseInt(Profile.getDogCoin()) >= 90) {
             showDogCoinImage();
         }
     }

@@ -10,13 +10,10 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,26 +36,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.adapters.ChatViewAdapter;
-import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 import pet.com.br.pet.database.ChatController;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.ChatView;
 import pet.com.br.pet.models.Profile;
 import pet.com.br.pet.textviewcustom.ScrollTextView;
 import pet.com.br.pet.utils.ChatViewUtils;
-
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Logger;
 
 
 /**
