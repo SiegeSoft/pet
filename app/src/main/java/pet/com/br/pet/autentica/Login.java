@@ -1,12 +1,19 @@
 package pet.com.br.pet.autentica;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -31,6 +38,7 @@ import java.util.Map;
 import pet.com.br.pet.R;
 import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 import pet.com.br.pet.fragments.Registro;
+import pet.com.br.pet.gps.LocationDirector;
 import pet.com.br.pet.models.Profile;
 
 /**
@@ -67,6 +75,8 @@ public class Login  extends AppCompatActivity {
     int termo_uso_value = 0;
     Registro registro;
 
+    private final int REQUEST_CODE_SMS_PERMISSIONS = 0x2;
+    private final int REQUEST_PHONE_STATE_CODE = 0x3;
     //RELATIVES
     RelativeLayout relative_termo_contrato, relative_login_form;
 
@@ -77,6 +87,8 @@ public class Login  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
         termo_uso_value = 0;
         fadeout_valueregistro = 0;
 
@@ -87,11 +99,22 @@ public class Login  extends AppCompatActivity {
         editTextUsername = (EditText) findViewById(R.id.editText_login);
         editTextPassword = (EditText) findViewById(R.id.editText_senha);
 
-        TelephonyManager mTelephonyMgr;
-        mTelephonyMgr = (TelephonyManager)
-                getSystemService(Context.TELEPHONY_SERVICE);
-        String mPhoneNumber = mTelephonyMgr.getLine1Number();
-        Profile.setPhoneNumber(mPhoneNumber);
+        askForPermission(Manifest.permission.READ_SMS,REQUEST_CODE_SMS_PERMISSIONS);
+
+
+        try{
+            TelephonyManager mTelephonyMgr;
+            mTelephonyMgr = (TelephonyManager)
+                    getSystemService(Context.TELEPHONY_SERVICE);
+            String mPhoneNumber = mTelephonyMgr.getLine1Number();
+            Profile.setPhoneNumber(mPhoneNumber);
+            Log.e("Telefone: ", ""+mPhoneNumber);
+
+        }catch (Exception e){
+
+            Log.e("Exception: ", ""+e.getMessage());
+        }
+
 
         _session = new LoginManager(getApplicationContext());
 
@@ -113,6 +136,43 @@ public class Login  extends AppCompatActivity {
 
 
     }
+
+    private void askForPermission(String permission, Integer requestCode) {
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+
+                //This is called if user has denied the permission before
+                //In this case I am just asking the permission again
+                ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+
+            } else {
+
+                ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+            }
+        } else {
+            //Toast.makeText(this, "" + permission + " permissão já garantida.", Toast.LENGTH_SHORT).show();
+            statusCheck();
+        }
+    }
+
+    public void statusCheck() {
+        try{
+            TelephonyManager mTelephonyMgr;
+            mTelephonyMgr = (TelephonyManager)
+                    getSystemService(Context.TELEPHONY_SERVICE);
+            String mPhoneNumber = mTelephonyMgr.getLine1Number();
+            Profile.setPhoneNumber(mPhoneNumber);
+            Log.e("Telefone: ", ""+mPhoneNumber);
+
+        }catch (Exception e){
+            askForPermission(Manifest.permission.READ_SMS,REQUEST_CODE_SMS_PERMISSIONS);
+            askForPermission(Manifest.permission.READ_PHONE_STATE,REQUEST_PHONE_STATE_CODE);
+            Log.e("Exception: ", ""+e.getMessage());
+        }
+    }
+
 
     public void OnClickRegistrar(View v){
         OpenTermoContrato();

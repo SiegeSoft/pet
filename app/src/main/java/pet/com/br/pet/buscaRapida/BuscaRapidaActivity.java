@@ -161,7 +161,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _pets = (ImageView) findViewById(R.id.pets);
         _textOops = (TextView) findViewById(R.id.txtViewOops);
         _textConfings = (TextView) findViewById(R.id.txtViewConfings);
-        _rodape = (RelativeLayout) findViewById(R.id.rodape);
 
 
         _context = this;
@@ -214,7 +213,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 Log.e("No repeat times", ""+_noRepeatTimes);
-                if (_noRepeatTimes <= 3) {
+                if (_noRepeatTimes < 5) {
                     if (itemsInAdapter == 0) {
                         getData();
                         _noRepeatTimes++;
@@ -251,14 +250,12 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _pets.setVisibility(View.VISIBLE);
         _textOops.setVisibility(View.VISIBLE);
         _textConfings.setVisibility(View.VISIBLE);
-        _rodape.setVisibility(View.GONE);
     }
 
     private void setAnunciosVisibleImage(){
         _pets.setVisibility(View.GONE);
         _textOops.setVisibility(View.GONE);
         _textConfings.setVisibility(View.GONE);
-        _rodape.setVisibility(View.VISIBLE);
     }
 
     private void setLike(String id) {
@@ -432,6 +429,12 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.e("Success", "Sucesso ao salvar likes e dislikes");
+                        Usuario.setLikes(like);
+                        Usuario.setDislikes(dislike);
+                        _arrayLikes.addAll(Usuario.getLikes());
+                        _arrayDislikes.addAll(Usuario.getDislikes());
+                        _loginManager.updateLikesDislikes(like, dislike);
+
                     }
                 },
                 new Response.ErrorListener() {

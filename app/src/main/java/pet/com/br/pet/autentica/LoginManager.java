@@ -58,6 +58,11 @@ public class LoginManager {
         _editor.commit();
     }
 
+    public void updateLikesDislikes(String like, String dislike){
+        _editor.putString(KEY_LIKE, like);
+        _editor.putString(KEY_DISLIKE, dislike);
+        _editor.apply();
+    }
 
     /**
      * Check if is logged
