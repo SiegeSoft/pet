@@ -44,6 +44,8 @@
         13. "Pacotes"\n
         14. "Galeria Premium"\n
     </string>
+    <string name="idade">Idade:</string>
+
 
     <string-array name="categorias_pet">
         <item>Selecionar Categoria</item>

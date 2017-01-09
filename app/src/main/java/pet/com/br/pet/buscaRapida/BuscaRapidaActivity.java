@@ -98,7 +98,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
     private TextView _textOops, _textConfings;
     private ImageView _pets;
-    private ImageButton _btnHeart, _btnShare, _btnNext;
     private RelativeLayout _rodape;
 
     private LoginManager _loginManager;
@@ -162,9 +161,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _pets = (ImageView) findViewById(R.id.pets);
         _textOops = (TextView) findViewById(R.id.txtViewOops);
         _textConfings = (TextView) findViewById(R.id.txtViewConfings);
-        _btnHeart = (ImageButton) findViewById(R.id.btnHeart);
-        _btnNext = (ImageButton) findViewById(R.id.btnNext);
-        _btnShare = (ImageButton) findViewById(R.id.btnShare);
         _rodape = (RelativeLayout) findViewById(R.id.rodape);
 
 
@@ -255,9 +251,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _pets.setVisibility(View.VISIBLE);
         _textOops.setVisibility(View.VISIBLE);
         _textConfings.setVisibility(View.VISIBLE);
-        _btnHeart.setVisibility(View.GONE);
-        _btnNext.setVisibility(View.GONE);
-        _btnShare.setVisibility(View.GONE);
         _rodape.setVisibility(View.GONE);
     }
 
@@ -265,9 +258,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _pets.setVisibility(View.GONE);
         _textOops.setVisibility(View.GONE);
         _textConfings.setVisibility(View.GONE);
-        _btnHeart.setVisibility(View.VISIBLE);
-        _btnNext.setVisibility(View.VISIBLE);
-        _btnShare.setVisibility(View.VISIBLE);
         _rodape.setVisibility(View.VISIBLE);
     }
 
