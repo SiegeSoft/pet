@@ -71,6 +71,7 @@ public class AnunciosAdapter extends RecyclerView.Adapter<AnunciosAdapter.ViewHo
                 intent.putExtra("categoria", anuncios.get(position).getCategoria());
                 intent.putExtra("vendaoudoa", anuncios.get(position).getTipoVenda());
                 intent.putExtra("dono", anuncios.get(position).getDono());
+                intent.putExtra("username", anuncios.get(position).getUsername());
                 context.startActivity(intent);
             }
         });

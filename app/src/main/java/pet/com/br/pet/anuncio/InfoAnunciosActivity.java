@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,10 +26,14 @@ import org.json.JSONObject;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.buscaRapida.InfoBuscaRapidaActivity;
+import pet.com.br.pet.chat.ChatViewActivity;
 import pet.com.br.pet.menus.BaseMenu;
+import pet.com.br.pet.models.Usuario;
 
+import static android.view.View.GONE;
 import static pet.com.br.pet.utils.TagUtils.TAG_IMAGEMPATCH;
 import static pet.com.br.pet.utils.UrlUtils.ANUNCIO_UNICO_URL;
+import static pet.com.br.pet.utils.TagUtils.KEY_USERNAME;
 
 public class InfoAnunciosActivity extends BaseMenu {
 
@@ -43,6 +48,7 @@ public class InfoAnunciosActivity extends BaseMenu {
     private TextView _textViewRaca, _textViewIdade, _textViewDescricao, _textViewCategoria, _textViewDono, _textViewTipoVenda;
     private ImageView _imageViewFoto;
     private RequestQueue _requestQueue;
+    private String _username;
 
 
     @Override
@@ -54,6 +60,11 @@ public class InfoAnunciosActivity extends BaseMenu {
         setInfos();
         _requestQueue = Volley.newRequestQueue(this);
         _requestQueue.add(getImage(_codigo));
+        Button chat = (Button) findViewById(R.id.chatButton);
+
+        if(_username.equals(Usuario.getUserName())){
+            chat.setVisibility(GONE);
+        }
 
     }
 
@@ -69,6 +80,14 @@ public class InfoAnunciosActivity extends BaseMenu {
 
     }
 
+    public void abrirChat(View v){
+        Intent intent = new Intent(this, ChatViewActivity.class);
+        intent.putExtra("Userchat", _username);
+        intent.putExtra("Usercodigo", _codigo);
+        intent.putExtra("Userdesc", "");
+        this.startActivity(intent);
+    }
+
     private Bitmap decodeStringImg(String imgid) {
         byte[] decodedString = Base64.decode(imgid, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -78,7 +97,7 @@ public class InfoAnunciosActivity extends BaseMenu {
     private void getInfos() {
         Intent intent = getIntent();
         _codigo = intent.getStringExtra("codigo");
-
+        _username = intent.getStringExtra("username");
         _raca = intent.getStringExtra("raca");
         _idade = intent.getStringExtra("idade");
         _descricao = intent.getStringExtra("descricao");
@@ -108,13 +127,13 @@ public class InfoAnunciosActivity extends BaseMenu {
                     public void onResponse(JSONArray response) {
 
                         parseData(response);
-                        progressBar.setVisibility(View.GONE);
+                        progressBar.setVisibility(GONE);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progressBar.setVisibility(View.GONE);
+                        progressBar.setVisibility(GONE);
                         Toast.makeText(InfoAnunciosActivity.this, "Sem imagem", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -126,6 +145,7 @@ public class InfoAnunciosActivity extends BaseMenu {
         JSONObject json = null;
         try {
             json = array.getJSONObject(0);
+
             _imageViewFoto.setImageBitmap(decodeStringImg(json.getString(TAG_IMAGEMPATCH)));
 
         } catch (JSONException e) {

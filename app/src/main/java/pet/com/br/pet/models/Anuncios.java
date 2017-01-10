@@ -18,6 +18,15 @@ public class Anuncios {
     private String codigo;
     private String descricao;
     private String categoria;
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public Bitmap getImgid() {
         return imgid;

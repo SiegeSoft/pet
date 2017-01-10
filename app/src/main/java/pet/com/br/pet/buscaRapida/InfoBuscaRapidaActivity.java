@@ -23,7 +23,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import pet.com.br.pet.R;
+import pet.com.br.pet.chat.ChatViewActivity;
 import pet.com.br.pet.menus.BaseMenu;
+import pet.com.br.pet.models.Profile;
 
 import static pet.com.br.pet.utils.TagUtils.TAG_IMAGEMPATCH;
 import static pet.com.br.pet.utils.UrlUtils.ANUNCIO_UNICO_URL;
@@ -55,6 +57,7 @@ public class InfoBuscaRapidaActivity extends BaseMenu {
         _requestQueue.add(getImage(_codigo));
 
 
+
     }
 
     private void getInfos() {
@@ -80,6 +83,9 @@ public class InfoBuscaRapidaActivity extends BaseMenu {
         _textViewDono = (TextView) findViewById(R.id.textNome);
 
     }
+
+
+
 
     private Bitmap decodeStringImg(String imgid) {
         byte[] decodedString = Base64.decode(imgid, Base64.DEFAULT);

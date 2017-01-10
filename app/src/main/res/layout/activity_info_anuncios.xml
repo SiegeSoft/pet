@@ -75,7 +75,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/textView2"
-                            android:paddingRight="15dp"/>
+                            android:paddingRight="5dp"/>
 
                         <TextView
                             android:id="@+id/idade"
@@ -160,8 +160,19 @@
                                 android:text="New Text"
                                 android:id="@+id/textNome" />
 
+                            <RelativeLayout
+                                android:layout_marginTop="14dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
 
+                                <Button
+                                    android:id="@+id/chatButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Chat"
+                                    android:onClick="abrirChat"/>
 
+                            </RelativeLayout>
 
                         </LinearLayout>
                     </ScrollView>
