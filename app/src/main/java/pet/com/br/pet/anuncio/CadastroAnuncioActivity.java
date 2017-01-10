@@ -223,12 +223,12 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
 
     private void iniciaAnuncio() {
-        dogcondiscount = Integer.parseInt(Profile.getDogCoin()) - 90;
+        //dogcondiscount = Integer.parseInt(Profile.getDogCoin()) - 90;
         if(valor_img_view == 2) {
             dogcondiscount = Integer.parseInt(Profile.getDogCoin()) - 90;
-            _session.dogCoinSession(String.valueOf(dogcondiscount));
+          /**  _session.dogCoinSession(String.valueOf(dogcondiscount));
             Profile.setDogCoin(_userDetails.get(LoginManager.KEY_DOG_COIN));
-            Log.e("DOGCOINVALUE",""+dogcondiscount);
+            Log.e("DOGCOINVALUE",""+dogcondiscount);**/
         }
 
         strcodigo = _codigo.trim();

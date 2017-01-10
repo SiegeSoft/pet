@@ -56,6 +56,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
     public static TextView _menudogCoin;
     public static ImageView drawable_image_usericon;
 
+
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         /**
@@ -99,7 +100,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
         Bitmap bitmap = ((BitmapDrawable) Profile.getIcon()).getBitmap();
         Drawable drawable = new BitmapDrawable(getResources(), createCircleBitmap(bitmap));
         drawable_image_usericon.setImageDrawable(drawable);
-        _menudogCoin.setText(Profile.getDogCoin());
+        _menudogCoin.setText(_userDetails.get(LoginManager.KEY_DOG_COIN));
         setUpNavView();
     }
 
