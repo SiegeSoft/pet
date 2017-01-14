@@ -56,7 +56,7 @@ public class AnunciosAdapter extends RecyclerView.Adapter<AnunciosAdapter.ViewHo
 
         holder.txtDono.setText("Dono: " + anuncio.getDono());
         holder.txtIdade.setText("Idade: " + anuncio.getIdade());
-        holder.txtTipoVenda.setText("Venda/Doação: " + anuncio.getTipoVenda());
+        holder.txtTipoVenda.setText("" + anuncio.getTipoVenda());
         holder.txtHora.setText(anuncio.getHora());
 
 

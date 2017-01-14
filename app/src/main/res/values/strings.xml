@@ -5,7 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="descricao">Descrição:</string>
     <string name="categoria">Categoria:</string>
-    <string name="doa_ou_venda">Doação ou Venda:</string>
+    <string name="doa_ou_venda">Doação:</string>
     <string name="dono">Dono:</string>
     <string name="ProfileName"></string>
     <string name="ProfileNameContact"></string>
@@ -89,14 +89,14 @@
         <item>Tocantins (TO)</item>
     </string-array>
 
-    <string name="hint_raca">Raça ou Nome do Pet</string>
-    <string name="hint_idade">Idade do Pet</string>
-    <string name="hint_valor">Valor do Pet</string>
-    <string name="hint_descricao">Descricao</string>
-    <string name="err_msg_raca">Preencha o campo Corretamente</string>
-    <string name="err_msg_idade">Preencha o campo Corretamente</string>
-    <string name="err_msg_valor">Preencha o campo Corretamente</string>
-    <string name="err_msg_descricao">Preencha o campo Corretamente</string>
+    <string name="hint_raca">Raça ou nome do Pet</string>
+    <string name="hint_idade">Idade do Pet (Ex: 1 mês, 1 ano)</string>
+    <string name="hint_valor">Doação</string>
+    <string name="hint_descricao">Descrição</string>
+    <string name="err_msg_raca">Preencha o campo corretamente</string>
+    <string name="err_msg_idade">Preencha o campo corretamente</string>
+    <string name="err_msg_valor">Preencha o campo corretamente</string>
+    <string name="err_msg_descricao">Preencha o campo corretamente</string>
     <string name="pesquisar">Pesquisar</string>
     <string name="refinarPesquisa">Refina a pesquisa</string>
 

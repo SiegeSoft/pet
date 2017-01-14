@@ -2,25 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:icon="@android:drawable/ic_menu_add"
-          android:title="Anuncios">
+          android:title="Pets">
 
         <menu>
             <item android:id="@+id/sub_ver_anuncio"
-                android:title="Anuncios" android:state_pressed="true" android:icon="@android:drawable/ic_menu_add"
+                android:title="Pets" android:state_pressed="true" android:icon="@android:drawable/ic_menu_add"
                 />
 
             <group android:checkableBehavior="single" android:visible="false">
 
                 <item android:id="@+id/sub_pesq_anuncio" android:icon="@android:drawable/ic_menu_search"
-                    android:title="Lista de Anuncios"
+                    android:title="Lista de Pets"
                     android:visible="false"/>
 
                 <item android:id="@+id/sub_ins_anuncio" android:icon="@android:drawable/ic_menu_set_as"
-                    android:title="Cadastrar Anuncios"
+                    android:title="Cadastrar nova doação"
                     android:visible="false"/>
 
                 <item android:id="@+id/sub_buscarapida" android:icon="@android:drawable/ic_menu_gallery"
-                    android:title="Busca Rápida"
+                    android:title="Busca rápida"
                     android:visible="false" />
 
             </group>
@@ -33,7 +33,7 @@
         android:title="Negociações">
         <menu>
             <item android:id="@+id/sub_ver_negociacoes" android:icon="@android:drawable/ic_menu_add"
-                android:title="Minhas Negociacoes" />
+                android:title="Minhas adoações" />
 
             <group android:checkableBehavior="single"
                 android:visible="false">

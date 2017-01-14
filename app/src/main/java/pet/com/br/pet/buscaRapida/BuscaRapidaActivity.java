@@ -152,6 +152,8 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
             _arrayLikes.addAll(Usuario.getLikes());
             _arrayDislikes.addAll(Usuario.getDislikes());
+            _arrayIds.addAll(_arrayLikes);
+            _arrayIds.addAll(_arrayDislikes);
         }
 
         askForPermission(Manifest.permission.ACCESS_FINE_LOCATION,LOCATION);
@@ -503,31 +505,41 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
     private void isFirstEquals(BuscaRapida buscaRapida, boolean equals) {
         for (int x = 0; x < _arrayIds.size(); x++) {
+
             if (_arrayIds.get(x).equals(buscaRapida.getId())) {
+                Log.e("IS FIRST EQUALS: ",""+_arrayIds.get(x) +"busca rapida id"+buscaRapida.getId());
                 equals = true;
                 _noRepeatTimes++;
                 break;
             }
+
         }
         if (!equals) {
             _buscaRapidaLista.add(buscaRapida);
             _noRepeatTimes--;
+            Log.e("ADICIONADO: ",""+buscaRapida.getId());
         }
+
+
     }
 
     private void isEquals(BuscaRapida buscaRapida, boolean equals) {
         if (!_buscaRapidaLista.get(_buscaRapidaLista.size() - 1).getId().equals(buscaRapida.getId())) {
             for (int x = 0; x < _arrayIds.size(); x++) {
                 if (_arrayIds.get(x).equals(buscaRapida.getId())) {
+                    Log.e("IS EQUALS: ",""+_arrayIds.get(x) +"busca rapida id"+buscaRapida.getId());
                     equals = true;
                     _noRepeatTimes++;
                     break;
                 }
+
             }
             if (!equals) {
                 _buscaRapidaLista.add(buscaRapida);
                 _noRepeatTimes--;
+                Log.e("ADICIONADO: ",""+buscaRapida.getId());
             }
+
         }
     }
 
