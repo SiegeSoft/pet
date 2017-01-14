@@ -1,16 +1,24 @@
 package pet.com.br.pet.anuncio;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -44,9 +52,11 @@ public class AnunciosActivity extends BaseMenu {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     private Context _context;
+    private int _opcoes = 0;
 
     private RequestQueue requestQueue;
     private int requestCount = 1, requestCountInit = 2;
+    private String _categoria = "";
 
     //String username;
 
@@ -80,6 +90,72 @@ public class AnunciosActivity extends BaseMenu {
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        menu.findItem(R.id.action_search).setVisible(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_search) {
+            dialogSettings(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void dialogSettings(final Activity activity){
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.activity_search_anuncio, null);
+        final Spinner spinnerCategoria = (Spinner) alertLayout.findViewById(R.id.spinnerCategorias);
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+        alert.setTitle(R.string.refinarPesquisa);
+        alert.setView(alertLayout);
+        alert.setCancelable(false);
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (spinnerCategoria.getSelectedItem().toString().equals("Todos os pets") || spinnerCategoria.getSelectedItem().toString().equals("Selecione a categoria")) {
+                    _opcoes = 0;
+                    anuncios.clear();
+                    adapter.notifyDataSetChanged();
+                    requestCount = 1;
+                    requestCountInit = 2;
+                    getData();
+
+                } else {
+                    _opcoes = 1;
+                    anuncios.clear();
+                    requestCount = 1;
+                    requestCountInit = 2;
+                    _categoria = spinnerCategoria.getSelectedItem().toString();
+                    adapter.notifyDataSetChanged();
+                    getData();
+                }
+                if(!(spinnerCategoria.getSelectedItem().toString().equals("Selecione a categoria"))) {
+                    Toast.makeText(activity, "Vocẽ selecionou: " + spinnerCategoria.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+
+
     private RecyclerView.OnScrollListener rVOnScrollListener = new RecyclerView.OnScrollListener() {
 
         @Override
@@ -107,11 +183,8 @@ public class AnunciosActivity extends BaseMenu {
     };
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+
+
 
     private JsonArrayRequest getDataFromServer(String url) {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
@@ -160,16 +233,28 @@ public class AnunciosActivity extends BaseMenu {
 
 
     private void getData() {
+        if(_opcoes==0) {
+            requestQueue.add(getDataFromServer(UrlUtils.ANUNCIO_URL + String.valueOf(requestCount)));
+            requestCount++;
+        } else{
+            requestQueue.add(getDataFromServer(UrlUtils.ANUNCIO_CATEGORIA__URL + String.valueOf(requestCount) +"&categoria="+_categoria));
+            requestCount++;
+        }
 
-        requestQueue.add(getDataFromServer(UrlUtils.ANUNCIO_URL+String.valueOf(requestCount)));
-        requestCount++;
     }
+
+
 
     private void getNewData() {
-
-        requestQueue.add(getNewDataFromServer(UrlUtils.ANUNCIO_ATUALIZA_URL+String.valueOf(requestCountInit)));
-        requestCountInit++;
+        if(_opcoes==0) {
+            requestQueue.add(getNewDataFromServer(UrlUtils.ANUNCIO_ATUALIZA_URL + String.valueOf(requestCountInit)));
+            requestCountInit++;
+        } else{
+            requestQueue.add(getDataFromServer(UrlUtils.ANUNCIO_CATEGORIA_ATUALIZA_URL + String.valueOf(requestCountInit) +"&categoria="+_categoria));
+            requestCountInit++;
+        }
     }
+
 
 
     private void parseData(JSONArray array) {
@@ -231,9 +316,14 @@ public class AnunciosActivity extends BaseMenu {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(!anuncios.getCodigo().equals(this.anuncios.get(0).getCodigo())) {
-                this.anuncios.add(0,anuncios);
+
+        try {
+            if (!anuncios.getCodigo().equals(this.anuncios.get(0).getCodigo())) {
+                this.anuncios.add(0, anuncios);
             }
+        }catch(ArrayIndexOutOfBoundsException error){
+            getNewData();
+        }
 
 
         //Notifying the adapter that data has been added or changed

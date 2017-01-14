@@ -160,10 +160,11 @@
                                 android:text="New Text"
                                 android:id="@+id/textNome" />
 
-                            <RelativeLayout
+                            <LinearLayout
                                 android:layout_marginTop="14dp"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                 android:orientation="horizontal">
 
                                 <Button
                                     android:id="@+id/chatButton"
@@ -172,7 +173,16 @@
                                     android:text="Chat"
                                     android:onClick="abrirChat"/>
 
-                            </RelativeLayout>
+                                <Button
+                                    android:id="@+id/reportarButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="reportar"
+                                    android:layout_marginLeft="15dp"
+                                    android:onClick="reportar"/>
+
+
+                            </LinearLayout>
 
                         </LinearLayout>
                     </ScrollView>

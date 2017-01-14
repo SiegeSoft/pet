@@ -30,27 +30,4 @@
     </RelativeLayout>
 
 
-    <LinearLayout
-        android:background="@color/colorPrimary"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"
-        android:id="@+id/rodape"
-        android:layout_width="match_parent"
-        android:layout_height="100dp">
-
-
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView"
-            android:layout_weight="1" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner"
-            android:layout_weight="1" />
-    </LinearLayout>
-
 </RelativeLayout>

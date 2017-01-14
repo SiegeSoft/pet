@@ -48,15 +48,46 @@
 
 
     <string-array name="categorias_pet">
-        <item>Selecionar Categoria</item>
+        <item>Selecione a categoria</item>
+        <item>Todos os pets</item>
         <item>Cães</item>
         <item>Gatos</item>
         <item>Tartarugas</item>
         <item>Roedores</item>
         <item>Répteis</item>
-        <item>Outros</item>
+        <item>Outros tipos</item>
     </string-array>
 
+    <string-array name="estados">
+        <item>Selecionar o Estado</item>
+        <item>São Paulo (SP)</item>
+        <item>Rio de Janeiro (RJ)</item>
+        <item>Acre (AC)</item>
+        <item>Alagoas (AL)</item>
+        <item>Amapá (AP)</item>
+        <item>Amazonas (AM)</item>
+        <item>Bahia (BA)</item>
+        <item>Ceará (CE)</item>
+        <item>Distrito Federal (DF)</item>
+        <item>Espírito Santo (ES)</item>
+        <item>Goiás (GO)</item>
+        <item>Maranhão (MA)</item>
+        <item>Mato Grosso (MT)</item>
+        <item>Mato Grosso do Sul (MS)</item>
+        <item>Minas Gerais (MG)</item>
+        <item>Pará (PA)</item>
+        <item>Paraíba (PB)</item>
+        <item>Paraná (PR)</item>
+        <item>Pernambuco (PE)</item>
+        <item>Piauí (PI)</item>
+        <item>Rio Grande do Norte (RN)</item>
+        <item>Rio Grande do Sul (RS)</item>
+        <item>Rondônia (RO)</item>
+        <item>Roraima (RR)</item>
+        <item>Santa Catarina (SC)</item>
+        <item>Sergipe (SE)</item>
+        <item>Tocantins (TO)</item>
+    </string-array>
 
     <string name="hint_raca">Raça ou Nome do Pet</string>
     <string name="hint_idade">Idade do Pet</string>
@@ -66,6 +97,8 @@
     <string name="err_msg_idade">Preencha o campo Corretamente</string>
     <string name="err_msg_valor">Preencha o campo Corretamente</string>
     <string name="err_msg_descricao">Preencha o campo Corretamente</string>
+    <string name="pesquisar">Pesquisar</string>
+    <string name="refinarPesquisa">Refina a pesquisa</string>
 
 
 </resources>

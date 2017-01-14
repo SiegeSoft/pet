@@ -249,8 +249,10 @@ public class CadastroAnuncioActivity extends BaseMenu {
                                     _session.dogCoinSession(String.valueOf(dogcondiscount));
                                     Profile.setDogCoin(_userDetails.get(LoginManager.KEY_DOG_COIN));
                                     Log.e("DOGCOINVALUE",""+dogcondiscount);
-                                    openProfile();
                                 }
+                                openProfile();
+
+
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(CadastroAnuncioActivity.this);
                                 builder.setMessage("ERRO AO CADASTRAR O ANUNCIO")

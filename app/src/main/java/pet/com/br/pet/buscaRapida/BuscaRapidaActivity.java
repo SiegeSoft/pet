@@ -110,8 +110,6 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
     //PERMISSION
     private static final int GPS_ENABLE_REQUEST = 0x1001;
-    private static final int WIFI_ENABLE_REQUEST = 0x1002;
-    private static final int ROAMING_ENABLE_REQUEST = 0x1003;
 
     //LOCATION
     static final Integer LOCATION = 0x1;

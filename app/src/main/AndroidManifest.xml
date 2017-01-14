@@ -36,13 +36,13 @@
         <activity
             android:name=".anuncio.AnunciosActivity"
 
-            android:label="PETTRADING"
+            android:label="PetTrading"
             android:theme="@style/AppTheme.NoActionBar" />
 
 
         <activity
             android:name=".anuncio.CadastroAnuncioActivity"
-            android:label="CADASTRAR ANÚNCIOS"
+            android:label="Cadastrar Anúncios"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden"/>
 
@@ -58,7 +58,7 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".buscaRapida.BuscaRapidaActivity"
-            android:label="BUSCA RÁPIDA"
+            android:label="PetTrading"
             android:theme="@style/AppTheme.NoActionBar" >
 
             <intent-filter>

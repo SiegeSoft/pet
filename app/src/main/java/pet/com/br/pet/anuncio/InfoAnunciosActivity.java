@@ -25,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import pet.com.br.pet.R;
-import pet.com.br.pet.buscaRapida.InfoBuscaRapidaActivity;
 import pet.com.br.pet.chat.ChatViewActivity;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Usuario;
@@ -33,7 +32,6 @@ import pet.com.br.pet.models.Usuario;
 import static android.view.View.GONE;
 import static pet.com.br.pet.utils.TagUtils.TAG_IMAGEMPATCH;
 import static pet.com.br.pet.utils.UrlUtils.ANUNCIO_UNICO_URL;
-import static pet.com.br.pet.utils.TagUtils.KEY_USERNAME;
 
 public class InfoAnunciosActivity extends BaseMenu {
 
@@ -42,7 +40,6 @@ public class InfoAnunciosActivity extends BaseMenu {
     private String _idade;
     private String _tipoVenda;
     private String _codigo;
-    private String _stringImage;
     private String _descricao;
     private String _categoria;
     private TextView _textViewRaca, _textViewIdade, _textViewDescricao, _textViewCategoria, _textViewDono, _textViewTipoVenda;
@@ -61,9 +58,10 @@ public class InfoAnunciosActivity extends BaseMenu {
         _requestQueue = Volley.newRequestQueue(this);
         _requestQueue.add(getImage(_codigo));
         Button chat = (Button) findViewById(R.id.chatButton);
-
+        Button reportar = (Button) findViewById(R.id.reportarButton);
         if(_username.equals(Usuario.getUserName())){
             chat.setVisibility(GONE);
+            reportar.setVisibility(GONE);
         }
 
     }

@@ -7,4 +7,8 @@
         android:orderInCategory="10" android:icon="@drawable/settings_icon"
         app:showAsAction="always" android:visible="false" />
 
+    <item android:id="@+id/action_search" android:title="@string/pesquisar"
+        android:orderInCategory="10" android:icon="@android:drawable/ic_search_category_default"
+        app:showAsAction="always" android:visible="false" />
+
 </menu>
