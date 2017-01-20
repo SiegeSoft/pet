@@ -15,10 +15,12 @@ public class ChatView {
     private String horah;
     private String horam;
     private String horas;
+    private String msgInternal;
     private static long adaptercontador;
     private static String ultimaHorah;
     private static String ultimaHoram;
     private static String ultimaHoras;
+
 
 
     public String getId() {
@@ -98,6 +100,9 @@ public class ChatView {
 
     public void setHoras(String horas) {this.horas = horas;}
 
+    public String getMsgInternal() {return msgInternal; }
+
+    public void setMsgInternal(String msgInternal) {this.msgInternal = msgInternal;}
     //
 
     public static String getUltimaHorahHorah() {

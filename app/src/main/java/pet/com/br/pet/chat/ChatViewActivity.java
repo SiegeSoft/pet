@@ -11,7 +11,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,7 +59,7 @@ import pet.com.br.pet.utils.ChatViewUtils;
 public class ChatViewActivity extends BaseMenu {
     private TextView titleTV;
 
-    private int scrollvalue = 0 ;
+    private int scrollvalue = 0;
 
     //LISTVIEW
     private List<ChatView> chatview;
@@ -90,6 +89,7 @@ public class ChatViewActivity extends BaseMenu {
 
 
     ScrollTextView scrolltext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,22 +120,22 @@ public class ChatViewActivity extends BaseMenu {
         ab.setDisplayShowCustomEnabled(true);
 
         //SETA O NOME DO USUARIO/MARQUEE DA ULTIMA VISUALIZAÇÃO
-        TextView texttitle =(TextView) findViewById(R.id.textview_tittle);
-        scrolltext=(ScrollTextView) findViewById(R.id.scrolltext);
+        TextView texttitle = (TextView) findViewById(R.id.textview_tittle);
+        scrolltext = (ScrollTextView) findViewById(R.id.scrolltext);
 
         requestQueue = Volley.newRequestQueue(this);
 
-        if(ChatView.getUltimaHorahHorah() == null && ChatView.getUltimaHoram() == null) {
-            texttitle.setText(""+user);
+        if (ChatView.getUltimaHorahHorah() == null && ChatView.getUltimaHoram() == null) {
+            texttitle.setText("" + user);
             getUltimoHorarioVisualisado();
-        }else{
-            texttitle.setText(""+user);
+        } else {
+            texttitle.setText("" + user);
             scrolltext.initialScroll();
         }
 
         Drawable icon = this.getResources().getDrawable(R.drawable.andy);
 
-        Bitmap bitmap = ((BitmapDrawable)icon).getBitmap();
+        Bitmap bitmap = ((BitmapDrawable) icon).getBitmap();
 
         Drawable drawable = new BitmapDrawable(getResources(), createCircleBitmap(bitmap));
         getSupportActionBar().setIcon(drawable);
@@ -144,29 +144,19 @@ public class ChatViewActivity extends BaseMenu {
         setaAdaptadorUsuarioDestino(user);
 
         //INICIA O PROGRAMA NA ULTIMA ATUALIZAÇÃO DO RECYCLERVIEW
-        int recyclerposition = recyclerView.getAdapter().getItemCount();
+        /*int recyclerposition = recyclerView.getAdapter().getItemCount();
         recyclerView.scrollToPosition(recyclerposition-1);
-        ChatView.setAdaptercontador(recyclerView.getAdapter().getItemCount());
-
-
-        //ATUALIZA AS INFORMAÇÕES A CADA 3 SEGUNDOS
-        final Handler handler = new Handler();
-        handler.postDelayed( new Runnable() {
-            @Override
-            public void run() {
-                getDataUsuarioDestino();
-                if(scrollvalue == 0){
-                    ScrollTextView scrolltext=(ScrollTextView) findViewById(R.id.scrolltext);
-                    scrolltext.startScroll();
-                    scrollvalue = 1;
-                }
-                //adapter.notifyDataSetChanged();
-                handler.postDelayed( this, 3000 );
-            }
-        },  3000 );
+        ChatView.setAdaptercontador(recyclerView.getAdapter().getItemCount());*/
+        getDataUsuarioDestino();
+        if (scrollvalue == 0) {
+            ScrollTextView scrolltext = (ScrollTextView) findViewById(R.id.scrolltext);
+            scrolltext.startScroll();
+            scrollvalue = 1;
+        }
     }
 
-    public Bitmap createCircleBitmap(Bitmap bitmapimg){
+
+    public Bitmap createCircleBitmap(Bitmap bitmapimg) {
         Bitmap output = Bitmap.createBitmap(bitmapimg.getWidth(),
                 bitmapimg.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
@@ -200,17 +190,16 @@ public class ChatViewActivity extends BaseMenu {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             onBackPressed();
         }
-        if (item.getItemId() == R.menu.helpchat){
+        if (item.getItemId() == R.menu.helpchat) {
 
         }
 
-            return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -222,14 +211,15 @@ public class ChatViewActivity extends BaseMenu {
                     public void onResponse(JSONArray response) {
                         try {
                             parseDataUsuarioDestino(response);
-                        }
-                        catch (Exception e){
+                            getDataUsuarioDestino();
+                        } catch (Exception e) {
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        getDataUsuarioDestino();
                     }
                 });
         return jsonArrayRequest;
@@ -244,8 +234,7 @@ public class ChatViewActivity extends BaseMenu {
                     public void onResponse(JSONArray response) {
                         try {
                             parseDataUltimoHorarioVisualisado(response);
-                        }
-                        catch (Exception e){
+                        } catch (Exception e) {
                         }
                     }
                 },
@@ -258,17 +247,15 @@ public class ChatViewActivity extends BaseMenu {
     }
 
 
-
     //INICIAR O RECEBIMENTO DAS MENSAGENS DOS UUARIOS
     private void getDataUsuarioDestino() {
         //Adding the method to the queue by calling the method getDataFromServer
-        requestQueue.add(getUsuarioDestinoDataFromServer(ChatViewUtils.DATA_URL+"&CODIGO="+codigo+"&USUARIODESTINO="+user+"&USUARIO="+Profile.getUsername()));
-        //Incrementing the request counter
+        requestQueue.add(getUsuarioDestinoDataFromServer(ChatViewUtils.DATA_URL + "&CODIGO=" + codigo + "&USUARIODESTINO=" + user + "&USUARIO=" + Profile.getUsername()));
     }
 
     private void getUltimoHorarioVisualisado() {
         //Adding the method to the queue by calling the method getDataFromServer
-        requestQueue.add(getUltimoHorarioVisualisadoFromServer(ChatViewUtils.DATA_ULTIMOHORARIO+"&codigo="+codigo+"&myusername="+Profile.getUsername()+"&usuariodestino="+user));
+        requestQueue.add(getUltimoHorarioVisualisadoFromServer(ChatViewUtils.DATA_ULTIMOHORARIO + "&codigo=" + codigo + "&myusername=" + Profile.getUsername() + "&usuariodestino=" + user));
         //Incrementing the request counter
     }
 
@@ -302,9 +289,9 @@ public class ChatViewActivity extends BaseMenu {
             // Linear search, see if the id exists
             boolean flag = false;
             //VERIFICA SE EXISTEM IDS DUPLICADOS
-            for(ChatView chat : chatview){
-                if(null != chat.getId() && null != chatvieww.getId()){
-                    if(chat.getId().equals(chatvieww.getId())){
+            for (ChatView chat : chatview) {
+                if (null != chat.getId() && null != chatvieww.getId()) {
+                    if (chat.getId().equals(chatvieww.getId())) {
                         // Item exists
                         flag = true;
                         break;
@@ -312,10 +299,11 @@ public class ChatViewActivity extends BaseMenu {
                 }
             }
             // if flag is true item exists, don't add.
-            if(!flag){
-                chatController.insereDado(chatvieww.getId(),chatvieww.getCodigo(),chatvieww.getUsername(),chatvieww.getMensagem(), chatvieww.getUsername(), chatvieww.getDia(), chatvieww.getMes(), chatvieww.getAno(), chatvieww.getHorah(), chatvieww.getHoram(), chatvieww.getHoras());
+            if (!flag) {
+                String internal = "0";
+                chatController.insereDado(chatvieww.getId(), codigo, Profile.getUsername(), chatvieww.getMensagem(), user, chatvieww.getDia(), chatvieww.getMes(), chatvieww.getAno(), chatvieww.getHorah(), chatvieww.getHoram(), chatvieww.getHoras(), internal);
                 //chatview.add(chatvieww);
-                setaAdaptadorUsuarioDestino(chatvieww.getUsername());
+                setaAdaptadorUsuarioDestino(user);
             }
         }
     }
@@ -338,9 +326,9 @@ public class ChatViewActivity extends BaseMenu {
                 e.printStackTrace();
             }
 
-            if(!(ChatView.getUltimaHorahHorah() == null && ChatView.getUltimaHoram() == null)) {
+            if (!(ChatView.getUltimaHorahHorah() == null && ChatView.getUltimaHoram() == null)) {
                 scrolltext.initialScroll();
-            }else{
+            } else {
                 Toast.makeText(ChatViewActivity.this, "Nao foi possivel obter a hora", Toast.LENGTH_LONG).show();
             }
 
@@ -349,12 +337,8 @@ public class ChatViewActivity extends BaseMenu {
     }
 
 
-
-
-
-
     //ATUALIZA O ADAPTADOR DAS MENSAGENS DE OUTROS USUARIOS
-    public void setaAdaptadorUsuarioDestino(String username){
+    public void setaAdaptadorUsuarioDestino(String username) {
         //Adding adapter to recyclerview
         try {
             adapter = new ChatViewAdapter(chatController.carregaTodosDadosUsuarioDestino(username, codigo), this);
@@ -362,24 +346,25 @@ public class ChatViewActivity extends BaseMenu {
             //This method runs in the same thread as the UI.
             adapter.notifyDataSetChanged();
             int recyclerposition = recyclerView.getAdapter().getItemCount();
-            recyclerView.scrollToPosition(recyclerposition-1);
+            recyclerView.scrollToPosition(recyclerposition - 1);
             ChatView.setAdaptercontador(recyclerView.getAdapter().getItemCount());
-        }
-        catch (Exception e){
-            Toast.makeText(ChatViewActivity.this, "Banco de dados error: "+ e, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(ChatViewActivity.this, "Banco de dados error: " + e, Toast.LENGTH_SHORT).show();
         }
     }
 
     //INSERIR MENSAGENS
-    public void botaoenviarmensagem(View v){
+    public void botaoenviarmensagem(View v) {
         String mg = mensagem.getText().toString().trim();
 
-        if(mg!= "" && mg.length() > 0){enviaMensagem(mg);}else{
+        if (mg != "" && mg.length() > 0) {
+            enviaMensagem(mg);
+        } else {
             Toast.makeText(ChatViewActivity.this, "Campo mensagem vazio ;)", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void enviaMensagem(final String msg){
+    public void enviaMensagem(final String msg) {
         msg.trim();
 
         //ENVIAR DATA E HORA PARA O SERVERIDOR
@@ -396,7 +381,7 @@ public class ChatViewActivity extends BaseMenu {
         HoraH = horah.format(calendario.getTime());
         SimpleDateFormat horam = new SimpleDateFormat("mm");
         HoraM = horam.format(calendario.getTime());
-         SimpleDateFormat horaS = new SimpleDateFormat("ss");
+        SimpleDateFormat horaS = new SimpleDateFormat("ss");
         HoraS = horaS.format(calendario.getTime());
 
 
@@ -404,21 +389,22 @@ public class ChatViewActivity extends BaseMenu {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try{
-                            if(response.trim().equals("success")){
-                                Toast.makeText(ChatViewActivity.this, "Mensagem enviada à "+user, Toast.LENGTH_SHORT).show();
+                        try {
+                            if (response.trim().equals("success")) {
+                                Toast.makeText(ChatViewActivity.this, "Mensagem enviada à " + user, Toast.LENGTH_SHORT).show();
                                 String uniqueId = UUID.randomUUID().toString();
 
                                 //ENVIAR PARA O BANCO DE DADOS
-                                chatController.insereDado(uniqueId, codigo, user, msg, Profile.getUsername(), DataDia, DataMes, DataAno, HoraH, HoraM, HoraS);
+                                String internal = "1";
+                                chatController.insereDado(uniqueId, codigo, Profile.getUsername(), msg, user, DataDia, DataMes, DataAno, HoraH, HoraM, HoraS, internal);
                                 mensagem.setText("");
 
                                 //ATUALIZA O ADAPTADOR
                                 setaAdaptadorUsuarioDestino(user);
-                            }else{
+                            } else {
                                 Toast.makeText(ChatViewActivity.this, "Não foi possivel cadastrar a mensagem", Toast.LENGTH_SHORT).show();
                             }
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             Toast.makeText(ChatViewActivity.this, "Não foi possivel cadastrar a mensagem", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -428,23 +414,23 @@ public class ChatViewActivity extends BaseMenu {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(ChatViewActivity.this, "Não foi possivel cadastrar a mensagem", Toast.LENGTH_SHORT).show();
                     }
-                }){
+                }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 String meunomee;
                 meunomee = Profile.getUsername().toString();
-                Map<String,String> map = new HashMap<String,String>();
-                map.put("CODIGO",codigo);
-                map.put("MENSAGEM" ,msg);
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("CODIGO", codigo);
+                map.put("MENSAGEM", msg);
                 map.put("MEUNOME", meunomee);
-                map.put("NOMEOUTRO",user);
-                map.put("DIA",DataDia);
-                map.put("MES",DataMes);
-                map.put("ANO",DataAno);
-                map.put("HORAH",HoraH);
-                map.put("HORAM",HoraM);
-                map.put("HORAS",HoraS);
+                map.put("NOMEOUTRO", user);
+                map.put("DIA", DataDia);
+                map.put("MES", DataMes);
+                map.put("ANO", DataAno);
+                map.put("HORAH", HoraH);
+                map.put("HORAM", HoraM);
+                map.put("HORAS", HoraS);
                 return map;
             }
         };

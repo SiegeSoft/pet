@@ -1,7 +1,6 @@
 package pet.com.br.pet.adapters;
 
 import android.app.Activity;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
@@ -9,11 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,7 +17,6 @@ import java.util.List;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.models.ChatView;
-import pet.com.br.pet.models.Profile;
 
 /**
  * Created by iaco_ on 29/08/2016.
@@ -56,11 +51,6 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        //CALCULA A DIFERENCA DOS USUARIOS
-
-        final boolean isMe = Profile.getUsername() != null &&
-                Profile.getUsername().equals(chatView.get(position).getUsername());
-
         RelativeLayout.LayoutParams params =
                 new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -90,34 +80,34 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
             if (chatView.get(position).getDia().equals(chatView.get(position-1).getDia())
                     && chatView.get(position).getMes().equals(chatView.get(position-1).getMes())
                     && chatView.get(position).getAno().equals(chatView.get(position-1).getAno())) {
-                    holder.txtMsgDay.setVisibility(View.GONE);
-                    holder.cardView.setContentPadding(0,0,0,0);
-                } else {
-                    if(currentdataDia == Integer.parseInt(iDataDia)
-                            && currentdataMes == Integer.parseInt(iDataMes)
-                            && currentdataAno == Integer.parseInt(iDataAno)){
-                        holder.txtMsgDay.setVisibility(View.VISIBLE);
-                        holder.txtMsgDay.setText("HOJE");
-                        holder.cardView.setContentPadding(0,80,0,0);
-                        //previousdataDia = currentdataDia;
-                    }else if(currentdataDia == Integer.parseInt(iDataDia)- 1
-                            && currentdataMes == Integer.parseInt(iDataMes)- 1
-                            && currentdataAno == Integer.parseInt(iDataAno)- 1){
-                        holder.txtMsgDay.setVisibility(View.VISIBLE);
-                        holder.txtMsgDay.setText("ONTEM");
-                        holder.cardView.setContentPadding(0,80,0,0);
-                        //previousdataDia = currentdataDia;
-                    }else if(!(currentdataDia == Integer.parseInt(iDataDia)- 1 && currentdataDia == Integer.parseInt(iDataDia)
-                            && currentdataMes == Integer.parseInt(iDataMes)- 1 && currentdataMes == Integer.parseInt(iDataMes)
-                            && currentdataAno == Integer.parseInt(iDataAno)- 1 && currentdataAno == Integer.parseInt(iDataAno))){
-                        holder.txtMsgDay.setVisibility(View.VISIBLE);
-                        holder.txtMsgDay.setText(""+ currentdataDia+ "/" + currentdataMes + "/" + currentdataAno);
-                        holder.cardView.setContentPadding(0,80,0,0);
-                    }
+                holder.txtMsgDay.setVisibility(View.GONE);
+                holder.cardView.setContentPadding(0,0,0,0);
+            } else {
+                if(currentdataDia == Integer.parseInt(iDataDia)
+                        && currentdataMes == Integer.parseInt(iDataMes)
+                        && currentdataAno == Integer.parseInt(iDataAno)){
+                    holder.txtMsgDay.setVisibility(View.VISIBLE);
+                    holder.txtMsgDay.setText("HOJE");
+                    holder.cardView.setContentPadding(0,80,0,0);
                     //previousdataDia = currentdataDia;
+                }else if(currentdataDia == Integer.parseInt(iDataDia)- 1
+                        && currentdataMes == Integer.parseInt(iDataMes)- 1
+                        && currentdataAno == Integer.parseInt(iDataAno)- 1){
+                    holder.txtMsgDay.setVisibility(View.VISIBLE);
+                    holder.txtMsgDay.setText("ONTEM");
+                    holder.cardView.setContentPadding(0,80,0,0);
+                    //previousdataDia = currentdataDia;
+                }else if(!(currentdataDia == Integer.parseInt(iDataDia)- 1 && currentdataDia == Integer.parseInt(iDataDia)
+                        && currentdataMes == Integer.parseInt(iDataMes)- 1 && currentdataMes == Integer.parseInt(iDataMes)
+                        && currentdataAno == Integer.parseInt(iDataAno)- 1 && currentdataAno == Integer.parseInt(iDataAno))){
+                    holder.txtMsgDay.setVisibility(View.VISIBLE);
+                    holder.txtMsgDay.setText(""+ currentdataDia+ "/" + currentdataMes + "/" + currentdataAno);
+                    holder.cardView.setContentPadding(0,80,0,0);
                 }
+                //previousdataDia = currentdataDia;
+            }
         }else {
-;
+            ;
             if(currentdataDia == Integer.parseInt(iDataDia)
                     && currentdataMes == Integer.parseInt(iDataMes)
                     && currentdataAno == Integer.parseInt(iDataAno)){
@@ -140,39 +130,40 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ViewHo
         }
 
 
-            if (isMe) {
-                //Exibe a data da mensagem caso o dia for atual
+        if (chatView.get(position).getMsgInternal().equals("1")) {
+            //Exibe a data da mensagem caso o dia for atual
 
-                //VERIFICA SE É O SEU USUARIO
+            //VERIFICA SE É O SEU USUARIO
 
-                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                holder.cardView.setLayoutParams(params);
-                holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
-                holder.relativechatView.setBackgroundResource(R.drawable.inmessage);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.cardView.setLayoutParams(params);
+            holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
+            holder.relativechatView.setBackgroundResource(R.drawable.inmessage);
 
-                //Atribuir aos textviews
+            //Atribuir aos textviews
 
-                //holder.txtUserchat.setText(chatView.get(position).getUsername());
-                holder.txtUsermsg.setText(chatView.get(position).getMensagem());
-                holder.txthora.setText(""+chatView.get(position).getHorah()+":"+chatView.get(position).getHoram());
+            //holder.txtUserchat.setText(chatView.get(position).getUsername());
+            holder.txtUsermsg.setText(chatView.get(position).getMensagem());
+            holder.txthora.setText(""+chatView.get(position).getHorah()+":"+chatView.get(position).getHoram());
 
-            } else {
+        }
+        if(chatView.get(position).getMsgInternal().equals("0")){
 
-                //VERIFICA SE ESSE É O OUTRO USUARIO
+            //VERIFICA SE ESSE É O OUTRO USUARIO
 
-                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                holder.cardView.setLayoutParams(params);
-                holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
-                holder.relativechatView.setBackgroundResource(R.drawable.out_message_bg);
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            holder.cardView.setLayoutParams(params);
+            holder.cardView.setCardBackgroundColor(Color.TRANSPARENT);
+            holder.relativechatView.setBackgroundResource(R.drawable.out_message_bg);
 
-                //Atribuir aos textviews
+            //Atribuir aos textviews
 
-                //holder.txtUserchat.setText(chatView.get(position).getUsername());
-                holder.txtUsermsg.setText(chatView.get(position).getMensagem());
-                holder.txthora.setText(""+chatView.get(position).getHorah()+":"+chatView.get(position).getHoram());
-            }
+            //holder.txtUserchat.setText(chatView.get(position).getUsername());
+            holder.txtUsermsg.setText(chatView.get(position).getMensagem());
+            holder.txthora.setText(""+chatView.get(position).getHorah()+":"+chatView.get(position).getHoram());
+        }
 
-            }
+    }
 
 
     @Override

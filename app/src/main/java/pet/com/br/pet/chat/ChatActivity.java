@@ -26,12 +26,9 @@ import java.util.List;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.adapters.ChatAdapter;
-import pet.com.br.pet.adapters.ChatViewAdapter;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Chat;
-import pet.com.br.pet.models.ChatView;
 import pet.com.br.pet.models.Profile;
-import pet.com.br.pet.utils.AnunciosUtils;
 import pet.com.br.pet.utils.ChatUtils;
 
 /**
@@ -142,7 +139,7 @@ public class ChatActivity extends BaseMenu {
             try {
 
                 json = array.getJSONObject(i);
-                chat1.setId(json.getString(ChatUtils.TAG_ID));
+                //chat1.setId(json.getString(ChatUtils.TAG_ID));
                 chat1.setCodigo(json.getString(ChatUtils.TAG_CODIGO));
                 chat1.setUsername(json.getString(ChatUtils.TAG_USUARIO));
                 chat1.setUsernameDestino(json.getString(ChatUtils.TAG_USUARIODESTINO));
@@ -158,7 +155,7 @@ public class ChatActivity extends BaseMenu {
                 if(null != chaT.getUsername() && null != chat1.getUsername() && chaT.getUsername().toString() != "null"
                         && chat1.getUsername().toString() != "null" && chaT.getUsername().toString() != ""
                         && chat1.getUsername().toString() != ""){
-                    if(chaT.getUsername().equals(chat1.getUsername())){
+                    if(chaT.getCodigo().equals(chat1.getCodigo()) && chaT.getUsername().equals(chat1.getUsername())){
                         // Item exists
                         flag = true;
                         break;

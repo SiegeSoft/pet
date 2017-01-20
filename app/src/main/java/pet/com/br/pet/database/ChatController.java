@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pet.com.br.pet.models.ChatView;
+import pet.com.br.pet.models.Profile;
 
 /**
  * Created by iaco_ on 03/09/2016.
@@ -22,7 +23,7 @@ public class ChatController {
         banco = new ChatData(context);
     }
 
-    public String insereDado(String id, String codigo, String username, String mensagem, String username2, String dia, String mes, String ano, String horah, String horam, String horas) {
+    public String insereDado(String id, String codigo, String username, String mensagem, String username2, String dia, String mes, String ano, String horah, String horam, String horas, String internal) {
         ContentValues valores;
         long resultado;
 
@@ -39,7 +40,7 @@ public class ChatController {
         valores.put(ChatData.C_HORAH, horah);
         valores.put(ChatData.C_HORAM, horam);
         valores.put(ChatData.C_HORAS, horas);
-
+        valores.put(ChatData.C_INTERNAL, internal);//0 to false 1 to true
 
         resultado = db.insert(ChatData.TABLE_1, null, valores);
         db.close();
@@ -56,60 +57,58 @@ public class ChatController {
         ChatView chatview;
         List<ChatView> chatViewList = new ArrayList<ChatView>();
 
-        //QUERY DB
-        String[] campos = {banco.C_ID_1, banco.C_CODIGO_1, banco.C_USERNAME_1, banco.C_MSG_1, banco.C_USERNAME_2, banco.C_DIA, banco.C_MES, banco.C_ANO, banco.C_HORAH, banco.C_HORAM, banco.C_HORAS};
-        String whereClause = banco.C_USERNAME_1 + "=?" + " AND " + banco.C_CODIGO_1 + "=?";
-        String[] whereArgs = {Username, Codigo};
+        /*//QUERY DB
+        String[] campos = {banco.C_ID_1, banco.C_CODIGO_1, banco.C_USERNAME_1, banco.C_MSG_1, banco.C_USERNAME_2, banco.C_DIA, banco.C_MES, banco.C_ANO, banco.C_HORAH, banco.C_HORAM, banco.C_HORAS, banco.C_INTERNAL};
+        String whereClause = banco.C_USERNAME_1 + "=?" + " AND " + banco.C_USERNAME_2 + "=?" + " AND " + banco.C_CODIGO_1 + "=?";
+        String Meunome = Profile.getUsername();
+        String[] whereArgs = {String.valueOf(Meunome), String.valueOf(Username), String.valueOf(Codigo)};*/
+        //Log.e("LOG BANCO", "" + Username + " " + Codigo);
+        String sql = "SELECT _id, CODIGO, USERNAME, MENSAGEM, OTHERUSERNAME, DIA, MES, ANO, HORAH, HORAM, HORAS, INTERNAL FROM CHATMSG" +
+                " WHERE CODIGO='" + Codigo + "' AND USERNAME='" + Profile.getUsername() + "' AND OTHERUSERNAME ='" + Username + "'";
 
         db = banco.getWritableDatabase();
-        Cursor cursor = db.query(banco.TABLE_1, campos, whereClause, whereArgs, null, null, null);
+        //Cursor cursor = db.query(banco.TABLE_1, campos, whereClause, whereArgs, null, null, null);
+        Cursor cursor = db.rawQuery(sql, null);
 
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-                    chatview = new ChatView();
-                    chatview.setId(cursor.getString(0));
-                    chatview.setCodigo(cursor.getString(1));
-                    String name1, name2;
-                    name1 = cursor.getString(2);
-                    name2 = cursor.getString(4);
 
-                    //VERIFICA SE O SEU USUARIO É IGUAL AO USUARIO TEMPORARIO
-                    if (name1 == name2) {
+                        chatview = new ChatView();
+                        chatview.setId(cursor.getString(0));
+                        chatview.setCodigo(cursor.getString(1));
                         chatview.setUsername(cursor.getString(2));
-                    } else {
-                        chatview.setUsername(cursor.getString(4));
-                    }
-                    chatview.setMensagem(cursor.getString(3));
-                    chatview.setDia(cursor.getString(5));
-                    chatview.setMes(cursor.getString(6));
-                    chatview.setAno(cursor.getString(7));
-                    chatview.setHorah(cursor.getString(8));
-                    chatview.setHoram(cursor.getString(9));
-                    chatview.setHoras(cursor.getString(10));
+                        chatview.setMensagem(cursor.getString(3));
+                        chatview.setDia(cursor.getString(5));
+                        chatview.setMes(cursor.getString(6));
+                        chatview.setAno(cursor.getString(7));
+                        chatview.setHorah(cursor.getString(8));
+                        chatview.setHoram(cursor.getString(9));
+                        chatview.setHoras(cursor.getString(10));
+                        chatview.setMsgInternal(cursor.getString(11));
 
 
-                    boolean flag = false;
+                        boolean flag = false;
 
-                    //VERIFICA SE EXISTEM ID'S DUPLICADOS
-                    for (ChatView chat : chatViewList) {
-                        if (null != chat.getId() && null != chatview.getId()) {
-                            if (chat.getId().equals(chatview.getId())) {
-                                // Item exists
-                                flag = true;
-                                break;
+                        //VERIFICA SE EXISTEM ID'S DUPLICADOS
+                        for (ChatView chat : chatViewList) {
+                            if (null != chat.getId() && null != chatview.getId()) {
+                                if (chat.getId().equals(chatview.getId())) {
+                                    // Item exists
+                                    flag = true;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (!flag) {
-                        chatViewList.add(chatview);
-                    }
-                } while (cursor.moveToNext());
+                        if (!flag) {
+                            chatViewList.add(chatview);
+                        }
+                    } while (cursor.moveToNext()) ;
+                }
             }
+            db.close();
+            return chatViewList;
         }
-        db.close();
-        return chatViewList;
+
+
     }
-
-
-}
