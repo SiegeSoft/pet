@@ -144,9 +144,10 @@ public class ChatViewActivity extends BaseMenu {
         setaAdaptadorUsuarioDestino(user);
 
         //INICIA O PROGRAMA NA ULTIMA ATUALIZAÇÃO DO RECYCLERVIEW
-        /*int recyclerposition = recyclerView.getAdapter().getItemCount();
+        int recyclerposition = recyclerView.getAdapter().getItemCount();
         recyclerView.scrollToPosition(recyclerposition-1);
-        ChatView.setAdaptercontador(recyclerView.getAdapter().getItemCount());*/
+        ChatView.setAdaptercontador(recyclerView.getAdapter().getItemCount());
+
         getDataUsuarioDestino();
         if (scrollvalue == 0) {
             ScrollTextView scrolltext = (ScrollTextView) findViewById(R.id.scrolltext);
@@ -338,10 +339,10 @@ public class ChatViewActivity extends BaseMenu {
 
 
     //ATUALIZA O ADAPTADOR DAS MENSAGENS DE OUTROS USUARIOS
-    public void setaAdaptadorUsuarioDestino(String username) {
+    public void setaAdaptadorUsuarioDestino(String username){
         //Adding adapter to recyclerview
         try {
-            adapter = new ChatViewAdapter(chatController.carregaTodosDadosUsuarioDestino(username, codigo), this);
+            adapter = new ChatViewAdapter(chatController.carregaTodosDadosUsuarioDestino(username, codigo), ChatViewActivity.this);
             recyclerView.setAdapter(adapter);
             //This method runs in the same thread as the UI.
             adapter.notifyDataSetChanged();
@@ -352,6 +353,23 @@ public class ChatViewActivity extends BaseMenu {
             Toast.makeText(ChatViewActivity.this, "Banco de dados error: " + e, Toast.LENGTH_SHORT).show();
         }
     }
+
+    //ATUALIZA O ADAPTADOR DAS MENSAGENS DE OUTROS USUARIOS
+    public void setaAdaptadorUsuarioDestinoMsg(String username) {
+        //Adding adapter to recyclerview
+        try {
+            adapter = new ChatViewAdapter(chatController.carregaTodosDadosUsuarioDestino(username, codigo), ChatViewActivity.this);
+            recyclerView.setAdapter(adapter);
+            //This method runs in the same thread as the UI.
+            adapter.notifyDataSetChanged();
+            int recyclerposition = recyclerView.getAdapter().getItemCount();
+            recyclerView.scrollToPosition(recyclerposition - 1);
+            ChatView.setAdaptercontador(recyclerView.getAdapter().getItemCount());
+        } catch (Exception e) {
+            Toast.makeText(ChatViewActivity.this, "Banco de dados error: " + e, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     //INSERIR MENSAGENS
     public void botaoenviarmensagem(View v) {
@@ -400,7 +418,7 @@ public class ChatViewActivity extends BaseMenu {
                                 mensagem.setText("");
 
                                 //ATUALIZA O ADAPTADOR
-                                setaAdaptadorUsuarioDestino(user);
+                                setaAdaptadorUsuarioDestinoMsg(user);
                             } else {
                                 Toast.makeText(ChatViewActivity.this, "Não foi possivel cadastrar a mensagem", Toast.LENGTH_SHORT).show();
                             }
