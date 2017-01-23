@@ -36,6 +36,7 @@ import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 import pet.com.br.pet.chat.ChatActivity;
 import pet.com.br.pet.conta.Conta;
 import pet.com.br.pet.models.Profile;
+import pet.com.br.pet.negociacoes.MinhasDoacoesActivity;
 
 
 /**
@@ -78,7 +79,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
         _nomeDoUsuario = (TextView) findViewById(R.id.Text_MenuUser);
         _loginManager = new LoginManager(this);
         _userDetails = _loginManager.getUserDetails();
-        _nomeDoUsuario.setText(_userDetails.get(LoginManager.KEY_NAME));
+        _nomeDoUsuario.setText(_userDetails.get(LoginManager.KEY_NOME_EXIBICAO));
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         Menu nav_menu = navigationView.getMenu();
@@ -208,6 +209,11 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
                 finish();
                 break;
 
+            case R.id.sub_minhas_doacoes:
+                iniciaOutraActivity(MinhasDoacoesActivity.class);
+                fullLayout.closeDrawer(GravityCompat.START);
+                break;
+
             case R.id.sub_sair:
                 fullLayout.closeDrawer(GravityCompat.START);
                 _loginManager = new LoginManager(this);
@@ -248,11 +254,13 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
         }
         if(verNegociacoes){
             nav_menu.findItem(R.id.sub_chat).setVisible(verNegociacoes);
+            nav_menu.findItem(R.id.sub_minhas_doacoes).setVisible(verNegociacoes);
             nav_menu.findItem(R.id.sub_ver_negociacoes).setIcon(android.R.drawable.ic_menu_info_details);
             isSelectedNegociacoes = false;
         }
         if (!verNegociacoes) {
             nav_menu.findItem(R.id.sub_chat).setVisible(verNegociacoes);
+            nav_menu.findItem(R.id.sub_minhas_doacoes).setVisible(verNegociacoes);
             nav_menu.findItem(R.id.sub_ver_negociacoes).setIcon(android.R.drawable.ic_menu_add);
             isSelectedNegociacoes = true;
         }

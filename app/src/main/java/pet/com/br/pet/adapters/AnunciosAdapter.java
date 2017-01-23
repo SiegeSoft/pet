@@ -44,7 +44,6 @@ public class AnunciosAdapter extends RecyclerView.Adapter<AnunciosAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Anuncios anuncio = anuncios.get(position);
-
         holder.txtRaca.setText(anuncio.getRaca());
 
         //TODO: BASE 64 image
