@@ -19,7 +19,6 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-
     <permission
         android:name="pet.com.br.pet.database.provedor.permission.CHAT_PROVEDOR"
         android:protectionLevel="normal" />
@@ -35,32 +34,27 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".anuncio.AnunciosActivity"
-
             android:label="PetTrading"
             android:theme="@style/AppTheme.NoActionBar" />
-
-
         <activity
             android:name=".anuncio.CadastroAnuncioActivity"
             android:label="Cadastrar Anúncios"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden"/>
-
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".chat.ChatActivity"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".chat.ChatViewActivity"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".buscaRapida.BuscaRapidaActivity"
             android:label="PetTrading"
-            android:theme="@style/AppTheme.NoActionBar" >
-
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -83,9 +77,12 @@
             android:name=".conta.ContaStatus"
             android:label="Perfil"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".anuncio.InfoAnunciosActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".anuncio.InfoAnunciosActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity android:name=".negociacoes.MinhasDoacoesActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 

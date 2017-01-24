@@ -33,12 +33,17 @@
         android:title="Negociações">
         <menu>
             <item android:id="@+id/sub_ver_negociacoes" android:icon="@android:drawable/ic_menu_add"
-                android:title="Minhas adoações" />
+                android:title="Negociações" />
 
             <group android:checkableBehavior="single"
                 android:visible="false">
+
                 <item android:id="@+id/sub_chat" android:icon="@android:drawable/sym_action_email"
                     android:title="Chat"
+                    android:visible="false"/>
+
+                <item android:id="@+id/sub_minhas_doacoes" android:icon="@android:drawable/ic_menu_myplaces"
+                    android:title="Minhas doações"
                     android:visible="false"/>
             </group>
         </menu>
