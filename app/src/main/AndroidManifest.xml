@@ -70,9 +70,8 @@
         <activity
             android:name=".autentica.Login"
             android:label="PETTRADING"
-
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".buscaRapida.InfoBuscaRapidaActivity"
             android:theme="@style/AppTheme.NoActionBar" />

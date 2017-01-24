@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+       android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -91,155 +91,6 @@
     <!-- RELATIVE REGISTRO -->
 
     <RelativeLayout
-        android:id="@+id/relative_registro_fadeout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#86000000"
-        android:clickable="true"
-        android:onClick="OnClickFadeOut"
-        android:visibility="gone">
-
-
-        <!-- LAYOUT REGISTRAR -->
-
-        <RelativeLayout
-            android:id="@+id/relative_autenticacao_registro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="5dp"
-            android:background="#f1f1f1"
-            android:paddingBottom="5dp"
-            android:visibility="visible">
-
-            <ImageView
-                android:id="@+id/img_registrar_logo"
-                android:layout_width="90dp"
-                android:layout_height="80dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
-                android:src="@drawable/pettrading_img_logo" />
-
-            <TextView
-                android:id="@+id/registro_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="20dp"
-                android:text="Registro de Conta"
-                android:textColor="#000000"
-                android:textSize="23sp" />
-
-            <EditText
-                android:id="@+id/editText_registrar_login"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/registro_title"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/login_background"
-                android:hint="Escolher Usuario"
-                android:inputType="text"
-                android:lines="1"
-                android:maxLength="25"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textSize="21sp"
-                android:textStyle="normal"
-                android:typeface="sans" />
-
-            <EditText
-                android:id="@+id/editText_registrar_senha"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/editText_registrar_login"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/login_background"
-                android:hint="Escolher Senha"
-                android:inputType="textPassword|number"
-                android:lines="1"
-                android:maxLength="25"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textSize="21sp"
-                android:typeface="sans" />
-
-            <EditText
-                android:id="@+id/editText_registrar_nomeusuario"
-                android:layout_width="290dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/editText_registrar_senha"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/login_background"
-                android:hint="Escolher Nome Exibiçao"
-                android:inputType="text"
-                android:lines="1"
-                android:maxLength="30"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textSize="21sp"
-                android:textStyle="normal"
-                android:typeface="sans" />
-
-            <EditText
-                android:id="@+id/editText_registrar_email"
-                android:layout_width="290dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/editText_registrar_nomeusuario"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/login_background"
-                android:hint="Escolher Email (Opc)*"
-                android:inputType="text"
-                android:lines="1"
-                android:maxLength="25"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textSize="21sp"
-                android:textStyle="normal"
-                android:typeface="sans" />
-
-            <Button
-                android:id="@+id/botao_registrar"
-                android:layout_width="150dp"
-                android:layout_height="60dp"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/editText_registrar_email"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/botaologin_background"
-                android:onClick="BotaoaceitarRegistro"
-                android:text="Registrar"
-                android:textColor="#1a1919"
-                android:textSize="23sp" />
-
-            <Button
-                android:id="@+id/botao_registro_voltar"
-                android:layout_width="150dp"
-                android:layout_height="60dp"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/editText_registrar_email"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/botaologin_background"
-                android:onClick="BotaoRegistrarVoltar"
-                android:text="Voltar"
-                android:textColor="#1a1919"
-                android:textSize="23sp" />
-
-        </RelativeLayout>
-
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/relative_termo_contrato"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -287,6 +138,206 @@
             android:background="@drawable/botaologin_background"
             android:onClick="RejeitarTermoContrato"
             android:text="Rejeitar" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative_registro_fadeout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#86000000"
+        android:clickable="true"
+        android:onClick="OnClickFadeOut"
+        android:visibility="gone"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+        <!-- LAYOUT REGISTRAR -->
+
+        <RelativeLayout
+            android:id="@+id/relative_autenticacao_registro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:clickable="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="#f1f1f1"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/img_registrar_logo"
+                android:layout_width="90dp"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/pettrading_img_logo" />
+
+            <TextView
+                android:id="@+id/registro_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="20dp"
+                android:text="Registro de Conta"
+                android:textColor="#000000"
+                android:textSize="23sp" />
+
+            <EditText
+                android:id="@+id/editText_registrar_login"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/registro_title"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/login_background"
+                android:hint="Escolher Usuario"
+                android:inputType="text"
+                android:lines="1"
+                android:maxLength="25"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="21sp"
+                android:textStyle="normal"
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/registro_username_alert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="5dp"
+                android:layout_below="@+id/editText_registrar_login"
+                android:text=""
+                android:textColor="#ff0000"
+                android:visibility="gone"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/editText_registrar_senha"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/registro_username_alert"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="5dp"
+
+                android:background="@drawable/login_background"
+                android:hint="Escolher Senha"
+                android:inputType="textPassword|text"
+                android:lines="1"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:maxLength="25"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="21sp"
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/registro_password_alert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="5dp"
+                android:layout_below="@+id/editText_registrar_senha"
+                android:text=""
+                android:textColor="#ff0000"
+                android:visibility="gone"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/editText_registrar_nomeusuario"
+                android:layout_width="290dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/registro_password_alert"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/login_background"
+                android:hint="Escolher Nome de Exibiçao"
+                android:inputType="text"
+                android:lines="1"
+                android:maxLength="30"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="21sp"
+                android:textStyle="normal"
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/registro_nomeexibicao_alert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="5dp"
+                android:layout_below="@+id/editText_registrar_nomeusuario"
+                android:text=""
+                android:visibility="gone"
+                android:textColor="#ff0000"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/editText_registrar_email"
+                android:layout_width="290dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/registro_nomeexibicao_alert"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/login_background"
+                android:hint="Escolher Email (Opc)*"
+                android:inputType="text"
+                android:lines="1"
+                android:maxLength="25"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="21sp"
+                android:textStyle="normal"
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/registro_email_alert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="5dp"
+                android:layout_below="@+id/editText_registrar_email"
+                android:text=""
+                android:visibility="gone"
+                android:textColor="#ff0000"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/botao_registrar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/registro_email_alert"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="15dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/botaologin_background"
+                android:onClick="BotaoaceitarRegistro"
+                android:text="Registrar"
+                android:textColor="#1a1919"
+                android:textSize="23sp" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

@@ -10,6 +10,7 @@ public class UrlUtils {
     public static final String ANUNCIO_UNICO_URL = "http://kahvitech.com/pet/anuncioUnico.php?codigo=";
     public static final String LOGIN_URL = "http://kahvitech.com/pet/login.php";
     public static final String USER_DETAIL_URL = "http://kahvitech.com/pet/informacoesCurtidas.php?user=";
+    public static final String REGISTRO_URL = "http://kahvitech.com/pet/registro.php";
 
 
 
