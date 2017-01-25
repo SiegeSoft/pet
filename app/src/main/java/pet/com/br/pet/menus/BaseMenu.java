@@ -212,6 +212,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.sub_minhas_doacoes:
                 iniciaOutraActivity(MinhasDoacoesActivity.class);
                 fullLayout.closeDrawer(GravityCompat.START);
+                finish();
                 break;
 
             case R.id.sub_sair:
