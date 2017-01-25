@@ -120,7 +120,7 @@ public class MinhasDoacoesActivity extends BaseMenu {
                     float width = height / 3;
 
                     if(dX < 0){
-                        p.setColor(Color.parseColor("#D32F2F"));
+                        p.setColor(Color.parseColor("#f27979"));
                         RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
                         c.drawRect(background,p);
                         icon = BitmapFactory.decodeResource(getResources(), R.drawable.trash);
