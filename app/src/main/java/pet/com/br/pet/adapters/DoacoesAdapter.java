@@ -108,6 +108,7 @@ public class DoacoesAdapter extends RecyclerView.Adapter<DoacoesAdapter.ViewHold
 
     }
 
+
     private void deleteAnuncio(final String codigo){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlUtils.DELETAR_MEU_ANUNCIO+codigo,
                 new Response.Listener<String>() {

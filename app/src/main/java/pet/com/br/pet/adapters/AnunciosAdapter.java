@@ -77,6 +77,8 @@ public class AnunciosAdapter extends RecyclerView.Adapter<AnunciosAdapter.ViewHo
 
     }
 
+
+
     @Override
     public int getItemCount() {
         return anuncios.size();
