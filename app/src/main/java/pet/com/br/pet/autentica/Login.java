@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ import pet.com.br.pet.utils.UrlUtils;
  * Created by iaco_ on 15/08/2016.
  */
 public class Login extends AppCompatActivity {
-
+    Context context;
     private static final String LOGIN_URL = "http://kahvitech.com/pet/login.php";
     private static final String USER_DETAIL_URL = "http://kahvitech.com/pet/informacoesCurtidas.php?user=";
 
@@ -77,7 +78,7 @@ public class Login extends AppCompatActivity {
     //RELATIVES
     RelativeLayout relative_termo_contrato, relative_login_form;
 
-    public static RelativeLayout relative_fade;
+    RelativeLayout relative_fade;
 
     //registro
     EditText texto_cadastra_username;
@@ -137,12 +138,10 @@ public class Login extends AppCompatActivity {
         //RELATIVE
         RelativeLayout layoutregistro = (RelativeLayout) findViewById(R.id.relative_autenticacao_registro);
         if (!layoutregistro.hasOnClickListeners()) {
-            RelativeLayout relative_fadeout = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
-            relative_fadeout.setOnClickListener(new View.OnClickListener() {
+            relative_fade.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (fadeout_valueregistro == 1) {
-                        RelativeLayout relative_fade = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
                         relative_fade.setVisibility(View.GONE);
                         relative_login_form.setVisibility(View.VISIBLE);
                         fadeout_valueregistro = 0;
@@ -320,8 +319,7 @@ public class Login extends AppCompatActivity {
         if (termo_uso_value == 0) {
             relative_termo_contrato.setVisibility(View.VISIBLE);
             if (fadeout_valueregistro == 0) {
-                RelativeLayout relative_fadeout = (RelativeLayout) findViewById(R.id.relative_registro_fadeout);
-                relative_fadeout.setVisibility(View.VISIBLE);
+                relative_fade.setVisibility(View.VISIBLE);
                 // Creating a new RelativeLayout
                 fadeout_valueregistro = 1;
             }
@@ -377,6 +375,29 @@ public class Login extends AppCompatActivity {
         }
 
         enviaRegistro();
+    }
+
+    public void ConfirmaCodigoEmail(){
+        final EditText edittext = new EditText(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+        builder.setMessage("Ativação de conta!");
+        builder.setTitle("Enviamos uma mensagem para o seu email, copie e cole aqui o código enviado.");
+
+        builder.setView(edittext);
+
+        builder.setPositiveButton("Validar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                edittext.getText().toString();
+            }
+        });
+
+        builder.setNegativeButton("Reenviar Código", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // what ever you want to do with No option.
+            }
+        });
+
+        builder.show();
     }
 
     private boolean validateTextUsername() {
@@ -442,25 +463,68 @@ public class Login extends AppCompatActivity {
         registro_password_alerta.setVisibility(View.GONE);
         registro_nomeexibicao_alerta.setVisibility(View.GONE);
         registro_email_alerta.setVisibility(View.GONE);
+        loading = ProgressDialog.show(Login.this, "Aguarde...", "Carregando...", false, false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlUtils.REGISTRO_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            if (response.trim().equals("success")) {
-                                Toast.makeText(Login.this, "Usuario Cadastrado Com Sucesso", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(Login.this, "Não foi possivel cadastrar o seu usuário", Toast.LENGTH_SHORT).show();
+                            if(response.trim().equals("Usuario ja existente")){
+                                //Toast.makeText(Login.this, "Usuario já existente, tente outro", Toast.LENGTH_SHORT).show();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Nome de usuario já existente, tente outro.")
+                                        .setNegativeButton("Tentar Novamente", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
+                            }else if (response.trim().equals("Email ja existente")){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Email já existente, tente outro.")
+                                        .setNegativeButton("Tentar Novamente", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
+                            }else if (response.trim().equals("sucesso")) {
+                                //Toast.makeText(Login.this, "Usuario Cadastrado Com Sucesso", Toast.LENGTH_SHORT).show();
+                                texto_cadastra_username.setText("");
+                                texto_cadastra_senha.setText("");
+                                texto_cadastra_nomeexibicao.setText("");
+                                texto_cadastra_email.setText("");
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Usuario Cadastrado Com Sucesso.")
+                                        .setNegativeButton("Prosseguir", null)
+                                        .create()
+                                        .show();
+                                ConfirmaCodigoEmail();
+                                loading.dismiss();
+                                fadeout_valueregistro = 0;
+                                relative_fade.setVisibility(View.GONE);
+                                relative_login_form.setVisibility(View.VISIBLE);
+                            }else if(response.trim().equals("erro")) {
+                                //Toast.makeText(Login.this, "Não foi possivel cadastrar o seu usuário", Toast.LENGTH_SHORT).show();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Não foi possivel cadastrar o seu usuário.")
+                                        .setNegativeButton("Tentar Novamente", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
                             }
                         } catch (Exception e) {
-                            Toast.makeText(Login.this, "Erro ao Cadastrar Usuario", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(Login.this, "Erro ao cadastrar usuário", Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                            builder.setMessage("Erro ao cadastrar usuário.")
+                                    .setNegativeButton("Tentar Novamente", null)
+                                    .create()
+                                    .show();
+                            loading.dismiss();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Login.this, "Error ao conectar com o servidor", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Erro de conexão com o servidor", Toast.LENGTH_SHORT).show();
+                        loading.dismiss();
                     }
                 }) {
 
@@ -473,11 +537,11 @@ public class Login extends AppCompatActivity {
                 String email = texto_cadastra_email.getText().toString();
                 String telefone = "5513991571171";
 
-                map.put("USERNAME", username);
-                map.put("PASSWORD", password);
-                map.put("NOMEEXIBICAO", nomeexibicao);
-                map.put("EMAIL", email);
-                map.put("CELULAR", telefone);
+                map.put("USERNAME",String.valueOf(username));
+                map.put("PASSWORD", String.valueOf(password));
+                map.put("NOMEEXIBICAO", String.valueOf(nomeexibicao));
+                map.put("EMAIL", String.valueOf(email));
+                map.put("CELULAR", String.valueOf(telefone));
                 return map;
             }
         };
