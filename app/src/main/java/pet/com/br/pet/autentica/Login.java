@@ -88,6 +88,8 @@ public class Login extends AppCompatActivity {
     //EditText texto_cadastra_celular;
     TextView registro_username_alerta, registro_password_alerta, registro_nomeexibicao_alerta, registro_email_alerta;
 
+    boolean codigoconfirmacaobool = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,10 +203,79 @@ public class Login extends AppCompatActivity {
         relative_login_form.setVisibility(View.GONE);
     }
 
+    public void verificaLoginBlock() {
+        username = editTextUsername.getText().toString().trim();
+        password = editTextPassword.getText().toString().trim();
+        loading = ProgressDialog.show(this, "Aguarde...", "Validando Usuario...", false, false);
+        if(username.length() >= 7 && password.length() >= 7){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlUtils.VERIFICA_BLOCK,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            if (response.trim().equals("Falta confirmacao")) {
+                                loading.dismiss();
+                                ConfirmaCodigoEmail(username, password, "", UrlUtils.EMAIL_CONFIRMACAOREGISTRADO_URL);
+                            } else if (response.trim().equals("Usuario confirmado")) {
+                                loading.dismiss();
+                                solicitaLogin();
+                            }else if (response.trim().equals("login invalido")) {
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Login ou senha invalidos")
+                                        .setNegativeButton("Tentar novamente", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                            builder.setMessage("Erro na sincronização com servidor")
+                                    .setNegativeButton("Tentar novamente", null)
+                                    .create()
+                                    .show();
+                            loading.dismiss();
+
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        loading.dismiss();
+                        error.printStackTrace();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                        builder.setMessage("Erro na sincronização com servidor: " + error)
+                                .setNegativeButton("Tentar novamente", null)
+                                .create()
+                                .show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("username", username);
+                map.put("password", password);
+
+                return map;
+
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+        }else{
+            Toast.makeText(Login.this, "CAMPOS USUARIO E SENHA DEVEM CONTER 7 OU MAIS CARACTERES", Toast.LENGTH_LONG).show();
+            loading.dismiss();
+        }
+    }
+
+
     private void solicitaLogin() {
         username = editTextUsername.getText().toString().trim();
         password = editTextPassword.getText().toString().trim();
-        loading = ProgressDialog.show(this, "Aguarde...", "Carregando...", false, false);
+        loading = ProgressDialog.show(this, "Aguarde...", "Carregando Usuario...", false, false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -213,17 +284,16 @@ public class Login extends AppCompatActivity {
                         try {
                             if (response.trim().equals("success")) {
                                 getInfos();
+                                loading.dismiss();
+
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
                                 builder.setMessage("ERRO AO REALIZAR O LOGIN SENHA OU USUARIO INVALIDO")
                                         .setNegativeButton("Tentar novamente", null)
                                         .create()
                                         .show();
-                                loading.dismiss();
-
                             }
                         } catch (Exception e) {
-                            loading.dismiss();
                             e.printStackTrace();
                             AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
                             builder.setMessage("Erro na sincronização com servidor")
@@ -309,7 +379,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(View v) {
-        solicitaLogin();
+        verificaLoginBlock();
     }
 
 
@@ -343,8 +413,8 @@ public class Login extends AppCompatActivity {
     }
 
     public void BotaoaceitarRegistro(View v) {
-        if(texto_cadastra_username.length() == 0 && texto_cadastra_nomeexibicao.length() == 0 &&
-                texto_cadastra_senha.length() == 0 && texto_cadastra_email.length() == 0){
+        if (texto_cadastra_username.length() == 0 && texto_cadastra_nomeexibicao.length() == 0 &&
+                texto_cadastra_senha.length() == 0 && texto_cadastra_email.length() == 0) {
             registro_username_alerta.setText("(Preencha o campo corretamente)");
             registro_username_alerta.setVisibility(View.VISIBLE);
             registro_password_alerta.setText("(Preencha o campo corretamente)");
@@ -353,7 +423,7 @@ public class Login extends AppCompatActivity {
             registro_nomeexibicao_alerta.setVisibility(View.VISIBLE);
             registro_email_alerta.setText("(Preencha o campo corretamente)");
             registro_email_alerta.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             validateTextRegistro();
         }
     }
@@ -377,23 +447,27 @@ public class Login extends AppCompatActivity {
         enviaRegistro();
     }
 
-    public void ConfirmaCodigoEmail(){
+    public void ConfirmaCodigoEmail(final String usernametmp, final String passwordtemp, final String emailtmp, final String emailurl) {
+        enviaCodigoConfirmacao(usernametmp, passwordtemp, emailtmp, emailurl);
+    }
+    public void insereCodigoEmail(final String usernametmp, final String passwordtemp, final String emailtmp, final String emailurl){
         final EditText edittext = new EditText(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
-        builder.setMessage("Ativação de conta!");
-        builder.setTitle("Enviamos uma mensagem para o seu email, copie e cole aqui o código enviado.");
-
+        builder.setMessage("Digite o codigo enviado para o seu email abaixo");
+        builder.setTitle("Ativação de conta!");
         builder.setView(edittext);
 
         builder.setPositiveButton("Validar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                edittext.getText().toString();
+                String editstring = edittext.getText().toString();
+                validaConta(usernametmp, editstring);
             }
         });
 
         builder.setNegativeButton("Reenviar Código", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // what ever you want to do with No option.
+                ConfirmaCodigoEmail(usernametmp, passwordtemp, emailtmp, emailurl);
             }
         });
 
@@ -405,11 +479,11 @@ public class Login extends AppCompatActivity {
             registro_username_alerta.setText("(Preencha o campo corretamente)");
             registro_username_alerta.setVisibility(View.VISIBLE);
             return false;
-        } else if(texto_cadastra_username.length() > 0 && texto_cadastra_username.length() < 7) {
+        } else if (texto_cadastra_username.length() > 0 && texto_cadastra_username.length() < 7) {
             registro_username_alerta.setText("(O campo deve conter 7 ou mais digitos.)");
             registro_username_alerta.setVisibility(View.VISIBLE);
             return false;
-        } else if(texto_cadastra_username.length() >= 7){
+        } else if (texto_cadastra_username.length() >= 7) {
             registro_username_alerta.setVisibility(View.GONE);
         }
         return true;
@@ -424,7 +498,7 @@ public class Login extends AppCompatActivity {
             registro_password_alerta.setText("(O campo deve conter 7 ou mais digitos.)");
             registro_password_alerta.setVisibility(View.VISIBLE);
             return false;
-        } else if(texto_cadastra_senha.length() >=7){
+        } else if (texto_cadastra_senha.length() >= 7) {
             registro_password_alerta.setVisibility(View.GONE);
         }
         return true;
@@ -439,7 +513,7 @@ public class Login extends AppCompatActivity {
             registro_nomeexibicao_alerta.setText("(O campo deve conter 7 ou mais digitos.)");
             registro_nomeexibicao_alerta.setVisibility(View.VISIBLE);
             return false;
-        } else if(texto_cadastra_nomeexibicao.length() >= 7){
+        } else if (texto_cadastra_nomeexibicao.length() >= 7) {
             registro_nomeexibicao_alerta.setVisibility(View.GONE);
         }
         return true;
@@ -469,7 +543,7 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            if(response.trim().equals("Usuario ja existente")){
+                            if (response.trim().equals("Usuario ja existente")) {
                                 //Toast.makeText(Login.this, "Usuario já existente, tente outro", Toast.LENGTH_SHORT).show();
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
                                 builder.setMessage("Nome de usuario já existente, tente outro.")
@@ -477,30 +551,25 @@ public class Login extends AppCompatActivity {
                                         .create()
                                         .show();
                                 loading.dismiss();
-                            }else if (response.trim().equals("Email ja existente")){
+                            } else if (response.trim().equals("Email ja existente")) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
                                 builder.setMessage("Email já existente, tente outro.")
                                         .setNegativeButton("Tentar Novamente", null)
                                         .create()
                                         .show();
                                 loading.dismiss();
-                            }else if (response.trim().equals("sucesso")) {
+                            } else if (response.trim().equals("sucesso")) {
                                 //Toast.makeText(Login.this, "Usuario Cadastrado Com Sucesso", Toast.LENGTH_SHORT).show();
-                                texto_cadastra_username.setText("");
-                                texto_cadastra_senha.setText("");
-                                texto_cadastra_nomeexibicao.setText("");
-                                texto_cadastra_email.setText("");
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
                                 builder.setMessage("Usuario Cadastrado Com Sucesso.")
                                         .setNegativeButton("Prosseguir", null)
                                         .create()
                                         .show();
-                                ConfirmaCodigoEmail();
+
                                 loading.dismiss();
-                                fadeout_valueregistro = 0;
-                                relative_fade.setVisibility(View.GONE);
-                                relative_login_form.setVisibility(View.VISIBLE);
-                            }else if(response.trim().equals("erro")) {
+                                ConfirmaCodigoEmail(texto_cadastra_username.getText().toString(), "", texto_cadastra_email.getText().toString(), UrlUtils.EMAIL_CONFIRMACAO_URL);
+
+                            } else if (response.trim().equals("erro")) {
                                 //Toast.makeText(Login.this, "Não foi possivel cadastrar o seu usuário", Toast.LENGTH_SHORT).show();
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
                                 builder.setMessage("Não foi possivel cadastrar o seu usuário.")
@@ -537,7 +606,7 @@ public class Login extends AppCompatActivity {
                 String email = texto_cadastra_email.getText().toString();
                 String telefone = "5513991571171";
 
-                map.put("USERNAME",String.valueOf(username));
+                map.put("USERNAME", String.valueOf(username));
                 map.put("PASSWORD", String.valueOf(password));
                 map.put("NOMEEXIBICAO", String.valueOf(nomeexibicao));
                 map.put("EMAIL", String.valueOf(email));
@@ -548,5 +617,160 @@ public class Login extends AppCompatActivity {
         RequestQueue requestQueueNew = Volley.newRequestQueue(Login.this);
         requestQueueNew.add(stringRequest);
     }
+
+    //ENVIAREGISTRO
+    public void enviaCodigoConfirmacao(final String usernametmp, final String passwordtemp, final String emailtmp, final String emailurl) {
+        loading = ProgressDialog.show(Login.this, "Aguarde...", "Carregando...", false, false);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, emailurl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            if (response.trim().equals("Email enviado com sucesso")) {
+                                //Toast.makeText(Login.this, "Usuario já existente, tente outro", Toast.LENGTH_SHORT).show();
+                                /*AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Obrigado por confirmar a sua conta!")
+                                        .setNegativeButton("Continuar", null)
+                                        .create()
+                                        .show();*/
+                                loading.dismiss();
+                                insereCodigoEmail(usernametmp, passwordtemp, emailtmp, emailurl);
+                            } else if (response.trim().equals("Falha ao enviar o email")) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Não foi possível enviarmos o código de validação, tente novamente.")
+                                        .setNegativeButton("Tentar Novamente", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
+                            } else if (response.trim().equals("erro na comunicacao")) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Erro de comunicão com o banco de dados.")
+                                        .setNegativeButton("Tentar Novamente", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
+                            }else if (response.trim().equals("login invalido")){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Usuario ou senha inválidos")
+                                        .setNegativeButton("Tentar Novamente", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
+                            }
+                        } catch (Exception e) {
+                            //Toast.makeText(Login.this, "Erro ao cadastrar usuário", Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                            builder.setMessage("Erro ao enviar email.")
+                                    .setNegativeButton("Tentar Novamente", null)
+                                    .create()
+                                    .show();
+                            loading.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Login.this, "Erro de conexão com o servidor", Toast.LENGTH_SHORT).show();
+                        loading.dismiss();
+                        codigoconfirmacaobool = false;
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                if (emailurl == UrlUtils.EMAIL_CONFIRMACAOREGISTRADO_URL) {
+                    map.put("username", String.valueOf(usernametmp));
+                    map.put("password", String.valueOf(passwordtemp));
+                }else
+                if (emailurl == UrlUtils.EMAIL_CONFIRMACAO_URL) {
+                    map.put("username", String.valueOf(usernametmp));
+                    map.put("email", String.valueOf(emailtmp));
+                }
+                return map;
+            }
+        };
+        RequestQueue requestQueueNew = Volley.newRequestQueue(Login.this);
+        requestQueueNew.add(stringRequest);
+    }
+
+
+    private void validaConta(final String user, final String codigo) {
+        loading = ProgressDialog.show(this, "Aguarde...", "Carregando...", false, false);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlUtils.VALIDA_CODIGO_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            if (response.trim().equals("codigo validado com sucesso")) {
+                                fadeout_valueregistro = 0;
+                                relative_fade.setVisibility(View.GONE);
+                                relative_login_form.setVisibility(View.VISIBLE);
+                                texto_cadastra_username.setText("");
+                                texto_cadastra_senha.setText("");
+                                texto_cadastra_nomeexibicao.setText("");
+                                texto_cadastra_email.setText("");
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setTitle("Usuário validado com sucesso!");
+                                builder.setMessage("Por favor, efetue o seu login")
+                                        .setNegativeButton("Prosseguir", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
+
+                            } else if (response.trim().equals("codigo invalido")) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Código inválido")
+                                        .setNegativeButton("Tentar novamente", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                builder.setMessage("Erro durante a validação do código")
+                                        .setNegativeButton("Tentar novamente", null)
+                                        .create()
+                                        .show();
+                                loading.dismiss();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                            builder.setMessage("Erro na sincronização com servidor")
+                                    .setNegativeButton("Tentar novamente", null)
+                                    .create()
+                                    .show();
+                            loading.dismiss();
+
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                        builder.setMessage("Erro na sincronização com servidor: " + error)
+                                .setNegativeButton("Tentar novamente", null)
+                                .create()
+                                .show();
+                        loading.dismiss();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("username", user);
+                map.put("codigo", codigo);
+                return map;
+
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
 }
 

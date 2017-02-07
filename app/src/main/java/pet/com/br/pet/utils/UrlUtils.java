@@ -11,7 +11,10 @@ public class UrlUtils {
     public static final String LOGIN_URL = "http://kahvitech.com/pet/login.php";
     public static final String USER_DETAIL_URL = "http://kahvitech.com/pet/informacoesCurtidas.php?user=";
     public static final String REGISTRO_URL = "http://kahvitech.com/pet/registro.php";
-
+    public static final String EMAIL_CONFIRMACAO_URL = "http://kahvitech.com/pet/sendEmailConfirmationCode.php";
+    public static final String EMAIL_CONFIRMACAOREGISTRADO_URL = "http://kahvitech.com/pet/sendEmailConfirmationCodeRegistrado.php";
+    public static final String VALIDA_CODIGO_URL = "http://kahvitech.com/pet/ativaUsuario.php";
+    public static final String VERIFICA_BLOCK = "http://kahvitech.com/pet/verificaBlock.php";
 
 
 
