@@ -322,7 +322,28 @@ public class CadastroAnuncioActivity extends BaseMenu {
             startActivityForResult(intent, SELECT_PICTURE);
         } else if (valor_img_view == 1 && Integer.parseInt(Profile.getDogCoin()) >= 90) {
             showDogCoinImage();
+        }else{
+
         }
+    }
+
+    public void ImageException(){
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("OoOps sem DogCoin's =/");
+        builder.setMessage("Deseja adiquirir mais moedas?");
+        builder.setPositiveButton("Mais Moedas", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, final int id) {
+                dialog.cancel();
+            }
+        });
+
     }
 
     public void showDogCoinImage() {
@@ -685,6 +706,22 @@ public class CadastroAnuncioActivity extends BaseMenu {
                         showImageWidthException();
                     }
                 }
+            } catch(NullPointerException e)
+            {
+                Log.e("Error na captura", "CODE: " + e);
+                if(bitmap.getWidth()>1000 && bitmap.getHeight() < 1000) {
+                    newWidth = 1000;
+                    newHeight = bitmap.getHeight();
+                    showImageWidthException();
+                }else if(bitmap.getWidth()<1000 && bitmap.getHeight() > 1000){
+                    newWidth = bitmap.getWidth();
+                    newHeight = 1000;
+                    showImageWidthException();
+                }else if(bitmap.getWidth()>1000 && bitmap.getHeight() > 1000){
+                    newWidth = 1000;
+                    newHeight = 1000;
+                    showImageWidthException();
+                }
             } catch (Exception e) {
                 Log.e("Error na captura", "CODE: " + e);
                 if(bitmap.getWidth()>1000 && bitmap.getHeight() < 1000) {
@@ -739,6 +776,22 @@ public class CadastroAnuncioActivity extends BaseMenu {
                         newHeight = 1000;
                         showImageWidthException();
                     }
+                }
+            } catch(NullPointerException e)
+            {
+                Log.e("Error na captura", "CODE: " + e);
+                if(bitmap2.getWidth()>1000 && bitmap2.getHeight() < 1000) {
+                    newWidth = 1000;
+                    newHeight = bitmap2.getHeight();
+                    showImageWidthException();
+                }else if(bitmap2.getWidth()<1000 && bitmap2.getHeight() > 1000){
+                    newWidth = bitmap2.getWidth();
+                    newHeight = 1000;
+                    showImageWidthException();
+                }else if(bitmap2.getWidth()>1000 && bitmap2.getHeight() > 1000){
+                    newWidth = 1000;
+                    newHeight = 1000;
+                    showImageWidthException();
                 }
             } catch (Exception e) {
                 Log.e("Error na captura", "CODE: " + e);

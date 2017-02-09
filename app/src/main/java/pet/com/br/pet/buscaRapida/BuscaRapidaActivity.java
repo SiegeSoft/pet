@@ -1,5 +1,7 @@
 /**
  * Created by iaco_ on 24/08/2016.
+ * <p>
+ * Edit by rafael on 30/08/2016.
  */
 
 /**
@@ -27,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -35,13 +36,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -51,7 +49,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.autentica.Login;
@@ -155,9 +152,11 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             _arrayIds.addAll(_arrayLikes);
             _arrayIds.addAll(_arrayDislikes);
         }
-
-        askForPermission(Manifest.permission.ACCESS_FINE_LOCATION,LOCATION);
-
+        try {
+            askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION);
+        } catch (Exception e) {
+            Log.e("Error ", "" + e);
+        }
         _pets = (ImageView) findViewById(R.id.pets);
         _textOops = (TextView) findViewById(R.id.txtViewOops);
         _textConfings = (TextView) findViewById(R.id.txtViewConfings);
@@ -167,11 +166,11 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         _flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         _buscaRapidaLista = new ArrayList<BuscaRapida>();
 
-        for(String likerr: _arrayLikes){
+        for (String likerr : _arrayLikes) {
             Log.e("Primeiro", likerr);
         }
 
-        for(String sil: _arrayDislikes){
+        for (String sil : _arrayDislikes) {
             Log.e("Primeiro dis", sil);
         }
 
@@ -212,15 +211,15 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                Log.e("No repeat times", ""+_noRepeatTimes);
+                Log.e("No repeat times", "" + _noRepeatTimes);
                 if (_noRepeatTimes < 5) {
                     if (itemsInAdapter == 0) {
                         getData();
                         _noRepeatTimes++;
                     }
-                } else{
+                } else {
                     setPetsVisibleImage();
-                    if(_enviaLikesDislikes){
+                    if (_enviaLikesDislikes) {
                         _enviaLikesDislikes = false;
 
                     }
@@ -246,13 +245,13 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
 
     }
 
-    private void setPetsVisibleImage(){
+    private void setPetsVisibleImage() {
         _pets.setVisibility(View.VISIBLE);
         _textOops.setVisibility(View.VISIBLE);
         _textConfings.setVisibility(View.VISIBLE);
     }
 
-    private void setAnunciosVisibleImage(){
+    private void setAnunciosVisibleImage() {
         _pets.setVisibility(View.GONE);
         _textOops.setVisibility(View.GONE);
         _textConfings.setVisibility(View.GONE);
@@ -312,7 +311,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         return super.onOptionsItemSelected(item);
     }
 
-    private void dialogSettings(final Activity activity){
+    private void dialogSettings(final Activity activity) {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.activity_settings_busca_rapida, null);
         final SeekBar seekBar = (SeekBar) alertLayout.findViewById(R.id.distanceBar);
@@ -325,19 +324,19 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 txtDistance.setText(String.valueOf(progress));
 
-                if(progress < 30){
+                if (progress < 30) {
                     txtCity.setText(R.string.neighborhood);
 
-                } else if(progress >= 30 && progress < 50){
+                } else if (progress >= 30 && progress < 50) {
                     txtCity.setText(R.string.city);
 
-                } else if(progress >= 50 && progress < 100){
+                } else if (progress >= 50 && progress < 100) {
                     txtCity.setText(R.string.more_city);
 
-                } else if(progress >= 100 && progress < 200) {
+                } else if (progress >= 100 && progress < 200) {
                     txtCity.setText(R.string.state);
 
-                } else if(progress >= 200 && progress <= 400) {
+                } else if (progress >= 200 && progress <= 400) {
                     txtCity.setText(R.string.more_state);
 
                 } else {
@@ -388,15 +387,15 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     private void getData() {
         try {
             requestQueue.add(getDataFromServer(_getLatitude, _getLongitude, _distance));
-        }catch(NullPointerException error){
+        } catch (NullPointerException error) {
             setPetsVisibleImage();
         }
     }
 
-    private String transformLikes(ArrayList<String> likes){
+    private String transformLikes(ArrayList<String> likes) {
         String likesFormatted = "";
 
-        for(String like : likes){
+        for (String like : likes) {
             likesFormatted = like + "@" + likesFormatted;
         }
 
@@ -404,27 +403,27 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     }
 
 
-    private String transformDislikes(ArrayList<String> dislikes){
+    private String transformDislikes(ArrayList<String> dislikes) {
         String dislikesFormatted = "";
 
-        for(String dislike : dislikes){
+        for (String dislike : dislikes) {
             dislikesFormatted = dislike + "@" + dislikesFormatted;
         }
 
         return dislikesFormatted;
     }
 
-    private void sendLikesAndDislikes(){
+    private void sendLikesAndDislikes() {
         requestQueue.add(sendInformationsLikes());
     }
 
-    private JsonArrayRequest sendInformationsLikes(){
+    private JsonArrayRequest sendInformationsLikes() {
         final String like = transformLikes(_arrayLikes);
         final String dislike = transformDislikes(_arrayDislikes);
         Log.e("likes", like);
         Log.e("dislike", dislike);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(UrlUtils.ATUALIZA_CURTIDA+like+"&DISLIKE="+dislike+"&USERNAME="+Usuario.getUserName(),
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(UrlUtils.ATUALIZA_CURTIDA + like + "&DISLIKE=" + dislike + "&USERNAME=" + Usuario.getUserName(),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -452,7 +451,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         progressBar.setVisibility(View.VISIBLE);
         setProgressBarIndeterminateVisibility(true);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(UrlUtils.LOCALIZACAO_URL+latitude+"&LON="+longitude+"&DISTANCE="+String.valueOf(distance),
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(UrlUtils.LOCALIZACAO_URL + latitude + "&LON=" + longitude + "&DISTANCE=" + String.valueOf(distance),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -507,7 +506,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         for (int x = 0; x < _arrayIds.size(); x++) {
 
             if (_arrayIds.get(x).equals(buscaRapida.getId())) {
-                Log.e("IS FIRST EQUALS: ",""+_arrayIds.get(x) +"busca rapida id"+buscaRapida.getId());
+                Log.e("IS FIRST EQUALS: ", "" + _arrayIds.get(x) + "busca rapida id" + buscaRapida.getId());
                 equals = true;
                 _noRepeatTimes++;
                 break;
@@ -517,7 +516,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         if (!equals) {
             _buscaRapidaLista.add(buscaRapida);
             _noRepeatTimes--;
-            Log.e("ADICIONADO: ",""+buscaRapida.getId());
+            Log.e("ADICIONADO: ", "" + buscaRapida.getId());
         }
 
 
@@ -527,7 +526,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
         if (!_buscaRapidaLista.get(_buscaRapidaLista.size() - 1).getId().equals(buscaRapida.getId())) {
             for (int x = 0; x < _arrayIds.size(); x++) {
                 if (_arrayIds.get(x).equals(buscaRapida.getId())) {
-                    Log.e("IS EQUALS: ",""+_arrayIds.get(x) +"busca rapida id"+buscaRapida.getId());
+                    Log.e("IS EQUALS: ", "" + _arrayIds.get(x) + "busca rapida id" + buscaRapida.getId());
                     equals = true;
                     _noRepeatTimes++;
                     break;
@@ -537,7 +536,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             if (!equals) {
                 _buscaRapidaLista.add(buscaRapida);
                 _noRepeatTimes--;
-                Log.e("ADICIONADO: ",""+buscaRapida.getId());
+                Log.e("ADICIONADO: ", "" + buscaRapida.getId());
             }
 
         }
@@ -628,7 +627,11 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             }
         } else {
             //Toast.makeText(this, "" + permission + " permissão já garantida.", Toast.LENGTH_SHORT).show();
-            statusCheck();
+            try {
+                statusCheck();
+            } catch (Exception e) {
+                statusCheck();
+            }
         }
     }
 
@@ -641,7 +644,7 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                 case 1:
                     try {
                         statusCheck();
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         statusCheck();
                     }
                     break;
@@ -650,12 +653,13 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
     }
 
     public void statusCheck() {
-        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        try{
+        try {
+            LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
             if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 showGPSDiabledDialog();
             }
-            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 LocationDirector myloc = new LocationDirector(this);
 
                 if (myloc.canGetLocation) {
@@ -671,14 +675,14 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
                 }
             }
 
-        }catch (Exception e){
-            askForPermission(Manifest.permission.ACCESS_FINE_LOCATION,LOCATION);
+        } catch (Exception e) {
+            askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION);
         }
     }
 
     //VERIFICA SE O GPS ESTÁ DESATIVADO.
     private void showGPSDiabledDialog() {
-        try{
+        try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
             builder.setTitle("GPS Desativado!");
@@ -686,16 +690,26 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             builder.setPositiveButton("Ativar GPS", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), GPS_ENABLE_REQUEST);
                 }
             });
             mGPSDialog = builder.create();
             mGPSDialog.show();
-        }catch (Exception e){
+        } catch (Exception e) {
             showGPSDiabledDialog();
         }
 
     }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if ( mGPSDialog!=null && mGPSDialog.isShowing() ){
+            mGPSDialog.cancel();
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -721,12 +735,11 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             //else {
             //  super.onActivityResult(requestCode, resultCode, data);
             //}
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("ALERTA DE ERRO A.R:", "REFAZNEDO LOGICA... ");
             statusCheck();
         }
     }
-
 
 
 }
