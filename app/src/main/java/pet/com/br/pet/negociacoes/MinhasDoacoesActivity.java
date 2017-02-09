@@ -63,7 +63,6 @@ public class MinhasDoacoesActivity extends BaseMenu {
     private LoginManager _loginManager;
     private HashMap<String, String> _userDetails;
     private Paint p = new Paint();
-    private DoacoesAdapter doacoesAdapter;
     private Context context;
 
     @Override

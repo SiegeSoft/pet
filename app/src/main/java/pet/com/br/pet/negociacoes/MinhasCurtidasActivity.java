@@ -43,15 +43,17 @@ import java.util.Map;
 import java.util.Set;
 
 import pet.com.br.pet.R;
+import pet.com.br.pet.adapters.CurtidasAdapter;
 import pet.com.br.pet.adapters.DoacoesAdapter;
 import pet.com.br.pet.autentica.LoginManager;
+import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Doacoes;
 import pet.com.br.pet.models.Usuario;
 import pet.com.br.pet.utils.AnunciosUtils;
 import pet.com.br.pet.utils.TagUtils;
 import pet.com.br.pet.utils.UrlUtils;
 
-public class MinhasCurtidasActivity extends AppCompatActivity {
+public class MinhasCurtidasActivity extends BaseMenu {
 
 
     private RecyclerView recyclerView;
@@ -77,7 +79,7 @@ public class MinhasCurtidasActivity extends AppCompatActivity {
         _loginManager = new LoginManager(this);
         _userDetails = _loginManager.getUserDetails();
 
-        getLikes();
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
@@ -85,11 +87,11 @@ public class MinhasCurtidasActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         _doacoes = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(this);
+        getLikes();
 
-        getData(_userDetails.get(LoginManager.KEY_NAME));
 
         //initializing our adapter
-        adapter = new DoacoesAdapter(_doacoes, this);
+        adapter = new CurtidasAdapter(_doacoes, this);
 
         //Adding adapter to recyclerview
         recyclerView.setAdapter(adapter);
@@ -173,19 +175,19 @@ public class MinhasCurtidasActivity extends AppCompatActivity {
         hashSetLikes.addAll(arrayLikes);
         arrayLikes.clear();
         arrayLikes.addAll(hashSetLikes);
-        for(int a=0; a< arrayLikes.size(); a++){
+        Log.e("Arrayx", ""+arrayLikes.size());
+        for(int a=0; a<arrayLikes.size(); a++){
+            getData(arrayLikes.get(a));
             Log.e("Minhas curtidas", ""+arrayLikes.get(a));
         }
     }
 
-
-
     private void getData(String id){
-        requestQueue.add(getInfos(UrlUtils.ANUNCIO_ID + id));
+        requestQueue.add(getInfos(UrlUtils.ANUNCIO_ID +""+ id));
     }
 
 
-    private JsonArrayRequest getInfos(String url) {
+    private JsonArrayRequest getInfos(final String url) {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         progressBar.setVisibility(View.VISIBLE);
         setProgressBarIndeterminateVisibility(true);
@@ -194,6 +196,7 @@ public class MinhasCurtidasActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         parseData(response);
+                        Log.e("Passou aqui", ""+url);
                         progressBar.setVisibility(View.GONE);
                     }
                 },

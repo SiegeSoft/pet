@@ -101,8 +101,6 @@ public class DoacoesAdapter extends RecyclerView.Adapter<DoacoesAdapter.ViewHold
                         })
                         .create()
                         .show();
-
-
             }
         });
 

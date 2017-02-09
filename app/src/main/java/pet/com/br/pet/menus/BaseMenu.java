@@ -36,6 +36,7 @@ import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
 import pet.com.br.pet.chat.ChatActivity;
 import pet.com.br.pet.conta.Conta;
 import pet.com.br.pet.models.Profile;
+import pet.com.br.pet.negociacoes.MinhasCurtidasActivity;
 import pet.com.br.pet.negociacoes.MinhasDoacoesActivity;
 
 
@@ -203,6 +204,13 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
                 finish();
                 break;
 
+
+            case R.id.sub_curtidas:
+                iniciaOutraActivity(MinhasCurtidasActivity.class);
+                fullLayout.closeDrawer(GravityCompat.START);
+                finish();
+                break;
+
             case R.id.sub_conta:
                 iniciaOutraActivity(Conta.class);
                 fullLayout.closeDrawer(GravityCompat.START);
@@ -244,6 +252,8 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
         nav_menu.findItem(R.id.sub_pesq_anuncio).setVisible(pesquisar);
         nav_menu.findItem(R.id.sub_ins_anuncio).setVisible(inserir);
         nav_menu.findItem(R.id.sub_buscarapida).setVisible(buscaRapida);
+        nav_menu.findItem(R.id.sub_curtidas).setVisible(pesquisar);
+
 
         if (verAnuncio) {
             nav_menu.findItem(R.id.sub_ver_anuncio).setIcon(android.R.drawable.ic_menu_info_details);
