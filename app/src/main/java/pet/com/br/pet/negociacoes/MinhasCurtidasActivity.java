@@ -1,6 +1,5 @@
 package pet.com.br.pet.negociacoes;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,16 +10,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -38,21 +35,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.adapters.DoacoesAdapter;
 import pet.com.br.pet.autentica.LoginManager;
-import pet.com.br.pet.buscaRapida.BuscaRapidaActivity;
-import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Doacoes;
+import pet.com.br.pet.models.Usuario;
 import pet.com.br.pet.utils.AnunciosUtils;
 import pet.com.br.pet.utils.TagUtils;
 import pet.com.br.pet.utils.UrlUtils;
 
-public class MinhasDoacoesActivity extends BaseMenu {
+public class MinhasCurtidasActivity extends AppCompatActivity {
 
 
     private RecyclerView recyclerView;
@@ -63,16 +62,22 @@ public class MinhasDoacoesActivity extends BaseMenu {
     private LoginManager _loginManager;
     private HashMap<String, String> _userDetails;
     private Paint p = new Paint();
-    private DoacoesAdapter doacoesAdapter;
     private Context context;
+    private ArrayList<String> arrayLikes = new ArrayList<>();
+    private ArrayList<String> arrayDislikes = new ArrayList<>();
+    private Set<String> hashSetLikes;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_minhas_adoacoes);
+        setContentView(R.layout.activity_minhas_curtidas);
+
         context = getApplicationContext();
         _loginManager = new LoginManager(this);
         _userDetails = _loginManager.getUserDetails();
+
+        getLikes();
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
@@ -89,7 +94,9 @@ public class MinhasDoacoesActivity extends BaseMenu {
         //Adding adapter to recyclerview
         recyclerView.setAdapter(adapter);
         swipeDeleteRecycler();
+
     }
+
 
     private void swipeDeleteRecycler(){
 
@@ -135,11 +142,10 @@ public class MinhasDoacoesActivity extends BaseMenu {
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-
     private void deleteSwipDoacao(final String codigo, final int position){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setMessage("Você deseja deletar seu anuncio de doação?")
+        builder.setMessage("Você deseja apagar esse like?")
                 .setNegativeButton("Não!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -151,92 +157,31 @@ public class MinhasDoacoesActivity extends BaseMenu {
                 .setPositiveButton("Sim, desejo deletar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        deleteAnuncio(codigo, position);
+                        //deleteAnuncio(codigo, position);
                     }
                 })
                 .create()
                 .show();
     }
 
-
-
-    private void deleteAnuncio(final String codigo, final int position){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlUtils.DELETAR_MEU_ANUNCIO+codigo,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-
-                            setMessage(position);
-
-                        } catch (Exception exception) {
-                            Toast.makeText(context, "Erro ao deletar ", Toast.LENGTH_SHORT).show();
-                            Log.e("Error: ", ""+exception.getMessage());
-                        }
-                    }
-
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setMessage("Erro na sincronização com servidor ")
-                                .setNegativeButton("Tentar novamente", null)
-                                .create()
-                                .show();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put(TagUtils.TAG_COD, codigo);
-                return map;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        requestQueue.add(stringRequest);
-    }
-
-    private void setMessage(final int position){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Doação deletada!")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener(){
-
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        _doacoes.remove(position);
-                        adapter.notifyDataSetChanged();
-                    }
-                })
-                .setCancelable(false)
-                .create()
-                .show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    protected boolean useDrawerToggle() {
-        return false;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            Intent intent = new Intent(this, BuscaRapidaActivity.class);
-            startActivity(intent);
+    private void getLikes(){
+        Usuario.setDislikes(_userDetails.get(LoginManager.KEY_DISLIKE));
+        Usuario.setLikes(_userDetails.get(LoginManager.KEY_LIKE));
+        arrayLikes.addAll(Usuario.getLikes());
+        arrayDislikes.addAll(Usuario.getDislikes());
+        hashSetLikes = new HashSet<>();
+        hashSetLikes.addAll(arrayLikes);
+        arrayLikes.clear();
+        arrayLikes.addAll(hashSetLikes);
+        for(int a=0; a< arrayLikes.size(); a++){
+            Log.e("Minhas curtidas", ""+arrayLikes.get(a));
         }
-        return super.onOptionsItemSelected(item);
     }
 
-    private void getData(String username){
-        requestQueue.add(getInfos(UrlUtils.ANUNCIO_MINHAS_DOACOES + username));
+
+
+    private void getData(String id){
+        requestQueue.add(getInfos(UrlUtils.ANUNCIO_ID + id));
     }
 
 
@@ -256,7 +201,7 @@ public class MinhasDoacoesActivity extends BaseMenu {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(MinhasDoacoesActivity.this, "Você não possui doações anunciadas", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MinhasCurtidasActivity.this, "Você não possui curtidas", Toast.LENGTH_LONG).show();
                     }
                 });
         return jsonArrayRequest;
@@ -303,5 +248,6 @@ public class MinhasDoacoesActivity extends BaseMenu {
             return decodedByte;
         }
     }
+
 
 }

@@ -3,6 +3,7 @@ package pet.com.br.pet.adapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,7 @@ public class AnunciosAdapter extends RecyclerView.Adapter<AnunciosAdapter.ViewHo
                 intent.putExtra("vendaoudoa", anuncios.get(position).getTipoVenda());
                 intent.putExtra("dono", anuncios.get(position).getDono());
                 intent.putExtra("username", anuncios.get(position).getUsername());
+                Log.e("Intent username", ""+anuncios.get(position).getUsername());
                 context.startActivity(intent);
             }
         });

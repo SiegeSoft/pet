@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +25,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import pet.com.br.pet.R;
+import pet.com.br.pet.autentica.LoginManager;
 import pet.com.br.pet.chat.ChatViewActivity;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Usuario;
@@ -46,12 +50,15 @@ public class InfoAnunciosActivity extends BaseMenu {
     private ImageView _imageViewFoto;
     private RequestQueue _requestQueue;
     private String _username;
-
+    private HashMap<String, String> _userDetails;
+    private LoginManager _loginManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_anuncios);
+        _loginManager = new LoginManager(getApplicationContext());
+        _userDetails = _loginManager.getUserDetails();
         getInfos();
         setIds();
         setInfos();
@@ -59,8 +66,11 @@ public class InfoAnunciosActivity extends BaseMenu {
         _requestQueue.add(getImage(_codigo));
         Button chat = (Button) findViewById(R.id.chatButton);
         Button reportar = (Button) findViewById(R.id.reportarButton);
-        if(_username.equals(Usuario.getUserName())){
-            chat.setVisibility(GONE);
+
+        Log.e("Username ", ""+_username);
+        Log.e("Usuario.getUsername ", ""+_userDetails.get(LoginManager.KEY_NAME));
+        if(_username.equals(_userDetails.get(LoginManager.KEY_NAME))){
+           chat.setVisibility(GONE);
             reportar.setVisibility(GONE);
         }
 
@@ -68,7 +78,6 @@ public class InfoAnunciosActivity extends BaseMenu {
 
     private void setIds() {
         _imageViewFoto = (ImageView) findViewById(R.id.cardImage);
-
         _textViewRaca = (TextView) findViewById(R.id.raca);
         _textViewIdade = (TextView) findViewById(R.id.idade);
         _textViewDescricao = (TextView) findViewById(R.id.textInfo);
