@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,45 +25,36 @@ import java.util.List;
 import java.util.Map;
 
 import pet.com.br.pet.R;
-import pet.com.br.pet.anuncio.CadastroAnuncioActivity;
-import pet.com.br.pet.anuncio.InfoAnunciosActivity;
-import pet.com.br.pet.autentica.LoginManager;
-import pet.com.br.pet.models.Anuncios;
 import pet.com.br.pet.models.Doacoes;
-import pet.com.br.pet.models.Profile;
-import pet.com.br.pet.models.Usuario;
 import pet.com.br.pet.negociacoes.MinhasDoacoesActivity;
 import pet.com.br.pet.utils.TagUtils;
 import pet.com.br.pet.utils.UrlUtils;
 
-import static pet.com.br.pet.utils.TagUtils.KEY_USERNAME;
-
 /**
- * Created by rafaelmagalhaes on 22/01/17.
+ * Created by rafaelmagalhaes on 26/01/17.
  */
 
-public class DoacoesAdapter extends RecyclerView.Adapter<DoacoesAdapter.ViewHolder> {
-
+public class CurtidasAdapter extends RecyclerView.Adapter<CurtidasAdapter.ViewHolder> {
 
     private Activity context;
     private List<Doacoes> doacoes;
 
-    public DoacoesAdapter(List<Doacoes> doacoes, Activity context) {
+    public CurtidasAdapter(List<Doacoes> doacoes, Activity context) {
         super();
         this.doacoes = doacoes;
         this.context = context;
     }
 
     @Override
-    public DoacoesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CurtidasAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_minhas_adoacoes, parent, false);
-        DoacoesAdapter.ViewHolder viewHolder = new DoacoesAdapter.ViewHolder(v);
+                .inflate(R.layout.item_minhas_curtidas, parent, false);
+        CurtidasAdapter.ViewHolder viewHolder = new CurtidasAdapter.ViewHolder(v);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final DoacoesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final CurtidasAdapter.ViewHolder holder, int position) {
         final Doacoes doacoes = this.doacoes.get(position);
         holder.txtRaca.setText(doacoes.getRaca());
 
@@ -101,6 +89,8 @@ public class DoacoesAdapter extends RecyclerView.Adapter<DoacoesAdapter.ViewHold
                         })
                         .create()
                         .show();
+
+
             }
         });
 
@@ -186,3 +176,5 @@ public class DoacoesAdapter extends RecyclerView.Adapter<DoacoesAdapter.ViewHold
         }
     }
 }
+
+

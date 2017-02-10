@@ -303,7 +303,7 @@ public class AnunciosActivity extends BaseMenu {
                 anuncios.setIdade(json.getString(AnunciosUtils.TAG_IDADE));
                 anuncios.setTipoVenda(json.getString(AnunciosUtils.TAG_VALOR));
                 anuncios.setHora(json.getString(AnunciosUtils.TAG_HORARIO));
-
+                anuncios.setUsername(json.getString(AnunciosUtils.TAG_USERNAME));
                 if (json.getString(AnunciosUtils.TAG_IMAGEMPATCH).equals("")) {
                     anuncios.setImgid(null);
                 } else {

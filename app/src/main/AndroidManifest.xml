@@ -65,7 +65,7 @@
             android:name=".autentica.Login"
             android:label="PETTRADING"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".buscaRapida.InfoBuscaRapidaActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -80,10 +80,11 @@
         <activity
             android:name=".anuncio.InfoAnunciosActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".negociacoes.MinhasDoacoesActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+        <activity
+            android:name=".negociacoes.MinhasDoacoesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".negociacoes.MinhasCurtidasActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest><!--

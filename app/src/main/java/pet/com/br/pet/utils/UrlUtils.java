@@ -29,6 +29,7 @@ public class UrlUtils {
     public static final String CHAT_CADASTRA_MENSAGEM_URL = "http://kahvitech.com/pet/cadastraMensagem.php?";
     public static final String ANUNCIO_MINHAS_DOACOES = "http://kahvitech.com/pet/minhasdoacoes.php?username=";
     public static final String DELETAR_MEU_ANUNCIO = "http://kahvitech.com/pet/deletaranuncio.php?codigo=";
+    public static final String ANUNCIO_ID = "http://kahvitech.com/pet/getAnuncioId.php?id=";
 
 
 

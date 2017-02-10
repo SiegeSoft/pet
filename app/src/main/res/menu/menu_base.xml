@@ -23,6 +23,10 @@
                     android:title="Busca rápida"
                     android:visible="false" />
 
+                <item android:id="@+id/sub_curtidas" android:icon="@android:drawable/ic_menu_set_as"
+                    android:title="Minhas curtidas"
+                    android:visible="false" />
+
             </group>
         </menu>
 
