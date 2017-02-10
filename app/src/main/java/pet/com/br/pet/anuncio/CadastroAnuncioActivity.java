@@ -33,6 +33,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -69,7 +70,7 @@ import static pet.com.br.pet.utils.TagUtils.KEY_USERNAME;
 
 public class CadastroAnuncioActivity extends BaseMenu {
 
-    private static final String LOGIN_URL = "http://kahvitech.com/pet/cadastraAnuncio.php";
+    private static final String CADASTRARANUNCIO_URL = "http://kahvitech.com/pet/cadastraAnuncio.php";
     private static final String KEY_CODIGO = "CODIGO";
     private static final String KEY_RACA = "RACA";
     private static final String KEY_IDADE = "IDADE";
@@ -162,6 +163,11 @@ public class CadastroAnuncioActivity extends BaseMenu {
     private HashMap<String, String> _userDetails;
 
 
+    //checkbox
+    CheckBox checkboxbuscarapida;
+
+    //VALUE BUSCARAPIDA
+    int value_buscarapida=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,6 +175,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
         _session = new LoginManager(getApplicationContext());
         _userDetails = _session.getUserDetails();
 
+        value_buscarapida=0;
         txtcodigo = (TextView) findViewById(R.id.text_codigo);
         txtcodigo.setText("Codigo: " + criarCodigo());
         tamanhoimagememmega = (TextView) findViewById(R.id.ImageSize);
@@ -180,8 +187,6 @@ public class CadastroAnuncioActivity extends BaseMenu {
         editTextdescricao.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editTextdescricao.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
-        //testandoooo
-
         editTextraca.addTextChangedListener(new MyTextWatcher(editTextraca));
         editTextidade.addTextChangedListener(new MyTextWatcher(editTextidade));
         editTextdescricao.addTextChangedListener(new MyTextWatcher(editTextdescricao));
@@ -191,6 +196,8 @@ public class CadastroAnuncioActivity extends BaseMenu {
         inputLayoutDescricao = (TextInputLayout) findViewById(R.id.input_layout_descricao);
         ///
         img_view = (ImageView) findViewById(R.id.imageAnuncio);
+        //checkbox
+        checkboxbuscarapida = (CheckBox) findViewById(R.id.checkbox_buscarapida);
 
         spinner_categorias = (Spinner) findViewById(R.id.spinnercategorias);
         spinner_categorias.setOnTouchListener(new View.OnTouchListener() {
@@ -238,7 +245,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
         strdescricao = editTextdescricao.getText().toString().trim();
         loading = ProgressDialog.show(this, "Aguarde...", "Carregando...", false, false);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, CADASTRARANUNCIO_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -305,6 +312,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 map.put("IMAGEM", image_name);
                 map.put("IMAGEMPATCH", encoded_string);
                 map.put("DOGCOIN", String.valueOf(dogcondiscount));
+                map.put("BUSCARAPIDA", String.valueOf(value_buscarapida));
                 return map;
             }
         };
@@ -346,7 +354,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
 
     }
 
-    public void showDogCoinImage() {
+    public void showDogCoinImage(){
         try {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
             builder.setCancelable(false);
@@ -354,9 +362,9 @@ public class CadastroAnuncioActivity extends BaseMenu {
             builder.setMessage("Utilizar DogCoin's para liberar a segunda imagem?");
             builder.setPositiveButton("Usar DogCoin", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialog, int which){
                     Intent intent = new Intent(Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                    android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                     startActivityForResult(intent, SELECT_PICTURE2);
                 }
             });
@@ -479,7 +487,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
             try {
                 imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
                 encoded_string2 = imageEncoded;
-                Log.e("LOOK", imageEncoded);
+                //Log.e("LOOK", imageEncoded);
 
                 int size = immagex.getByteCount();
                 double final_bitmapmegabytes = size / 1024.0;
@@ -509,7 +517,7 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 image.compress(Bitmap.CompressFormat.PNG, 50, baos);
                 b = baos.toByteArray();
                 imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-                Log.e("EWN", "Out of memory error catched");
+                //Log.e("EWN", "Out of memory error catched");
             }
             valor_img_view = 2;
         }
@@ -939,5 +947,88 @@ public class CadastroAnuncioActivity extends BaseMenu {
             }
         }
     }
+
+    public void OnClickCheckBuscaRapida(View v){
+        if(value_buscarapida == 0){
+            int total_debito_dogcoin = 0;
+            int total_value_dogcoin = 0;
+            if (my_img_view2 != null) {
+                total_debito_dogcoin = 0;
+                total_value_dogcoin = 0;
+                total_debito_dogcoin = 90 + 10;
+                total_value_dogcoin = Integer.parseInt(Profile.getDogCoin()) - total_debito_dogcoin;
+                if (total_value_dogcoin < 0) {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                    builder.setCancelable(false);
+                    builder.setTitle("OoOps, DogCoin's insuficientes");
+                    builder.setMessage("Você não pode impulsionar o seu anuncio, custo total: " + total_debito_dogcoin + " DogCoin's");
+                    builder.setNegativeButton("Entendido", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            checkboxbuscarapida.setChecked(false);
+                            dialog.cancel();
+                        }
+                    });
+                    builder.create();
+                    builder.show();
+                } else {
+                    if (checkboxbuscarapida.isChecked() == true) {
+                        checkboxbuscarapida.setChecked(true);
+                        AlertaCheckBoxBuscaRapida();
+                    }
+                }
+            } else {
+                total_debito_dogcoin = 0;
+                total_value_dogcoin = 0;
+                total_debito_dogcoin = 10;
+                total_value_dogcoin = Integer.parseInt(Profile.getDogCoin()) - total_debito_dogcoin;
+                if (total_value_dogcoin < 0) {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                    builder.setCancelable(false);
+                    builder.setTitle("OoOps, DogCoin's insuficientes");
+                    builder.setMessage("Você não pode impulsionar o seu anuncio, custo total: " + total_debito_dogcoin + " DogCoin's");
+                    builder.setNegativeButton("Entendido", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            checkboxbuscarapida.setChecked(false);
+                            dialog.cancel();
+                        }
+                    });
+                    builder.create();
+                    builder.show();
+                } else {
+                    if (checkboxbuscarapida.isChecked() == true) {
+                        checkboxbuscarapida.setChecked(true);
+                        AlertaCheckBoxBuscaRapida();
+                    }
+                }
+            }
+        }
+    }
+
+    public void AlertaCheckBoxBuscaRapida(){
+        try {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setTitle("Impulsionar Busca Rápida");
+            builder.setMessage("Deseja realmente impulsionar o seu anuncio? taxa de: 10 DogCoin's");
+            builder.setPositiveButton("Impulsionar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    value_buscarapida = 1;
+                }
+            });
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        checkboxbuscarapida.setChecked(false);
+                        dialog.cancel();
+                    }
+            });
+            builder.create();
+            builder.show();
+        } catch (Exception e) {
+            AlertaCheckBoxBuscaRapida();
+        }
+
+    }
+
 
 }
