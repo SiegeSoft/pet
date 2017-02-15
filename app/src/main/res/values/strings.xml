@@ -44,6 +44,47 @@
         13. "Pacotes"\n
         14. "Galeria Premium"\n
     </string>
+    <!-- FIM PAINEL TERMO CONTRATO -->
+
+
+
+    <!-- STRING PAINEL AJUDA -->
+    <string name="string_ajuda_dogcoin">
+    Você pode obter DogCoin\'s visualizando os anuncios que disponibilizamos
+    na guia \'\'Ganhe DogCoin\'s\'\'.
+    </string>
+
+    <string name="string_ajuda_buscarapida_anunciar">
+    Para anunciar no Busca Rápida, você irá precisar de 10 DogCoin\'s, em seguida
+    durante o cadastro de doações, marque a opção "Busca Rápida", e então será descontado
+    o valor taxado ao concluir a doação anunciada.
+    </string>
+
+    <string name="string_ajuda_buscarapida_configurar">
+    Para configurar a distancia da busca de doações, clique no botão \'\'configurações\'\'
+    no menu da tela \'\'Busca Rápida\'\'.
+    </string>
+
+    <string name="string_ajuda_conta_alterarsenha">
+    Para efetuar a alteração de troca de senha, você deverá ir na tela \'\'Conta\'\' e em seguida
+    selecionar a opção \'\'alterar senha\'\'.
+    </string>
+
+    <string name="string_ajuda_conta_alterarnomeexibicao">
+    Para alterar o seu nome de exibição, você deverar acessar a tela \'\'Conta\'\' e em seguida clicar
+    em sua imagem de perfil, logo você encontrará o botão de \'\'alterar o seu nome de exibição\'\'.
+    </string>
+
+    <string name="string_ajuda_conta_imagem">
+    Para alterar a sua imagem de perfil, você deverar acessar a tela \'\'Conta\'\' e em seguida clicar
+    em sua imagem de perfil, e em seguida clicar novamente na imagem de perfil e selecionar a imagem
+    desejada.
+    </string>
+
+    <!-- FIM PAINEL AJUDA -->
+
+
+
     <string name="idade">Idade:</string>
 
 

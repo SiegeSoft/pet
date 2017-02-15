@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="30dp">
+
+            <RelativeLayout
+                android:id="@+id/relative_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CENTRAL DE AJUDA"
+                    android:textSize="25sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative_title"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="- Duvidas Comuns"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+
+            <!--NEW TOPIC-->
+
+            <RelativeLayout
+                android:id="@+id/relative_topic_dogcoin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative_subtitle"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:background="@drawable/background_ajuda_topics"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/image_open_topic_dogcoin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@android:drawable/ic_menu_add"
+                    android:tint="#000000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/image_open_topic_dogcoin"
+                    android:text="Como obter DogCoin's?"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/textview_topic_dogcoin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative_topic_dogcoin"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/string_ajuda_dogcoin"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <!--NEW TOPIC-->
+            <RelativeLayout
+                android:id="@+id/relative_topic_buscarapida"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview_topic_dogcoin"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/background_ajuda_topics"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:clickable="true"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/image_open_topic_buscarapida"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@android:drawable/ic_menu_add"
+                    android:tint="#000000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Como anunciar no Busca Rápida?"
+                    android:textSize="15sp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/image_open_topic_buscarapida"
+                    android:layout_toEndOf="@+id/image_open_topic_buscarapida"
+                    android:id="@+id/textView" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textview_topic_buscarapida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative_topic_buscarapida"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/string_ajuda_buscarapida_anunciar"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <!--NEW TOPIC-->
+            <RelativeLayout
+                android:id="@+id/relative_topic_buscarapida_distancia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview_topic_buscarapida"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/background_ajuda_topics"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:clickable="true"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/image_open_topic_buscarapida_distancia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@android:drawable/ic_menu_add"
+                    android:tint="#000000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/image_open_topic_buscarapida_distancia"
+                    android:text="Como configurar o Busca Rápida?"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textview_topic_buscarapida_distancia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative_topic_buscarapida_distancia"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/string_ajuda_buscarapida_configurar"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+
+            <!--NEW TOPIC-->
+            <RelativeLayout
+                android:id="@+id/relative_topic_conta_alterarsenha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview_topic_buscarapida_distancia"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/background_ajuda_topics"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:clickable="true"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/image_open_topic_conta_alterarsenha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@android:drawable/ic_menu_add"
+                    android:tint="#000000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/image_open_topic_conta_alterarsenha"
+                    android:text="Como alterar a minha senha?"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textview_topic_conta_alterarsenha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative_topic_conta_alterarsenha"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/string_ajuda_conta_alterarsenha"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+
+            <!--NEW TOPIC-->
+            <RelativeLayout
+                android:id="@+id/relative_topic_conta_alterarnomeexibicao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview_topic_conta_alterarsenha"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/background_ajuda_topics"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:clickable="true"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp">
+
+
+                <ImageView
+                    android:id="@+id/image_open_topic_conta_alterarnomeexibicao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@android:drawable/ic_menu_add"
+                    android:tint="#000000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/image_open_topic_conta_alterarnomeexibicao"
+                    android:text="Como alterar o meu nome de exibição?"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textview_topic_conta_alterarnomeexibicao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative_topic_conta_alterarnomeexibicao"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/string_ajuda_conta_alterarnomeexibicao"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+
+            <!--NEW TOPIC-->
+            <RelativeLayout
+                android:id="@+id/relative_topic_conta_imagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview_topic_conta_alterarnomeexibicao"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/background_ajuda_topics"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:clickable="true"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/image_open_topic_conta_imagem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@android:drawable/ic_menu_add"
+                    android:tint="#000000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/image_open_topic_conta_imagem"
+                    android:text="Como alterar a minha imagem de perfil?"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textview_topic_conta_imagem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relative_topic_conta_imagem"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/string_ajuda_conta_imagem"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
+

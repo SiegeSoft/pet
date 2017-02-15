@@ -28,6 +28,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import pet.com.br.pet.R;
+import pet.com.br.pet.ajuda.AjudaActivity;
 import pet.com.br.pet.anuncio.AnunciosActivity;
 import pet.com.br.pet.anuncio.CadastroAnuncioActivity;
 import pet.com.br.pet.autentica.Login;
@@ -223,6 +224,12 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
                 finish();
                 break;
 
+            case R.id.sub_ajuda:
+                iniciaOutraActivity(AjudaActivity.class);
+                fullLayout.closeDrawer(GravityCompat.START);
+                finish();
+                break;
+
             case R.id.sub_sair:
                 fullLayout.closeDrawer(GravityCompat.START);
                 _loginManager = new LoginManager(this);
@@ -256,7 +263,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
 
 
         if (verAnuncio) {
-            nav_menu.findItem(R.id.sub_ver_anuncio).setIcon(android.R.drawable.ic_menu_info_details);
+            nav_menu.findItem(R.id.sub_ver_anuncio).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
             isSelectedAnuncios = false;
         }
         if (!verAnuncio) {
@@ -266,7 +273,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
         if(verNegociacoes){
             nav_menu.findItem(R.id.sub_chat).setVisible(verNegociacoes);
             nav_menu.findItem(R.id.sub_minhas_doacoes).setVisible(verNegociacoes);
-            nav_menu.findItem(R.id.sub_ver_negociacoes).setIcon(android.R.drawable.ic_menu_info_details);
+            nav_menu.findItem(R.id.sub_ver_negociacoes).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
             isSelectedNegociacoes = false;
         }
         if (!verNegociacoes) {
