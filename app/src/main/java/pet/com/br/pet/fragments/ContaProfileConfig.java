@@ -1,7 +1,6 @@
 package pet.com.br.pet.fragments;
 import android.app.Fragment;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -22,17 +21,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import pet.com.br.pet.R;
-import pet.com.br.pet.chat.ChatViewActivity;
 import pet.com.br.pet.conta.Conta;
 import pet.com.br.pet.models.Profile;
-import pet.com.br.pet.utils.ChatViewUtils;
 import pet.com.br.pet.utils.ContaUtils;
 
 /**
@@ -191,8 +185,10 @@ public class ContaProfileConfig extends Fragment {
                                     texto_senhaantiga.setText("");
                                     texto_novasenha.setText("");
                                     Toast.makeText(getActivity(), "Senha Alterada Com Sucesso", Toast.LENGTH_SHORT).show();
-                                } else {
+                                } else if(response.trim().equals("Error")){
                                     Toast.makeText(getActivity(), "Não foi possivel alterar a sua senha", Toast.LENGTH_SHORT).show();
+                                } else if(response.trim().equals("Usuario Inexistente")){
+                                    Toast.makeText(getActivity(), "Erro durante a alteração da senha", Toast.LENGTH_SHORT).show();
                                 }
                             } catch (Exception e) {
                                 Toast.makeText(getActivity(), "Senha Antiga Inválida", Toast.LENGTH_SHORT).show();
@@ -213,8 +209,8 @@ public class ContaProfileConfig extends Fragment {
                     String senhaantiga = texto_senhaantiga.getText().toString();
                     String novasenha = texto_novasenha.getText().toString();
                     map.put("USERNAME", username);
-                    map.put("SENHAANTIGA", senhaantiga);
                     map.put("NOVASENHA", novasenha);
+                    map.put("SENHAANTIGA", senhaantiga);
                     return map;
                 }
             };

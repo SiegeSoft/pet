@@ -67,8 +67,21 @@ public class LoginManager {
         _editor.apply();
     }
 
+    /**
+     * USERNAME SESSION
+     * */
+    public void userNomeExibicaoSession(String nomeExibicao){
+        _editor.putString(KEY_NOME_EXIBICAO, nomeExibicao);
+        _editor.apply();
+    }
 
-
+    /**
+     * PROFILE SESSION
+     * */
+    public void userProfileSession(String profileImg){
+        _editor.putString(KEY_PROFILE, profileImg);
+        _editor.apply();
+    }
 
 
 

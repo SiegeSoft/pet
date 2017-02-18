@@ -15,31 +15,17 @@
             android:paddingBottom="30dp">
 
             <RelativeLayout
-                android:id="@+id/relative_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CENTRAL DE AJUDA"
-                    android:textSize="25sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/relative_subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/relative_title"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="- Duvidas Comuns"
-                    android:textSize="18sp" />
+                    android:text="Duvidas Comuns"
+                    android:textSize="25sp" />
             </RelativeLayout>
 
 

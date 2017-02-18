@@ -55,7 +55,7 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
     private LoginManager _loginManager;
     private HashMap<String, String> _userDetails;
 
-    private TextView _nomeDoUsuario;
+    public static TextView _nomeDoUsuario;
     public static TextView _menudogCoin;
     public static ImageView drawable_image_usericon;
 
@@ -78,10 +78,8 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
          */
         super.setContentView(fullLayout);
 
-        _nomeDoUsuario = (TextView) findViewById(R.id.Text_MenuUser);
         _loginManager = new LoginManager(this);
         _userDetails = _loginManager.getUserDetails();
-        _nomeDoUsuario.setText(_userDetails.get(LoginManager.KEY_NOME_EXIBICAO));
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         Menu nav_menu = navigationView.getMenu();
@@ -95,15 +93,42 @@ public class BaseMenu extends AppCompatActivity implements NavigationView.OnNavi
         } else {
             toolbar.setVisibility(View.GONE);
         }
-        Profile.setIcon(this.getResources().getDrawable(R.drawable.andy));
+        Profile.setProfileImage(_userDetails.get(LoginManager.KEY_PROFILE));
 
+        if(Profile.getProfileImage() == null || Profile.getProfileImage() == "" || Integer.parseInt(Profile
+        .getProfileImage()) == 0) {
+            Profile.setIcon(this.getResources().getDrawable(R.drawable.cachorro_icons));
+        }else{
+        if(Integer.parseInt(Profile.getProfileImage()) == 1){
+            Profile.setIcon(BaseMenu.this.getResources().getDrawable(R.drawable.cachorro_icons));
+        }else if(Integer.parseInt(Profile.getProfileImage()) == 2){
+            Profile.setIcon(BaseMenu.this.getResources().getDrawable(R.drawable.galinha_icons));
+        }else if(Integer.parseInt(Profile.getProfileImage()) == 3){
+            Profile.setIcon(BaseMenu.this.getResources().getDrawable(R.drawable.sapo_icons));
+        }else if(Integer.parseInt(Profile.getProfileImage()) == 4){
+            Profile.setIcon(BaseMenu.this.getResources().getDrawable(R.drawable.hamster_icons));
+        }else if(Integer.parseInt(Profile.getProfileImage()) == 5){
+            Profile.setIcon(BaseMenu.this.getResources().getDrawable(R.drawable.macaco_icons));
+        }else if(Integer.parseInt(Profile.getProfileImage()) == 6){
+            Profile.setIcon(BaseMenu.this.getResources().getDrawable(R.drawable.gato_icons));
+        }else if(Integer.parseInt(Profile.getProfileImage()) == 7){
+            Profile.setIcon(BaseMenu.this.getResources().getDrawable(R.drawable.tigre_icons));
+        }else if(Integer.parseInt(Profile.getProfileImage()) == 8){
+            Profile.setIcon(BaseMenu.this.getResources().getDrawable(R.drawable.coelho_icons));
+        }else if(Integer.parseInt(Profile.getProfileImage()) == 9){
+            Profile.setIcon(BaseMenu.this.getResources().getDrawable(R.drawable.rato_icons));
+        }}
+
+        _nomeDoUsuario = (TextView) findViewById(R.id.Text_MenuUser);
         _menudogCoin = (TextView) findViewById(R.id.text_dogcoin);
 
         drawable_image_usericon = (ImageView) findViewById(R.id.image_usericon);
         Bitmap bitmap = ((BitmapDrawable) Profile.getIcon()).getBitmap();
         Drawable drawable = new BitmapDrawable(getResources(), createCircleBitmap(bitmap));
         drawable_image_usericon.setImageDrawable(drawable);
+        _nomeDoUsuario.setText(_userDetails.get(LoginManager.KEY_NOME_EXIBICAO));
         _menudogCoin.setText(_userDetails.get(LoginManager.KEY_DOG_COIN));
+
         setUpNavView();
     }
 

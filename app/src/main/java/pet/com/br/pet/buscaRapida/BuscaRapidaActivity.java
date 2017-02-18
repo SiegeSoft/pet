@@ -151,6 +151,27 @@ public class BuscaRapidaActivity extends BaseMenu implements FlingCardListener.A
             _arrayDislikes.addAll(Usuario.getDislikes());
             _arrayIds.addAll(_arrayLikes);
             _arrayIds.addAll(_arrayDislikes);
+
+            //SETA AS IMAGENS DE PERFIL BY IACO;
+            if(Integer.parseInt(Profile.getProfileImage()) == 1){
+                Profile.setIcon(BuscaRapidaActivity.this.getResources().getDrawable(R.drawable.cachorro_icons));
+            }else if(Integer.parseInt(Profile.getProfileImage()) == 2){
+                Profile.setIcon(BuscaRapidaActivity.this.getResources().getDrawable(R.drawable.galinha_icons));
+            }else if(Integer.parseInt(Profile.getProfileImage()) == 3){
+                Profile.setIcon(BuscaRapidaActivity.this.getResources().getDrawable(R.drawable.sapo_icons));
+            }else if(Integer.parseInt(Profile.getProfileImage()) == 4){
+                Profile.setIcon(BuscaRapidaActivity.this.getResources().getDrawable(R.drawable.hamster_icons));
+            }else if(Integer.parseInt(Profile.getProfileImage()) == 5){
+                Profile.setIcon(BuscaRapidaActivity.this.getResources().getDrawable(R.drawable.macaco_icons));
+            }else if(Integer.parseInt(Profile.getProfileImage()) == 6){
+                Profile.setIcon(BuscaRapidaActivity.this.getResources().getDrawable(R.drawable.gato_icons));
+            }else if(Integer.parseInt(Profile.getProfileImage()) == 7){
+                Profile.setIcon(BuscaRapidaActivity.this.getResources().getDrawable(R.drawable.tigre_icons));
+            }else if(Integer.parseInt(Profile.getProfileImage()) == 8){
+                Profile.setIcon(BuscaRapidaActivity.this.getResources().getDrawable(R.drawable.coelho_icons));
+            }else if(Integer.parseInt(Profile.getProfileImage()) == 9){
+                Profile.setIcon(BuscaRapidaActivity.this.getResources().getDrawable(R.drawable.rato_icons));
+            }
         }
         try {
             askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION);

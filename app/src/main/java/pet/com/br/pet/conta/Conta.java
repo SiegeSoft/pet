@@ -19,7 +19,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import pet.com.br.pet.R;
+import pet.com.br.pet.autentica.LoginManager;
 import pet.com.br.pet.fragments.ContaProfileConfig;
 import pet.com.br.pet.menus.BaseMenu;
 import pet.com.br.pet.models.Profile;
@@ -33,14 +36,19 @@ public class Conta extends BaseMenu {
     ContaProfileConfig contaProfileConfig;
     int value = 0;
     public static int fadeout_value = 0;
-
+    TextView nomeexibicao;
+    //loginsession cache
+    private LoginManager _session;
+    private HashMap<String, String> _userDetails;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conta);
+        _session = new LoginManager(getApplicationContext());
+        _userDetails = _session.getUserDetails();
         imagem_conta_perfil = (ImageView) findViewById(R.id.image_conta_perfil);
+        nomeexibicao = (TextView) findViewById(R.id.text_conta_usuario_exibicao);
 
-        Profile.setIcon(this.getResources().getDrawable(R.drawable.andy));
         Conta.fadeout_value = 0;
 
         Bitmap bitmap = ((BitmapDrawable) Profile.getIcon()).getBitmap();
@@ -48,7 +56,7 @@ public class Conta extends BaseMenu {
         Drawable drawable = new BitmapDrawable(getResources(), createCircleBitmap(bitmap));
 
         imagem_conta_perfil.setImageDrawable(drawable);
-
+        nomeexibicao.setText("" + _userDetails.get(LoginManager.KEY_NOME_EXIBICAO));
 
         //FRAGMENT TROCA DE SENHA
         TextView textconta = (TextView) findViewById(R.id.text_conta_alterarSenha);
@@ -116,6 +124,7 @@ public class Conta extends BaseMenu {
         if (fadeout_value == 0) {
             Intent intent = new Intent(this ,ContaStatus.class);
             startActivity(intent);
+            finish();
         }
     }
 

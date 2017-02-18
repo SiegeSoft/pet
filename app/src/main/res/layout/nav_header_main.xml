@@ -21,7 +21,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/andy" />
+            android:src="@drawable/cachorro_icons" />
 
         <TextView
             android:id="@+id/Text_MenuUser"

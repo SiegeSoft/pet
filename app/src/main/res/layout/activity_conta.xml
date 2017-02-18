@@ -41,6 +41,39 @@
                 android:text="Nome Exibição"
                 android:textColor="#000000"
                 android:textSize="18dp" />
+
+            <ImageView
+                android:id="@+id/image_bronze_medal"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/image_conta_perfil"
+                android:layout_below="@+id/text_conta_usuario_exibicao"
+                android:src="@drawable/bronze_medal" />
+
+            <ImageView
+                android:id="@+id/image_prata_medal"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/image_bronze_medal"
+                android:layout_centerVertical="true"
+                android:layout_below="@+id/text_conta_usuario_exibicao"
+                android:src="@drawable/prata_medal" />
+
+            <ImageView
+                android:id="@+id/image_ouro_medal"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+
+                android:layout_toRightOf="@+id/image_prata_medal"
+                android:layout_centerVertical="true"
+                android:layout_below="@+id/text_conta_usuario_exibicao"
+                android:src="@drawable/ouro_medal" />
+
+
         </RelativeLayout>
 
         <!--CONTA CONFIG PERFIL AVANÇADO-->

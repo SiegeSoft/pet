@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+        <RelativeLayout
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!--TOP LAYOUT-->
+
+            <ImageView
+                android:id="@+id/icon1"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:padding="5dp"
+                android:background="@drawable/conta_border_pets"
+                android:src="@drawable/cachorro_icons" />
+
+            <ImageView
+                android:id="@+id/icon2"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:padding="5dp"
+                android:background="@drawable/conta_border_pets"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/icon1"
+                android:src="@drawable/galinha_icons" />
+
+            <ImageView
+                android:id="@+id/icon3"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:padding="5dp"
+                android:background="@drawable/conta_border_pets"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/icon2"
+                android:src="@drawable/sapo_icons" />
+
+            <!--MID LAYOUT-->
+
+            <ImageView
+                android:id="@+id/icon4"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:padding="5dp"
+                android:background="@drawable/conta_border_pets"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/icon1"
+                android:src="@drawable/hamster_icons" />
+
+            <ImageView
+                android:id="@+id/icon5"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:padding="5dp"
+                android:background="@drawable/conta_border_pets"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/icon4"
+                android:layout_below="@+id/icon1"
+                android:src="@drawable/macaco_icons" />
+
+            <ImageView
+                android:id="@+id/icon6"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:padding="5dp"
+                android:background="@drawable/conta_border_pets"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/icon5"
+                android:layout_below="@+id/icon1"
+                android:src="@drawable/gato_icons" />
+
+            <!--BOT LAYOUT-->
+
+            <ImageView
+                android:id="@+id/icon7"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:padding="5dp"
+                android:background="@drawable/conta_border_pets"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/icon4"
+                android:src="@drawable/tigre_icons" />
+
+            <ImageView
+                android:id="@+id/icon8"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:padding="5dp"
+                android:background="@drawable/conta_border_pets"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/icon7"
+                android:layout_below="@+id/icon4"
+                android:src="@drawable/coelho_icons" />
+
+            <ImageView
+                android:id="@+id/icon9"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:padding="5dp"
+                android:background="@drawable/conta_border_pets"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/icon8"
+                android:layout_below="@+id/icon4"
+                android:src="@drawable/rato_icons" />
+
+
+            <TextView
+                android:id="@+id/text_pet_names"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="Escolheu: Nenhum"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:layout_below="@+id/icon7"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

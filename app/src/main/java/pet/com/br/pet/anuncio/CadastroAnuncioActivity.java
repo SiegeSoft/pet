@@ -311,7 +311,11 @@ public class CadastroAnuncioActivity extends BaseMenu {
                 map.put(KEY_HORARIO, simpleDateFormat.format(date));
                 map.put("IMAGEM", image_name);
                 map.put("IMAGEMPATCH", encoded_string);
+                if(valor_img_view == 2) {
                 map.put("DOGCOIN", String.valueOf(dogcondiscount));
+                }else{
+                    map.put("DOGCOIN", "0");
+                }
                 map.put("BUSCARAPIDA", String.valueOf(value_buscarapida));
                 return map;
             }
