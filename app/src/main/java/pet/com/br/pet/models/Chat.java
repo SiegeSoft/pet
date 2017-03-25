@@ -1,8 +1,5 @@
 package pet.com.br.pet.models;
 
-import android.graphics.Bitmap;
-
-import java.util.ArrayList;
 /**
  * Created by iaco_ on 27/08/2016.
  */
@@ -11,6 +8,8 @@ public class Chat {
     private String usernameDestino;
     private String codigo;
     private String descricao;
+    private String profileimg;
+    private String destinovisualisado;
     private String id;
 
     public String getId() {
@@ -53,5 +52,20 @@ public class Chat {
         this.descricao = descricao;
     }
 
+    public String getProfileImg() {
+        return profileimg;
+    }
+
+    public void setProfileImg(String profileimg) {
+        this.profileimg = profileimg;
+    }
+
+    public String getDestinoVisualisado() {
+        return destinovisualisado;
+    }
+
+    public void setDestinoVisualisado(String destinovisualisado) {
+        this.destinovisualisado = destinovisualisado;
+    }
 
 }

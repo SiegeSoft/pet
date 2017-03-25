@@ -4,56 +4,69 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+        android:id="@+id/card_chat"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        card_view:cardUseCompatPadding="true"
         card_view:cardElevation="0dp"
         card_view:cardMaxElevation="0dp">
 
         <RelativeLayout
-            android:id="@+id/relative_chatview"
-            android:background="@drawable/out_message_bg"
+            android:id="@+id/relative_chat"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/out_message_bg">
 
             <TextView
                 android:id="@+id/usercodigo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Codigo"
-                android:textSize="@dimen/raca"
-                android:maxLength="25"
-                android:textColor="#000000"
                 android:fontFamily="sans-serif-condensed"
+                android:maxLength="25"
+                android:text="Codigo"
+                android:textColor="#000000"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/userchat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Usuario"
                 android:layout_below="@+id/usercodigo"
-                android:textColor="#000000"
+                android:layout_marginTop="2dp"
                 android:fontFamily="sans-serif-condensed"
-                android:textSize="@dimen/raca"
+                android:text="Usuario"
+                android:textColor="#000000"
+                android:textSize="15sp"
                 android:textStyle="normal" />
+
             <TextView
                 android:id="@+id/userdesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:layout_below="@+id/userchat"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-condensed"
+                android:maxLength="25"
                 android:text="Descrição"
                 android:textColor="#000000"
-                android:fontFamily="sans-serif-condensed"
-                android:textSize="@dimen/raca"
-                android:maxLength="25"
+                android:textSize="15sp"
                 android:textStyle="normal" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@+id/card_chat"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:text="NEW" />
+    </RelativeLayout>
 </RelativeLayout>

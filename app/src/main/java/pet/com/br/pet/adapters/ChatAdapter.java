@@ -1,31 +1,28 @@
 package pet.com.br.pet.adapters;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import pet.com.br.pet.R;
 import pet.com.br.pet.chat.ChatViewActivity;
 import pet.com.br.pet.models.Chat;
-import pet.com.br.pet.models.Profile;
 
 /**
  * Created by iaco_ on 27/08/2016.
  */
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private Activity context;
     private List<Chat> chat;
+    private String usuario_nome, usuario_codigo;
 
     public ChatAdapter(List<Chat> chat, Activity context) {
         super();
@@ -45,27 +42,33 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Chat userChat = chat.get(position);
 
-
         //holder.txtUserid.setText(userChat.getId());
-        holder.txtUserchat.setText("Usuario: "+chat.get(position).getUsername());
-        holder.txtUsercodigo.setText("Cod: "+ chat.get(position).getCodigo());
-        holder.txtUserdesc.setText("Anuncio: "+ chat.get(position).getDescricao());
+        holder.txtUserchat.setText("Usuario: " + chat.get(position).getUsername());
+        holder.txtUsercodigo.setText("Cod: " + chat.get(position).getCodigo());
+        holder.txtUserdesc.setText("Anuncio: " + chat.get(position).getDescricao());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener(){
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(v.getContext(), ChatViewActivity.class);
-
-                    intent.putExtra("Userchat", userChat.getUsername());
-                    intent.putExtra("Usercodigo", userChat.getCodigo());
-                    intent.putExtra("Userdesc", userChat.getDescricao());
-                    v.getContext().startActivity(intent);
+                intent.putExtra("Userchat", userChat.getUsername());
+                intent.putExtra("Usercodigo", userChat.getCodigo());
+                intent.putExtra("Userdesc", userChat.getDescricao());
+                intent.putExtra("UserProfileImg", userChat.getProfileImg());
+                v.getContext().startActivity(intent);
             }
         });
 
+        if (chat.get(position).getDestinoVisualisado().equals("0")) {
+            holder.relativechat.setBackgroundResource(R.drawable.out_message_bg);
         }
+        if (chat.get(position).getDestinoVisualisado().equals("1")) {
+            holder.relativechat.setBackgroundResource(R.drawable.chatbaloon);
+        }
+    }
+
 
     @Override
     public int getItemCount() {
@@ -75,10 +78,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     class ViewHolder extends RecyclerView.ViewHolder {
 
         //final TextView txtUserid;
-        final TextView txtUserchat;
-        final TextView txtUsercodigo;
-        final TextView txtUserdesc;
+        TextView txtUserchat;
+        TextView txtUsercodigo;
+        TextView txtUserdesc;
 
+        RelativeLayout relativechat;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -87,10 +91,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             txtUserchat = (TextView) itemView.findViewById(R.id.userchat);
             txtUsercodigo = (TextView) itemView.findViewById(R.id.usercodigo);
             txtUserdesc = (TextView) itemView.findViewById(R.id.userdesc);
-
+            relativechat = (RelativeLayout) itemView.findViewById(R.id.relative_chat);
 
 
         }
     }
-
 }

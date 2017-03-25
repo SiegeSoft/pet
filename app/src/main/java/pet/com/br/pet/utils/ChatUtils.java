@@ -11,9 +11,7 @@ public class ChatUtils {
     public static final String TAG_USUARIO = "USUARIO";
     public static final String TAG_USUARIODESTINO = "USUARIODESTINO";
     public static final String TAG_DESCRICAO = "DESCRICAO";
-
-
-
-
+    public static final String TAG_PROFILEIMG = "PROFILEIMG";
+    public static final String TAG_DESTINOVISUALISADO = "USUARIODESTINOVISUALISADO";
 
 }

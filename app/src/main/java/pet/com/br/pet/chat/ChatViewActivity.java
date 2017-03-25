@@ -76,7 +76,7 @@ public class ChatViewActivity extends BaseMenu {
     String codigo;
     String descricao;
     String number;
-    Bitmap profileimg;
+    String profileimg;
 
     //SENDDATACHAT
     EditText mensagem;
@@ -90,6 +90,7 @@ public class ChatViewActivity extends BaseMenu {
 
     ScrollTextView scrolltext;
 
+    Drawable icon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +110,7 @@ public class ChatViewActivity extends BaseMenu {
         user = intent.getStringExtra("Userchat");
         codigo = intent.getStringExtra("Usercodigo");
         descricao = intent.getStringExtra("Userdesc");
-
+        profileimg = intent.getStringExtra("UserProfileImg");
         //ACTION BAR PERSONALIZADA
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         ab.setDisplayShowTitleEnabled(false);
@@ -133,7 +134,25 @@ public class ChatViewActivity extends BaseMenu {
             scrolltext.initialScroll();
         }
 
-        Drawable icon = this.getResources().getDrawable(R.drawable.andy);
+        if(Integer.parseInt(profileimg) == 1){
+            icon = ChatViewActivity.this.getResources().getDrawable(R.drawable.cachorro_icons);
+        }else if(Integer.parseInt(profileimg) == 2){
+            icon = ChatViewActivity.this.getResources().getDrawable(R.drawable.galinha_icons);
+        }else if(Integer.parseInt(profileimg) == 3){
+            icon = ChatViewActivity.this.getResources().getDrawable(R.drawable.sapo_icons);
+        }else if(Integer.parseInt(profileimg) == 4){
+            icon = ChatViewActivity.this.getResources().getDrawable(R.drawable.hamster_icons);
+        }else if(Integer.parseInt(profileimg) == 5){
+            icon = ChatViewActivity.this.getResources().getDrawable(R.drawable.macaco_icons);
+        }else if(Integer.parseInt(profileimg) == 6){
+            icon = ChatViewActivity.this.getResources().getDrawable(R.drawable.gato_icons);
+        }else if(Integer.parseInt(profileimg) == 7){
+            icon = ChatViewActivity.this.getResources().getDrawable(R.drawable.tigre_icons);
+        }else if(Integer.parseInt(profileimg) == 8){
+            icon = ChatViewActivity.this.getResources().getDrawable(R.drawable.coelho_icons);
+        }else if(Integer.parseInt(profileimg) == 9){
+            icon = ChatViewActivity.this.getResources().getDrawable(R.drawable.rato_icons);
+        }
 
         Bitmap bitmap = ((BitmapDrawable) icon).getBitmap();
 
@@ -194,7 +213,9 @@ public class ChatViewActivity extends BaseMenu {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            Intent refresh = new Intent(ChatViewActivity.this, ChatActivity.class);
+            startActivity(refresh);
+            finish();
         }
         if (item.getItemId() == R.menu.helpchat) {
 
@@ -456,6 +477,37 @@ public class ChatViewActivity extends BaseMenu {
         requestQueueNew.add(stringRequest);
 
     }
+
+    /*public void getProfileImg(){
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, ContaUtils.ALTERANOMEEXIBICAO_URL,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    if (response.trim().equals("success")) {
+                                    } else if (response.trim().equals("Error")) {
+                                    } else if (response.trim().equals("Usuario Inexistente")) {
+                                    }
+                                } catch (Exception e) {
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }) {
+
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("USERNAME", user);
+                        return map;
+                    }
+                };
+                RequestQueue requestQueueNew = Volley.newRequestQueue(ChatViewActivity.this);
+                requestQueueNew.add(stringRequest);
+    }*/
 
 
 }
